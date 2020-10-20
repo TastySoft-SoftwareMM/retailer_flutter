@@ -1,90 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/main/main-screen.dart';
-import 'package:retailer/screens/user/sign_up.dart';
 import '../../style/theme.dart' as Style;
 
-class Login extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phNumberController = TextEditingController();
 
-  TextEditingController userIdController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  TextEditingController comfirmpasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
       body: Form(
         key: _formKey,
         child: ListView(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
-                  icon: Icon(Icons.more_vert),
+                  icon: Icon(
+                    Icons.arrow_back,
+                  ),
                   onPressed: () {
-                    print('setting was tap');
+                    Navigator.pop(context, true);
                   },
-                )
+                ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
+              padding: const EdgeInsets.all(25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    child: Image.asset(
-                      'assets/login.png',
-                      height: MediaQuery.of(context).size.height / 3,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
                   Text(
-                    'Login Now',
+                    'Create Account',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
-                  Text('Please sign in to continue',
-                      style: TextStyle(color: Colors.black)),
+                  getTextField(
+                      textEditingController: nameController,
+                      label: 'Name',
+                      iconPath: 'assets/icon/user.png'),
                   SizedBox(
                     height: 15,
                   ),
                   getTextField(
-                    textEditingController: userIdController,
-                    label: 'User ID',
-                    iconPath: 'assets/icon/id.png',
+                    textEditingController: phNumberController,
+                    label: 'Phone number',
+                    iconPath: 'assets/icon/contact.png',
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   getTextField(
-                      textEditingController: userIdController,
-                      label: 'Password',
+                    textEditingController: passwordController,
+                    label: 'Password',
+                    iconPath: 'assets/icon/lock.png',
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  getTextField(
+                      textEditingController: comfirmpasswordController,
+                      label: 'Comfirm Password',
                       iconPath: 'assets/icon/lock.png'),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      print('forgot password was tap');
-                    },
-                    child: Center(
-                        child: Text(
-                      'Forgot Password?',
-                      style: Style.headingPrimaryTextStyle,
-                    )),
-                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -92,7 +84,7 @@ class _LoginState extends State<Login> {
                     color: Style.Colors.mainColor,
                     child: Center(
                       child: Text(
-                        'LOGIN',
+                        'SIGN UP',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -112,18 +104,15 @@ class _LoginState extends State<Login> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Don\'t have an account? ',
-                        style: TextStyle(),
+                        'Already have an account? ',
+                        style: TextStyle(color: Colors.black),
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUpPage()));
+                          Navigator.pop(context, true);
                         },
                         child: Text(
-                          ' Sign up',
+                          ' Login now',
                           style: Style.headingPrimaryTextStyle,
                         ),
                       ),
@@ -131,7 +120,7 @@ class _LoginState extends State<Login> {
                   )),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -143,7 +132,6 @@ class _LoginState extends State<Login> {
       String label,
       String iconPath}) {
     return TextFormField(
-      style: TextStyle(),
       obscureText: true,
       controller: textEditingController,
       decoration: InputDecoration(
@@ -151,7 +139,7 @@ class _LoginState extends State<Login> {
         labelStyle: TextStyle(fontSize: 15),
         prefixIcon: Padding(
           padding: const EdgeInsets.all(
-            15,
+            18,
           ),
           child: ImageIcon(
             AssetImage(iconPath),

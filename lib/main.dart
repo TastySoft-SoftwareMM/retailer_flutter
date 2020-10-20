@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/main/main-screen.dart';
+import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'style/theme.dart' as Style;
 
@@ -33,6 +33,6 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MainScreen());
+        home: InventoryCheckScreen());
   }
 }

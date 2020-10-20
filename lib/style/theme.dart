@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Colors {
-  const Colors();
-
   static const Color mainColor = const Color(0xFFe53935);
   static const Color dropBackgroundColor = const Color.fromRGBO(0, 0, 0, 0.12);
   static const Color iconColor = const Color(0xFF999999);
