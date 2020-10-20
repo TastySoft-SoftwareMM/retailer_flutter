@@ -98,7 +98,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                   child: Column(
                     children: [
                       Container(
-                        height: 30,
+                        height: 40,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -107,17 +107,17 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                               padding: const EdgeInsets.only(
                                   left: 4, right: 4, top: 8),
                               child: Container(
-                                width: width * 0.25,
-                                height: 20,
-                                child: FittedBox(
-                                  fit: BoxFit.fitWidth,
+                                  width: secWidth * 0.8,
+                                  height: 40,
                                   child: Text(
-                                    "SP_Long Bread",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
+                                    "SP_Long Bread ls;a skfj skdl sfkldfj alsjfk llsfkj lskdfj flk;sfjd lk sfdkl skfl",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.2),
+                                  )),
                             ),
                             Spacer(),
                             Padding(
@@ -180,7 +180,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/minus.png'),
-                                                    color: Style.Colors.mainColor,
+                                                color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
                                             ),
@@ -218,7 +218,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/add.png'),
-                                                    color: Style.Colors.mainColor,
+                                                color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
                                             ),
@@ -271,7 +271,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/minus.png'),
-                                                    color: Style.Colors.mainColor,
+                                                color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
                                             ),
@@ -309,7 +309,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/add.png'),
-                                                    color: Style.Colors.mainColor,
+                                                color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
                                             ),

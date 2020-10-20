@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:retailer/screens/main/main-screen.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import '../../style/theme.dart' as Style;
@@ -10,10 +11,12 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  var width;
 
   TextEditingController userIdController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       body: Form(
@@ -24,12 +27,62 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(
-                  icon: Icon(Icons.more_vert),
-                  onPressed: () {
-                    print('setting was tap');
+                PopupMenuButton<dynamic>(
+                  offset: Offset(10, 10),
+                  onSelected: (value) => onMenuSelection(value),
+                  icon: Icon(Icons.more_vert, color: Colors.black),
+                  itemBuilder: (BuildContext contex) {
+                    return [
+                      PopupMenuItem<PopupMenuChoices>(
+                        height: 30,
+                        enabled: false,
+                        child: Center(
+                            child: Text(
+                          'Setting',
+                          style: TextStyle(color: Colors.black),
+                        )),
+                      ),
+                      PopupMenuDivider(
+                        height: 2,
+                      ),
+                      PopupMenuItem<PopupMenuChoices>(
+                        height: 50,
+                        value: PopupMenuChoices.url,
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Text(
+                                "URL",
+                              ),
+                              Spacer(),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: width * 0.2,
+                                ),
+                                child: Icon(Icons.keyboard_arrow_right),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem<PopupMenuChoices>(
+                        enabled: false,
+                        height: 30,
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Text(
+                                "Version 1.2.43",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ];
                   },
-                )
+                ),
               ],
             ),
             Padding(
@@ -159,5 +212,106 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  onMenuSelection(PopupMenuChoices value) async {
+    switch (value) {
+      case PopupMenuChoices.url:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return ChangeUrlPage();
+          }),
+        );
+        break;
+
+      default:
+    }
+  }
+}
+
+enum PopupMenuChoices { url }
+
+class ChangeUrlPage extends StatefulWidget {
+  @override
+  _ChangeUrlPageState createState() => _ChangeUrlPageState();
+}
+
+class _ChangeUrlPageState extends State<ChangeUrlPage> {
+  final _fomkey = GlobalKey<FormState>();
+  TextEditingController urlController = TextEditingController();
+  bool enable = false;
+  @override
+  Widget build(BuildContext context) {
+    if (urlController.text.isEmpty) {
+      urlController.text =
+          'http://52.253.88.71:8084/madbrepository/?fbclid=IwAR1Xrl508ZX3Cca714S5CcALeebob912uEWVfgMk9s60Z1YbCYqgSKIektY';
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('URL'),
+        centerTitle: true,
+      ),
+      body: Form(
+        key: _fomkey,
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: ListView(
+            children: [
+              Text(
+                'URL',
+                style: TextStyle(color: enable ? Colors.black : Colors.grey),
+              ),
+              TextField(
+                enabled: enable,
+                style: TextStyle(color: enable ? Colors.black : Colors.grey),
+                controller: urlController,
+                decoration: InputDecoration(
+                  disabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Style.Colors.mainColor),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Style.Colors.mainColor),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Style.Colors.mainColor),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FlatButton(
+                  color: Style.Colors.mainColor,
+                  onPressed: () {
+                    changeUrl(enable);
+                  },
+                  child: Center(
+                    child: Text(
+                      enable ? 'Save' : 'Update',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  changeUrl(bool value) async {
+    switch (value) {
+      case true:
+        Navigator.pop(context, true);
+        break;
+
+      case false:
+        setState(() {
+          enable = true;
+        });
+        break;
+    }
   }
 }
