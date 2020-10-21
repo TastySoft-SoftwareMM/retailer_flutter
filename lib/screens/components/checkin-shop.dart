@@ -10,7 +10,7 @@ class _CheckinShopState extends State<CheckinShop> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
+      height: 165,
       child: SingleChildScrollView(
         child: Card(
           child: Padding(

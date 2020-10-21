@@ -8,39 +8,123 @@ class InventoryCheckScreen extends StatefulWidget {
 }
 
 class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
+  bool search = false;
+  var width;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
     if (qtyController.text == '') {
       qtyController.text = '1';
     }
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Inventory Check"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              print('search button was tap');
-            },
-          )
+      body: Column(
+        children: [
+          Container(
+              height: 80,
+              width: width,
+              color: Style.Colors.mainColor,
+              child: search
+                  ? Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 4, top: 27, left: 4, right: 4),
+                      child: Card(
+                          child: Padding(
+                        padding: const EdgeInsets.only(left: 4, right: 4),
+                        child: TextField(
+                          autofocus: true,
+                          controller: searchController,
+                          onChanged: (value) {
+                            setState(() {
+                              value = searchController.text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(top: 8),
+                            prefixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  searchController.text = '';
+                                  search = false;
+
+                                  // Navigator.pop(context, true);
+                                });
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                size: 24,
+                                color: Colors.black,
+                              ),
+                            ),
+                            suffixIcon: searchController.text.isEmpty
+                                ? Container(
+                                    width: 10,
+                                  )
+                                : InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        searchController.text = '';
+                                      });
+                                    },
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      )),
+                    )
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            }),
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Inventory Check',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18),
+                              )
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        IconButton(
+                            icon: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                this.search = true;
+                              });
+                            }),
+                      ],
+                    )),
+          search
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.only(right: 4, left: 4, top: 10),
+                  child: CheckinShop(),
+                ),
+          Expanded(child: getStockList())
         ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(top: 5, bottom: 5),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4, left: 4),
-              child: CheckinShop(),
-            ),
-            Flexible(
-              child: getStockList(),
-            )
-          ],
-        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -74,7 +158,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
     var width = MediaQuery.of(context).size.width;
     return ListView.builder(
       itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.only(bottom: 8, left: 4),
+        padding: const EdgeInsets.only(left: 4),
         child: Container(
           height: 110,
           child: Row(
@@ -110,12 +194,12 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                   width: secWidth * 0.8,
                                   child: Text(
                                     "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
-                                    maxLines: 4,
-                                  
+                                    maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
-                                      fontSize: 14.5,
-                                        fontWeight: FontWeight.w500, height: 1),
+                                      fontWeight: FontWeight.w500,
+                                      height: 1,
+                                    ),
                                   )),
                             ),
                             Spacer(),
