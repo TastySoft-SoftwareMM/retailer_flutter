@@ -109,7 +109,6 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                    
                                     "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
                                     maxLines: 4,
                                   
