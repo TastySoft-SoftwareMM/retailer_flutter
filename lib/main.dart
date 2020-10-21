@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:retailer/screens/mandatorytasks/Inventory_stock.dart';
 import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'style/theme.dart' as Style;

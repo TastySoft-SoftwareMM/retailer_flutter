@@ -1,141 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/components/checkin-shop.dart';
-import 'package:retailer/screens/mandatorytasks/Inventory_stock.dart';
 import '../../style/theme.dart' as Style;
 
-class InventoryCheckScreen extends StatefulWidget {
+class InventoryStockAddPage extends StatefulWidget {
   @override
-  _InventoryCheckScreenState createState() => _InventoryCheckScreenState();
+  _InventoryStockAddPageState createState() => _InventoryStockAddPageState();
 }
 
-class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
-  bool search = false;
+class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
   var width;
+  bool check = false;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    if (qtyController.text == '') {
-      qtyController.text = '1';
+    if (qtyController.text.isEmpty) {
+      qtyController.text = '0';
     }
+    if (expQtyController.text.isEmpty) {
+      expQtyController.text = '0';
+    }
+    width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-              height: 80,
-              width: width,
-              color: Style.Colors.mainColor,
-              child: search
-                  ? Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 4, top: 27, left: 4, right: 4),
-                      child: Card(
-                          child: Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 4),
-                        child: TextField(
-                          autofocus: true,
-                          controller: searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              value = searchController.text;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(top: 8),
-                            prefixIcon: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  searchController.text = '';
-                                  search = false;
-
-                                  // Navigator.pop(context, true);
-                                });
-                              },
-                              child: Icon(
-                                Icons.arrow_back,
-                                size: 24,
-                                color: Colors.black,
-                              ),
-                            ),
-                            suffixIcon: searchController.text.isEmpty
-                                ? Container(
-                                    width: 10,
-                                  )
-                                : InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        searchController.text = '';
-                                      });
-                                    },
-                                    child: Icon(
-                                      Icons.clear,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      )),
-                    )
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context, true);
-                            }),
-                        Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 14),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Inventory Check',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18),
-                              )
-                            ],
-                          ),
-                        ),
-                        Spacer(),
-                        IconButton(
-                            icon: Icon(
-                              Icons.search,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                this.search = true;
-                              });
-                            }),
-                      ],
-                    )),
-          search
-              ? Container()
-              : Padding(
-                  padding: const EdgeInsets.only(right: 4, left: 4, top: 10),
-                  child: CheckinShop(),
-                ),
-          Expanded(child: getStockList())
-        ],
+      appBar: AppBar(
+        title: Text('Stocks'),
+        centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Container(
+                height: 50,
+                width: width - 5,
+                child: Card(
+                  color: Colors.white,
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      hintText: 'Search...',
+                      hintStyle: TextStyle(
+                          color: Colors.grey[700], letterSpacing: 0.5),
+                      contentPadding: EdgeInsets.only(top: 10),
+                    ),
+                  ),
+                )),
+          ),
+        ),
+        // actions: [IconButton(icon: Icon(Icons.arrow_back), onPressed: () {})],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => InventoryStockAddPage()));
-        },
-        backgroundColor: Style.Colors.mainColor,
-        child: Icon(Icons.add),
-        foregroundColor: Style.Colors.textColor,
-      ),
+      body: getStockList(),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8, bottom: 5),
         child: Container(
@@ -144,6 +61,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
             color: Style.Colors.mainColor,
             onPressed: () {
               print('Save was tap');
+              Navigator.pop(context, true);
             },
             child: Center(
               child: Text(
@@ -173,7 +91,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Image.asset(
-                      'assets/icon/sp_bread1.jpg',
+                      'assets/icon/sp_bread3.jpg',
                       height: 100,
                       fit: BoxFit.fitHeight,
                     ),
@@ -187,43 +105,46 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                   child: Column(
                     children: [
                       Spacer(),
-                      Container(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 4, right: 4, top: 4),
-                              child: Container(
-                                  width: secWidth * 0.8,
-                                  child: Text(
-                                    "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
-                                    maxLines: 3,
-                                    overflow: TextOverflow.clip,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      height: 1,
-                                    ),
-                                  )),
+                      Spacer(),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 4,
+                              right: 4,
                             ),
-                            Spacer(),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 10, top: 10),
-                              child: InkWell(
-                                onTap: () {
-                                  print('delete was tap');
+                            child: Container(
+                                width: secWidth * 0.8,
+                                child: Text(
+                                  "SP_Blueberry Cream Roll ",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    height: 1,
+                                  ),
+                                )),
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: SizedBox(
+                              height: 15,
+                              width: 20,
+                              child: Checkbox(
+                                activeColor: Style.Colors.mainColor,
+                                onChanged: (data) {
+                                  setState(() {
+                                    check = data;
+                                  });
                                 },
-                                child: ImageIcon(
-                                  AssetImage('assets/icon/delete.png'),
-                                  size: 23,
-                                  color: Style.Colors.mainColor,
-                                ),
+                                value: check,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       Spacer(),
                       Row(
@@ -252,8 +173,8 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                   height: 40,
                                   width: secWidth * 0.35,
                                   child: Card(
-                                    color: Colors.grey[50],
                                     elevation: 0,
+                                    color: Colors.grey[50],
                                     child: Row(
                                       children: [
                                         InkWell(
@@ -347,8 +268,8 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                   height: 40,
                                   width: secWidth * 0.35,
                                   child: Card(
-                                    color: Colors.grey[50],
                                     elevation: 0,
+                                    color: Colors.grey[50],
                                     child: Row(
                                       children: [
                                         InkWell(
@@ -382,7 +303,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w500),
-                                              controller: qtyController,
+                                              controller: expQtyController,
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
                                                 contentPadding:
