@@ -20,6 +20,6 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Login());
+        home: InventoryCheckScreen());
   }
 }

@@ -76,7 +76,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.only(bottom: 8, left: 4),
         child: Container(
-          height: 100,
+          height: 110,
           child: Row(
             children: [
               Container(
@@ -93,30 +93,27 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                 ),
               ),
               Container(
+                height: 110,
                 width: width * 0.73,
                 child: Card(
                   child: Column(
                     children: [
                       Container(
-                        height: 40,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                  left: 4, right: 4, top: 8),
+                                  left: 4, right: 4, top: 4),
                               child: Container(
                                   width: secWidth * 0.8,
-                                  height: 40,
                                   child: Text(
-                                    "SP_Long Bread ls;a skfj skdl sfkldfj alsjfk llsfkj lskdfj flk;sfjd lk sfdkl skfl",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
+                                    maxLines: 4,
+                                    overflow: TextOverflow.clip,
                                     style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        height: 1.2),
+                                        fontWeight: FontWeight.w500, height: 1),
                                   )),
                             ),
                             Spacer(),
@@ -141,7 +138,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                       Row(
                         children: [
                           Container(
-                            height: 50,
+                            height: 40,
                             width: secWidth * 0.45,
                             child: Row(
                               children: [
@@ -175,8 +172,11 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                             height: 40,
                                             width: secWidth * 0.1,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 7,
+                                                  top: 7,
+                                                  bottom: 7,
+                                                  left: 4),
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/minus.png'),
@@ -213,8 +213,8 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                             height: 40,
                                             width: secWidth * 0.1,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, top: 8, bottom: 8),
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/add.png'),
@@ -266,8 +266,11 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                             height: 40,
                                             width: secWidth * 0.1,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
+                                              padding: const EdgeInsets.only(
+                                                  right: 7,
+                                                  top: 7,
+                                                  bottom: 7,
+                                                  left: 4),
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/minus.png'),
@@ -304,8 +307,8 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                             height: 40,
                                             width: secWidth * 0.1,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(6.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 8, top: 8, bottom: 8),
                                               child: ImageIcon(
                                                 AssetImage(
                                                     'assets/icon/add.png'),
