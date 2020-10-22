@@ -51,46 +51,16 @@ class _ShopListScreenState extends State<ShopListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //   return StreamBuilder<ShopUserResponse>(
-    //       stream: shopuserbloc.subject.stream,
-    //       builder: (context, AsyncSnapshot<ShopUserResponse> snapshot) {
-    //         if (snapshot.hasData) {
-    //           if (snapshot.data.error != null &&
-    //               snapshot.data.error.length > 0) {}
-    //           return Padding(
-    //             padding: const EdgeInsets.all(8.0),
-    //             child: shopByUserWidget(snapshot.data),
-    //           );
-    //         } else if (snapshot.hasError) {
-    //           return Container(child: Text("Error1"));
-    //         } else {
-    //           return loadingWidget();
-    //         }
-    //       }
-    //       // child: Padding(
-    //       //     padding: const EdgeInsets.all(5.0),
-    //       //     child: Column(
-    //       //       children: [
-    //       //         shopByUserWidget(),
-    //       //         SizedBox(
-    //       //           height: 5.0,
-    //       //         ),
-    //       //         shopByTeamWidget()
-    //       //       ],
-    //       //     )),
-    //       );
-    // }
-    return Padding(
-        padding: const EdgeInsets.all(5.0),
+    return Container(
         child: Column(
-          children: [
-            shopByUserWidget(context),
-            SizedBox(
-              height: 5.0,
-            ),
-            shopByTeamWidget()
-          ],
-        ));
+      children: [
+        shopByUserWidget(context),
+        SizedBox(
+          height: 5.0,
+        ),
+        shopByTeamWidget()
+      ],
+    ));
   }
 
   Widget loadingWidget() {
@@ -116,793 +86,789 @@ class _ShopListScreenState extends State<ShopListScreen> {
   }
 
   Widget shopByUserWidget(context) {
-    return Container(
-      color: Style.Colors.dropBackgroundColor,
-      child: custom.ExpansionTitle(
-        // headerBackgroundColor: Color(0xFFCDD5D8),
-        headerBackgroundColor: Style.Colors.mainColor,
-        iconColor: Style.Colors.textColor,
-        title: Container(
-          child: Text(
-            "My list of stores for visit : 12/30",
-            style: TextStyle(color: Style.Colors.textColor),
-          ),
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Column(
-              children: [
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return checkInDialog();
-                          });
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      _onLoading();
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      print("Hello");
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-                                  style: Style.headingTextStyle),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text(
-                                "Complete",
-                                style: Style.statusSuccessTextStyle,
-                              ),
-                            )
-                          ],
-                        ),
-                        subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "959423299996",
-                                style: Style.secondTextStyle,
-                              ),
-                              Text(
-                                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                                  style: Style.secondTextStyle)
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
-                  ),
-                ),
-              ],
+    return Card(
+      child: Container(
+        color: Style.Colors.dropBackgroundColor,
+        child: custom.ExpansionTitle(
+          // headerBackgroundColor: Color(0xFFCDD5D8),
+          headerBackgroundColor: Style.Colors.mainColor,
+          iconColor: Style.Colors.textColor,
+          title: Container(
+            child: Text(
+              "My list of stores for visit : 12/30",
+              style: TextStyle(color: Style.Colors.textColor),
             ),
-          )
-        ],
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Column(
+                children: [
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        _onLoading();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        print("Hello");
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                    "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
+                                    style: Style.headingTextStyle),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  "Complete",
+                                  style: Style.statusSuccessTextStyle,
+                                ),
+                              )
+                            ],
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "959423299996",
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(
+                                    "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                                    style: Style.secondTextStyle)
+                              ]),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        // child: ExpansionTile(
+        //   title: Text(
+        //     "My List of stores for visit",
+        //     style: TextStyle(color: Colors.white),
+        //   ),
+        //   children: [
+        //     Container(
+        //       height: 100,
+        //       width: 100,
+        //       color: Colors.grey,
+        //       child: Text("My List of stores for visit"),
+        //     ),
+        //   ],
+        // ),
       ),
-      // child: ExpansionTile(
-      //   title: Text(
-      //     "My List of stores for visit",
-      //     style: TextStyle(color: Colors.white),
-      //   ),
-      //   children: [
-      //     Container(
-      //       height: 100,
-      //       width: 100,
-      //       color: Colors.grey,
-      //       child: Text("My List of stores for visit"),
-      //     ),
-      //   ],
-      // ),
     );
   }
 
@@ -1061,156 +1027,158 @@ class _ShopListScreenState extends State<ShopListScreen> {
   }
 
   Widget shopByTeamWidget() {
-    return Container(
-      color: Style.Colors.dropBackgroundColor,
-      child: custom.ExpansionTitle(
-        headerBackgroundColor: Style.Colors.mainColor,
-        iconColor: Style.Colors.textColor,
-        title: Container(
-          child: Text(
-            "Other list John Doe:",
-            style: TextStyle(color: Style.Colors.textColor),
+    return Card(
+          child: Container(
+        color: Style.Colors.dropBackgroundColor,
+        child: custom.ExpansionTitle(
+          headerBackgroundColor: Style.Colors.mainColor,
+          iconColor: Style.Colors.textColor,
+          title: Container(
+            child: Text(
+              "Other list John Doe:",
+              style: TextStyle(color: Style.Colors.textColor),
+            ),
           ),
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Column(
-              children: [
-                Card(
-                  color: Colors.white,
-                  child: InkWell(
-                    onTap: () {
-                      print("Hello");
-                    },
-                    child: ListTile(
-                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                      subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("959423299996"),
-                            Text("No1. .....str ......road")
-                          ]),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Column(
+                children: [
+                  Card(
+                    color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                        print("Hello");
+                      },
+                      child: ListTile(
+                        title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                        subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text("959423299996"),
+                              Text("No1. .....str ......road")
+                            ]),
+                      ),
                     ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Malar Myaing (မာလာမြိုင်​)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Malar Myaing (မာလာမြိုင်​)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-                Card(
-                  color: Colors.white,
-                  child: ListTile(
-                    title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
-                    subtitle: Text("959423299996"),
+                  Card(
+                    color: Colors.white,
+                    child: ListTile(
+                      title: Text("Aung Mi Thar Su (အောင်​မိသားစု)"),
+                      subtitle: Text("959423299996"),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                ],
+              ),
+            )
+          ],
+        ),
+        // child: ExpansionTile(
+        //   title: Text(
+        //     "My List of stores for visit",
+        //     style: TextStyle(color: Colors.white),
+        //   ),
+        //   children: [
+        //     Container(
+        //       height: 100,
+        //       width: 100,
+        //       color: Colors.grey,
+        //       child: Text("My List of stores for visit"),
+        //     ),
+        //   ],
+        // ),
       ),
-      // child: ExpansionTile(
-      //   title: Text(
-      //     "My List of stores for visit",
-      //     style: TextStyle(color: Colors.white),
-      //   ),
-      //   children: [
-      //     Container(
-      //       height: 100,
-      //       width: 100,
-      //       color: Colors.grey,
-      //       child: Text("My List of stores for visit"),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
