@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../style/theme.dart' as Style;
+import '../../custom/custom_expansion_title.dart' as custom;
 
 class CartItemScreen extends StatefulWidget {
   @override
@@ -7,103 +8,429 @@ class CartItemScreen extends StatefulWidget {
 }
 
 class _CartItemScreenState extends State<CartItemScreen> {
-  bool _first = true;
+  TextEditingController qtyController = TextEditingController();
+  var width;
   @override
   Widget build(BuildContext context) {
+    if (qtyController.text.isEmpty) {
+      qtyController.text = '2';
+    }
+    width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20.0,
-            ),
-            Stack(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Style.Colors.borderColor, width: 0.6))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              "May Zon (မေဇွန်)",
-                              style: Style.headingPrimaryTextStyle,
-                            ),
-                            Text(
-                                "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n"),
-                            Text("15/09/2020")
-                          ], 
+      body: Container(
+        margin: EdgeInsets.only(top: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
                         ),
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        }),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 4),
+                    width: width - 86,
+                    child: Center(
+                      child: Text(
+                        "May Zon (မေဇွန်)",
+                        style: Style.headingPrimaryTextStyle,
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
+                ],
+              ),
+              Container(
+                width: width - 46,
+                padding: EdgeInsets.only(left: 10, right: 8),
+                child: Text(
+                  "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                  textAlign: TextAlign.center,
                 ),
-                Positioned(
-                  top: -10,
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back)),
+              ),
+              Container(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: Center(child: Text("15/09/2020"))),
+              Divider(
+                color: Colors.black,
+                height: 1,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 6, right: 6),
+                height: 55,
+                color: Colors.red[100],
+                child: Center(
+                  child: Text(
+                    'Order Products',
+                    style: Style.headingTextStyle,
+                  ),
                 ),
-              ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4, right: 6, left: 6),
+                child: custom.ExpansionTitle(
+                  backgroundColor: Style.Colors.dropBackgroundColor,
+                  initiallyExpanded: false,
+                  headerBackgroundColor: Style.Colors.mainColor,
+                  iconColor: Style.Colors.textColor,
+                  title: Text(
+                    'SP Bakery',
+                    style: TextStyle(color: Style.Colors.textColor),
+                  ),
+                  onExpansionChanged: (value) {
+                    // print(value);
+                  },
+                  children: [getStockList()],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 4, right: 4),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 90,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 30,
+                                child: Text('Subtotal'),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text('Discount Amount (10%)'),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text('Total Amount (90%)'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        Container(
+                          height: 90,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                height: 30,
+                                child: Text(
+                                  ':',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text(
+                                  ':',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text(
+                                  ':',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        Spacer(),
+                        Container(
+                          height: 90,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                height: 30,
+                                child: Text('200'),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text('20'),
+                              ),
+                              Container(
+                                height: 30,
+                                child: Text('180'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Card(
+                  child: TextField(
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                        alignLabelWithHint: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelText: "Remark :",
+                        labelStyle: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
+                            color: Colors.black),
+                        fillColor: Colors.white,
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.all(8)),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.only(bottom: 2, left: 4, right: 4),
+        height: 40,
+        child: Row(
+          children: [
+            Container(
+                width: width * 0.32,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Style.Colors.mainColor),
+                child: FlatButton(
+                    onPressed: () {},
+                    child: Center(
+                      child: Text(
+                        'Complete Visit',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    ))),
+            Spacer(),
+            Container(
+                width: width * 0.32,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Style.Colors.mainColor),
+                child: FlatButton(
+                    onPressed: () {},
+                    child: Center(
+                      child: Text(
+                        'Print',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    ))),
+            Spacer(),
+            Container(
+                width: width * 0.32,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Style.Colors.mainColor),
+                child: FlatButton(
+                    onPressed: () {},
+                    child: Center(
+                      child: Text(
+                        'Order Update',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    )))
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getStockList() {
+    var secWidth = MediaQuery.of(context).size.width * 0.7 - 10;
+    var width = MediaQuery.of(context).size.width - 10;
+    return ListView.builder(
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (context, index) => Container(
+        height: 110,
+        child: Row(
+          children: [
+            Container(
+              width: width * 0.25,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Image.asset(
+                    'assets/icon/sp_bread1.jpg',
+                    height: 100,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ),
             ),
-            Expanded(
-              child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RaisedButton(
-                        color: Style.Colors.mainColor,
-                        textColor: Style.Colors.textColor,
-                        onPressed: () {},
-                        child: Text("Complete Visit"),
+            Container(
+              height: 110,
+              width: width * 0.74,
+              child: Card(
+                child: Column(
+                  children: [
+                    Spacer(),
+                    Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 4, right: 4, top: 4),
+                            child: Container(
+                                width: secWidth * 0.8,
+                                child: Text(
+                                  "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    height: 1,
+                                  ),
+                                )),
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10, top: 10),
+                            child: InkWell(
+                              onTap: () {
+                                print('delete was tap');
+                              },
+                              child: ImageIcon(
+                                AssetImage('assets/icon/delete.png'),
+                                size: 23,
+                                color: Style.Colors.mainColor,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      RaisedButton(
-                        color: Style.Colors.mainColor,
-                        textColor: Style.Colors.textColor,
-                        onPressed: () {},
-                        child: Text("Print"),
-                      ),
-                      AnimatedCrossFade(
-                        duration: const Duration(seconds: 1),
-                        crossFadeState: _first
-                            ? CrossFadeState.showFirst
-                            : CrossFadeState.showSecond,
-                        firstChild: RaisedButton(
-                          color: Style.Colors.mainColor,
-                          textColor: Style.Colors.textColor,
-                          onPressed: () {
-                            setState(() {
-                              _first = false;
-                            });
-                          },
-                          child: Text("Order Confirm"),
+                    ),
+                    Spacer(),
+                    Row(
+                      children: [
+                        Container(
+                          height: 40,
+                          width: secWidth * 0.5,
+                          child: Card(
+                            color: Colors.grey[50],
+                            elevation: 0,
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    print('minus one was tap');
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: secWidth * 0.15,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 8, top: 8, bottom: 8, left: 4),
+                                      child: ImageIcon(
+                                        AssetImage('assets/icon/minus.png'),
+                                        color: Style.Colors.mainColor,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 5),
+                                  child: Container(
+                                    width: secWidth * 0.15,
+                                    child: TextField(
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
+                                      controller: qtyController,
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.only(bottom: 14),
+                                        border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    print('object');
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: secWidth * 0.15,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8, top: 10, bottom: 10),
+                                      child: ImageIcon(
+                                        AssetImage('assets/icon/add.png'),
+                                        color: Style.Colors.mainColor,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                        secondChild: RaisedButton(
-                          color: Style.Colors.mainColor,
-                          textColor: Style.Colors.textColor,
-                          onPressed: () {
-                            setState(() {
-                              _first = true;
-                            });
-                          },
-                          child: Text("Order Update"),
+                        Spacer(),
+                        Text(
+                          '100',
+                          style: Style.headingTextStyle,
                         ),
-                      )
-                    ],
-                  )),
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: Text(
+                            '200',
+                            style: Style.headingTextStyle,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
             )
           ],
         ),
       ),
+      itemCount: 6,
     );
   }
 }

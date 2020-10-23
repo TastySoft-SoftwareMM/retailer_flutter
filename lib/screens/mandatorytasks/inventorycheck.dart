@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
+import 'package:retailer/screens/main/search.dart';
 import 'package:retailer/screens/mandatorytasks/Inventory_stock.dart';
 import '../../style/theme.dart' as Style;
 
@@ -9,11 +10,9 @@ class InventoryCheckScreen extends StatefulWidget {
 }
 
 class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
-  bool search = false;
   var width;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
-  TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -21,109 +20,26 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
       qtyController.text = '1';
     }
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Inventory Check"),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: DataSearch(
+                      "Search...",
+                    ));
+              })
+        ],
+      ),
       body: Column(
         children: [
-          Container(
-              height: 80,
-              width: width,
-              color: Style.Colors.mainColor,
-              child: search
-                  ? Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 4, top: 27, left: 4, right: 4),
-                      child: Card(
-                          child: Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 4),
-                        child: TextField(
-                          autofocus: true,
-                          controller: searchController,
-                          onChanged: (value) {
-                            setState(() {
-                              value = searchController.text;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(top: 8),
-                            prefixIcon: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  searchController.text = '';
-                                  search = false;
-
-                                  // Navigator.pop(context, true);
-                                });
-                              },
-                              child: Icon(
-                                Icons.arrow_back,
-                                size: 24,
-                                color: Colors.black,
-                              ),
-                            ),
-                            suffixIcon: searchController.text.isEmpty
-                                ? Container(
-                                    width: 10,
-                                  )
-                                : InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        searchController.text = '';
-                                      });
-                                    },
-                                    child: Icon(
-                                      Icons.clear,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      )),
-                    )
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context, true);
-                            }),
-                        Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 14),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Inventory Check',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18),
-                              )
-                            ],
-                          ),
-                        ),
-                        Spacer(),
-                        IconButton(
-                            icon: Icon(
-                              Icons.search,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                this.search = true;
-                              });
-                            }),
-                      ],
-                    )),
-          search
-              ? Container()
-              : Padding(
-                  padding: const EdgeInsets.only(right: 4, left: 4, top: 10),
-                  child: CheckinShop(),
-                ),
+          Padding(
+            padding: const EdgeInsets.only(right: 4, left: 4, top: 10),
+            child: CheckinShop(),
+          ),
           Expanded(child: getStockList())
         ],
       ),

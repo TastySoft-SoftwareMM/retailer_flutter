@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:retailer/screens/main/search.dart';
 import './main-drawer.dart';
 import '../../style/theme.dart' as Style;
 import 'main-drawer.dart';
@@ -33,19 +34,20 @@ class _MainScreenState extends State<MainScreen> {
             IconButton(
                 icon: Icon(Icons.search),
                 onPressed: () {
-                  print('search was tap');
+                  showSearch(
+                      context: context,
+                      delegate: DataSearch(
+                        "Search...",
+                      ));
                 })
           ],
         ),
         drawer: MainDrawer(),
-        // body: VisitCard(),
 
         body: Column(
           children: [
-            createUploadMerchandizingWidget(),
-            SizedBox(
-                height: MediaQuery.of(context).size.height - 136,
-                child: getExpansionList()),
+            Container(height: 60, child: createUploadMerchandizingWidget()),
+            Expanded(child: getExpansionList()),
           ],
         ),
       ),
@@ -55,6 +57,7 @@ class _MainScreenState extends State<MainScreen> {
   // create upload merchandizing widget
   Widget createUploadMerchandizingWidget() {
     return Container(
+      height: 60,
       decoration: new BoxDecoration(
           border: Border(
               bottom: BorderSide(width: 0.6, color: Style.Colors.borderColor))),
@@ -100,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(),
         title: Text(
-          'Cehck In',
+          'Check In',
           style:
               TextStyle(fontSize: 30, fontWeight: FontWeight.bold, height: 1),
         ),
@@ -121,7 +124,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       Flexible(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 4, left: 8),
+                          padding: const EdgeInsets.only(left: 8),
                           child: Container(
                             child: Text('Myo Myanmar (မျိုးမြန်မာ)'),
                           ),
@@ -197,6 +200,11 @@ class _MainScreenState extends State<MainScreen> {
                                   top: 8, left: 8, right: 15),
                               child: Container(
                                 child: DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white))),
+
                                   selectedItemBuilder: (value) {
                                     return [
                                       _selectedType == null
@@ -252,7 +260,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       Flexible(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 4, left: 8),
+                          padding: const EdgeInsets.only(left: 8),
                           child: Container(
                             child: Text(
                                 'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n'),
@@ -319,13 +327,14 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  getExpansionList() {
+  Widget getExpansionList() {
     List<Item> _items = Item.getItems();
     List<Widget> getByCharacter = [];
     return ListView.builder(
       itemBuilder: (context, index) => Card(
         elevation: 0,
         child: custom.ExpansionTitle(
+          backgroundColor: Style.Colors.dropBackgroundColor,
           initiallyExpanded: false,
           headerBackgroundColor: Style.Colors.mainColor,
           iconColor: Style.Colors.textColor,
@@ -354,55 +363,41 @@ class _MainScreenState extends State<MainScreen> {
                 getByCharacter.clear();
                 _items.forEach((element) {
                   getByCharacter.add(
-                    InkWell(
-                      onTap: () {
-                        checkInDialog(element._state);
-                      },
-                      child: Container(
-                        width: width,
-                        child: Card(
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15),
-                                child: Container(
-                                  width: element._state == 'pending'
-                                      ? width * 0.7
-                                      : width - 31,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        element._name,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      Text(element._phone),
-                                      Text(element._address),
-                                    ],
-                                  ),
+                    Card(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          checkInDialog(element._state);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: ListTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(element._name,
+                                      style: Style.headingTextStyle),
                                 ),
-                              ),
-                              element._state == 'pending'
-                                  ? Spacer()
-                                  : Container(),
-                              element._state == 'pending'
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(right: 15),
-                                      child: Container(
-                                        child: Text(
-                                          element._state,
-                                          style: TextStyle(
-                                              color: Colors.yellow[700],
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(),
-                            ],
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    element._state,
+                                    style: Style.statusSuccessTextStyle,
+                                  ),
+                                )
+                              ],
+                            ),
+                            subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    element._phone,
+                                    style: Style.secondTextStyle,
+                                  ),
+                                  Text(element._address,
+                                      style: Style.secondTextStyle)
+                                ]),
                           ),
                         ),
                       ),

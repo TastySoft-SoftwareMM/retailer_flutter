@@ -27,6 +27,7 @@ final TextStyle headingPrimaryTextStyle = TextStyle(
   height: 1.2,
   fontWeight: FontWeight.w500,
   color: Colors.mainColor,
+  
 );
 
 final TextStyle secondTextStyle = TextStyle(
