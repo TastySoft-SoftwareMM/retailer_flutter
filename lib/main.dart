@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
+import 'screens/main/main-screen.dart';
 import 'style/theme.dart' as Style;
 
 void main() {
@@ -19,6 +20,6 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: CartItemScreen());
+        home: MainScreen());
   }
 }
