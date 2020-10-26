@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/mandatorytasks/cart-item.dart';
-import 'screens/main/main-screen.dart';
+import 'package:retailer/screens/components/checkin-shop.dart';
+import 'package:retailer/screens/main/main-screen.dart';
+import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'style/theme.dart' as Style;
 
 void main() {

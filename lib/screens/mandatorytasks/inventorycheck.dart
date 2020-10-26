@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
-import 'package:retailer/screens/main/search.dart';
 import 'package:retailer/screens/mandatorytasks/Inventory_stock.dart';
+import 'package:retailer/screens/mandatorytasks/inventory_Search.dart';
 import '../../style/theme.dart' as Style;
 
 class InventoryCheckScreen extends StatefulWidget {
@@ -10,6 +10,18 @@ class InventoryCheckScreen extends StatefulWidget {
 }
 
 class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
+  List<String> mainList = [
+    'Sp_Blueberry Cream Roll',
+    'Blueberry Cream ',
+    'Long Bread',
+    'Short Bread',
+    'Example Bread',
+    'Super Cream Bread',
+    'small Cream Bread',
+    'No  Cream Bread',
+    'Stawbarry Cream',
+    'simple bread',
+  ];
   var width;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
@@ -28,8 +40,9 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
               onPressed: () {
                 showSearch(
                     context: context,
-                    delegate: DataSearch(
+                    delegate: InventorySearch(
                       "Search...",
+                      mainList,
                     ));
               })
         ],
@@ -103,6 +116,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                   child: Column(
                     children: [
                       Spacer(),
+                      Spacer(),
                       Container(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +128,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                    "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
+                                    mainList[index],
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
@@ -344,7 +358,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
           ),
         ),
       ),
-      itemCount: 6,
+      itemCount: mainList.length,
     );
   }
 }

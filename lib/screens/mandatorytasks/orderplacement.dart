@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/components/loading.dart';
-import 'package:retailer/screens/main/visit-card.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import '../../style/theme.dart' as Style;
 import '../../custom/custom_expansion_title.dart' as custom;
@@ -14,26 +13,31 @@ class OrderPlacementScreen extends StatefulWidget {
 class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
   var val = "";
   TextEditingController qtyController = TextEditingController();
-  TextEditingController ExpqtyController = TextEditingController();
+  TextEditingController expqtyController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     if (qtyController.text == '') {
       qtyController.text = '1';
     }
-    if (ExpqtyController.text == '') {
-      ExpqtyController.text = '1';
+    if (expqtyController.text == '') {
+      expqtyController.text = '1';
     }
-    return Scaffold( 
+    return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
         ),
         title: Text(
-            "Order Placement",
+          "Order Placement",
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
@@ -96,9 +100,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
               itemBuilder: (context, index) {
                 return recomandItemWidget();
               },
-
             ),
-
           ),
           Column(
             children: [
@@ -126,113 +128,20 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
             ),
           ),
           children: <Widget>[
-          Container(
-          height: 670,
-          child: ListView.builder(
-            itemCount: 100,
-            itemBuilder: (context, index) {
-              return stockItemWidget();
-            },
-
-          ),
-
-        ),
-        ],
+            Container(
+              height: 670,
+              child: ListView.builder(
+                itemCount: 100,
+                itemBuilder: (context, index) {
+                  return stockItemWidget();
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-
-  // Widget stockItemWidget() {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(top: 8, right: 8, left: 8),
-  //     child: Row(
-  //       children: [
-  //         Container(
-  //           width: 75,
-  //           height: 85,
-  //           margin: EdgeInsets.only(right: 8),
-  //           decoration: BoxDecoration(
-  //               color: Colors.red,
-  //               image: const DecorationImage(
-  //                   image: ExactAssetImage("assets/notfound.png"),
-  //                   fit: BoxFit.cover),
-  //               border: Border.all(
-  //                 color: Colors.white,
-  //                 width: 5,
-  //               ),
-  //               borderRadius: BorderRadius.circular(5)),
-  //         ),
-  //         Expanded(
-  //           child: Container(
-  //             height: 85,
-  //             decoration: BoxDecoration(
-  //                 color: Colors.white, borderRadius: BorderRadius.circular(5)),
-  //             child: Column(
-  //               children: [
-  //                 Padding(
-  //                   padding: const EdgeInsets.all(5.0),
-  //                   child: Row(
-  //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                     children: [
-  //                       Expanded(child: Text("SP Milk Cake")),
-  //                       InkWell(
-  //                         child: IconButton(
-  //                             onPressed: () {
-  //                               checkOutFun(context);
-  //                             },
-  //                             icon: Icon(Icons.add_shopping_cart)),
-  //                       )
-  //                     ],
-  //                   ),
-  //                 ),
-  //                 Expanded(
-  //                   child: Padding(
-  //                     padding: EdgeInsets.all(5.0),
-  //                     child: Row(
-  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                       children: [
-  //                         Container(
-  //                           decoration: BoxDecoration(
-  //                               color: Style.Colors.incdecCartCountColor,
-  //                               borderRadius: BorderRadius.circular(5)),
-  //                           child: Row(
-  //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                             children: [
-  //                               Text("-"),
-  //                               // Container(
-  //                               //   width: 30,
-  //                               //   child: TextFormField(
-  //                               //     maxLength: 3,
-  //                               //     cursorColor: Colors.black,
-  //                               //     decoration: new InputDecoration(
-  //                               //         border: InputBorder.none,
-  //                               //         focusedBorder: InputBorder.none,
-  //                               //         enabledBorder: InputBorder.none,
-  //                               //         errorBorder: InputBorder.none,
-  //                               //         disabledBorder: InputBorder.none,
-  //                               //         hintText: "0"),
-  //                               //   ),
-  //                               // ),
-  //                               // Text("+"),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                         Text("100"),
-  //                         Text("100"),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  //
-  // }
 
   Widget stockItemWidget() {
     return Container(
@@ -242,7 +151,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
       child: Row(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 8, top: 6, right: 8,bottom: 3),
+            padding:
+                const EdgeInsets.only(left: 8, top: 6, right: 8, bottom: 3),
             child: Container(
               width: 85,
               height: 96,
@@ -256,7 +166,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 8, top: 6, right: 8,bottom: 3),
+              padding:
+                  const EdgeInsets.only(left: 8, top: 6, right: 8, bottom: 3),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -290,7 +201,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                       child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0,left: 8),
+                            padding:
+                                const EdgeInsets.only(bottom: 8.0, left: 8),
                             child: Text(
                               'Quty',
                               style: TextStyle(
@@ -345,7 +257,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                             child: TextField(
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w500),
-                              controller: ExpqtyController,
+                              controller: expqtyController,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.only(bottom: 2),
@@ -381,7 +293,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
       child: Row(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 8, top: 6, right: 8,bottom: 3),
+            padding:
+                const EdgeInsets.only(left: 8, top: 6, right: 8, bottom: 3),
             child: Container(
               width: 85,
               height: 96,
@@ -395,7 +308,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 8, top: 6, right: 8,bottom: 3),
+              padding:
+                  const EdgeInsets.only(left: 8, top: 6, right: 8, bottom: 3),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -429,7 +343,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                       child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0,left: 8),
+                            padding:
+                                const EdgeInsets.only(bottom: 8.0, left: 8),
                             child: Text(
                               'Quty',
                               style: TextStyle(
@@ -484,7 +399,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                             child: TextField(
                               style: TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.w500),
-                              controller: ExpqtyController,
+                              controller: expqtyController,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.only(bottom: 2),
@@ -513,8 +428,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
   }
 
   showMore() {
-    return
-    FlatButton(
+    return FlatButton(
       onPressed: () {
         /*...*/
       },
@@ -527,22 +441,21 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
     );
   }
 
-  addToCart(){
-   return Container(
-     width: 480,
-     child: FlatButton(
-       color: Colors.red,
-       textColor: Colors.white,
-       padding: EdgeInsets.all(8.0),
-       splashColor: Colors.deepOrange,
-       onPressed: () {
-       },
-       child: Text(
-         "Add to Cart",
-         style: TextStyle(fontSize: 15.0),
-       ),
-     ),
-   ) ;
+  addToCart() {
+    return Container(
+      width: 480,
+      child: FlatButton(
+        color: Colors.red,
+        textColor: Colors.white,
+        padding: EdgeInsets.all(8.0),
+        splashColor: Colors.deepOrange,
+        onPressed: () {},
+        child: Text(
+          "Add to Cart",
+          style: TextStyle(fontSize: 15.0),
+        ),
+      ),
+    );
   }
 
   checkOutFun(BuildContext context) {
