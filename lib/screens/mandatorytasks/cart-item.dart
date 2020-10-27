@@ -69,40 +69,69 @@ class _CartItemScreenState extends State<CartItemScreen> {
             Flexible(
               child: ListView(
                 children: [
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 6, right: 6),
-                    height: 55,
-                    color: Colors.red[100],
-                    child: Center(
-                      child: Text(
-                        'Order Products',
-                        style: Style.headingTextStyle,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6, right: 6),
+                    child: Container(
+                      color: Colors.red[100],
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          'Order Products',
+                          style: Style.headingTextStyle,
+                        ),
                       ),
                     ),
                   ),
-                  getExpansion(),
-                  getBal(),
-                  getRemark(),
-                  SizedBox(
-                    height: 15,
-                  ),
                   Container(
-                    margin: EdgeInsets.only(left: 6, right: 6),
-                    height: 55,
-                    color: Colors.red[100],
-                    child: Center(
-                      child: Text(
-                        'Return Products',
-                        style: Style.headingTextStyle,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 5,
+                          blurRadius: 5,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        getExpansion(),
+                        getBal(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6, right: 6),
+                    child: Container(
+                      color: Colors.red[100],
+                      height: 45,
+                      child: Center(
+                        child: Text(
+                          'Return Products',
+                          style: Style.headingTextStyle,
+                        ),
                       ),
                     ),
                   ),
-                  getExpansion(),
-                  getBal(),
-                  getRemark(),
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 5,
+                          blurRadius: 5,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        getExpansion(),
+                        getBal(),
+                        getRemark(),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
