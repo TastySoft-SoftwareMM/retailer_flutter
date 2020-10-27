@@ -127,95 +127,92 @@ class _MainDrawerState extends State<MainDrawer> {
         titlePadding: EdgeInsets.only(top: 20, left: 8),
         content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-          return SizedBox(
-            height: 350,
-            child: Column(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => ListTile(
-                          leading: selected == index + 1
-                              ? Icon(
-                                  Icons.radio_button_checked,
-                                  color: Style.Colors.mainColor,
-                                )
-                              : Icon(Icons.radio_button_off),
-                          title: Text(selectShopList[index]),
-                          onTap: () {
-                            setState(() {
-                              selected = index + 1;
-                            });
-                          },
-                        ),
-                        itemCount: selectShopList.length,
-                      )
-                    ],
-                  ),
-                ),
-                Spacer(),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+          return Column(
+            children: [
+              SingleChildScrollView(
+                child: Column(
                   children: [
-                    Spacer(),
-                    Container(
-                      height: 40,
-                      width: 110,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Style.Colors.mainColor, width: 1.5),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context, true);
-                          },
-                          child: Center(
-                            child: Text('Cancel',
-                                style: TextStyle(
-                                    color: Style.Colors.mainColor,
-                                    fontWeight: FontWeight.w500)),
-                          )),
-                    ),
-                    Spacer(),
-                    Container(
-                      height: 40,
-                      width: 110,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Style.Colors.mainColor, width: 1.5),
-                          borderRadius: BorderRadius.circular(5)),
-                      child: FlatButton(
-                          onPressed: () async {
-                            if (selected != 0) {
-                              Navigator.pop(context, true);
-                              // showLoading();
-
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => OrderListScreen()));
-                            } else {
-                              showToast();
-                            }
-                          },
-                          child: Center(
-                            child: Text(
-                              'Select',
-                              style: TextStyle(
-                                  color: Style.Colors.mainColor,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          )),
-                    ),
-                    Spacer(),
+                    ListView.builder(
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => ListTile(
+                        leading: selected == index + 1
+                            ? Icon(
+                                Icons.radio_button_checked,
+                                color: Style.Colors.mainColor,
+                              )
+                            : Icon(Icons.radio_button_off),
+                        title: Text(selectShopList[index]),
+                        onTap: () {
+                          setState(() {
+                            selected = index + 1;
+                          });
+                        },
+                      ),
+                      itemCount: selectShopList.length,
+                    )
                   ],
                 ),
-              ],
-            ),
+              ),
+              Spacer(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Spacer(),
+                  Container(
+                    height: 40,
+                    width: 110,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Style.Colors.mainColor, width: 1.5),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: Center(
+                          child: Text('Cancel',
+                              style: TextStyle(
+                                  color: Style.Colors.mainColor,
+                                  fontWeight: FontWeight.w500)),
+                        )),
+                  ),
+                  Spacer(),
+                  Container(
+                    height: 40,
+                    width: 110,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Style.Colors.mainColor, width: 1.5),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: FlatButton(
+                        onPressed: () async {
+                          if (selected != 0) {
+                            Navigator.pop(context, true);
+                            // showLoading();
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderListScreen()));
+                          } else {
+                            showToast();
+                          }
+                        },
+                        child: Center(
+                          child: Text(
+                            'Select',
+                            style: TextStyle(
+                                color: Style.Colors.mainColor,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        )),
+                  ),
+                  Spacer(),
+                ],
+              ),
+            ],
           );
         }),
         contentPadding:
@@ -233,33 +230,5 @@ class _MainDrawerState extends State<MainDrawer> {
         backgroundColor: Colors.black54,
         textColor: Colors.white,
         fontSize: 16.0);
-  }
-
-  showLoading() async {
-    // return AlertDialog(
-    //   content: SizedBox(
-    //     height: 200,
-    //     child: Row(
-    //       children: [
-    //         SizedBox(
-    //           width: 50,
-    //           child: CircularProgressIndicator(
-    //               // backgroundColor: Colors.black12,
-    //               valueColor:
-    //                   AlwaysStoppedAnimation<Color>(Style.Colors.mainColor)),
-    //         ),
-    //         Padding(
-    //           padding: EdgeInsets.only(left: 10),
-    //           child: Text('Loading'),
-    //         )
-    //       ],
-    //     ),
-    //   ),
-    // );
-
-    await Future.delayed(Duration(seconds: 3));
-
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => OrderListScreen()));
   }
 }
