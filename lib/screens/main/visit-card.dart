@@ -5,6 +5,7 @@ import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/components/loading.dart';
 import 'package:retailer/screens/main/main-drawer.dart';
 import 'package:retailer/screens/main/main-screen.dart';
+import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizing.dart';
 import 'package:retailer/screens/mandatorytasks/orderplacement.dart';
@@ -42,7 +43,10 @@ class _VisitCardState extends State<VisitCard> {
           actions: [
             IconButton(
               icon: Icon(Icons.shopping_cart),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                CartItemScreen()));
+              },
             ),
           ],
         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:retailer/screens/mandatorytasks/orderList.dart';
 import 'package:retailer/screens/user/profile.dart';
 import '../../style/theme.dart' as Style;
 
@@ -75,8 +77,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 title: Text('Order List'),
                 onTap: () {
                   Navigator.pop(context, true);
-                  Navigator.push(context,
-                      new MaterialPageRoute(builder: (context) => Profile()));
+                  showAlertDialog();
                 },
               ),
               Divider(
@@ -102,5 +103,163 @@ class _MainDrawerState extends State<MainDrawer> {
         ],
       ),
     );
+  }
+
+  showAlertDialog() {
+    int selected = 0;
+    List selectShopList = [
+      'Shwo Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)',
+      'Thidar Store (သီတာစတိုး)',
+      'Toe Kyaw Kyaw (တိုးကျော်ကျော်)',
+      'Shwe Poe (ရွှေပိုး)',
+      'Myo Myanmar (မျိုးမြန်မာ)'
+    ];
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(),
+        title: Text(
+          'Select Shop',
+          style:
+              TextStyle(fontSize: 18, fontWeight: FontWeight.w500, height: 1),
+        ),
+        titlePadding: EdgeInsets.only(top: 20, left: 8),
+        content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return SizedBox(
+            height: 350,
+            child: Column(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => ListTile(
+                          leading: selected == index + 1
+                              ? Icon(
+                                  Icons.radio_button_checked,
+                                  color: Style.Colors.mainColor,
+                                )
+                              : Icon(Icons.radio_button_off),
+                          title: Text(selectShopList[index]),
+                          onTap: () {
+                            setState(() {
+                              selected = index + 1;
+                            });
+                          },
+                        ),
+                        itemCount: selectShopList.length,
+                      )
+                    ],
+                  ),
+                ),
+                Spacer(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Spacer(),
+                    Container(
+                      height: 40,
+                      width: 110,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Style.Colors.mainColor, width: 1.5),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: Center(
+                            child: Text('Cancel',
+                                style: TextStyle(
+                                    color: Style.Colors.mainColor,
+                                    fontWeight: FontWeight.w500)),
+                          )),
+                    ),
+                    Spacer(),
+                    Container(
+                      height: 40,
+                      width: 110,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Style.Colors.mainColor, width: 1.5),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: FlatButton(
+                          onPressed: () async {
+                            if (selected != 0) {
+                              Navigator.pop(context, true);
+                              // showLoading();
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => OrderListScreen()));
+                            } else {
+                              showToast();
+                            }
+                          },
+                          child: Center(
+                            child: Text(
+                              'Select',
+                              style: TextStyle(
+                                  color: Style.Colors.mainColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          )),
+                    ),
+                    Spacer(),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }),
+        contentPadding:
+            EdgeInsets.only(left: 15, top: 10, right: 10, bottom: 15),
+      ),
+    );
+  }
+
+  showToast() {
+    return Fluttertoast.showToast(
+        msg: "Select Shop",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black54,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+  showLoading() async {
+    // return AlertDialog(
+    //   content: SizedBox(
+    //     height: 200,
+    //     child: Row(
+    //       children: [
+    //         SizedBox(
+    //           width: 50,
+    //           child: CircularProgressIndicator(
+    //               // backgroundColor: Colors.black12,
+    //               valueColor:
+    //                   AlwaysStoppedAnimation<Color>(Style.Colors.mainColor)),
+    //         ),
+    //         Padding(
+    //           padding: EdgeInsets.only(left: 10),
+    //           child: Text('Loading'),
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    // );
+
+    await Future.delayed(Duration(seconds: 3));
+
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => OrderListScreen()));
   }
 }

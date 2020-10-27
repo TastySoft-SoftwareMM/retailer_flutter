@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:retailer/screens/main/visit-card.dart';
+import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import '../../style/theme.dart' as Style;
 import 'package:intl/intl.dart';
 
@@ -216,7 +218,10 @@ class CheckInAlert {
                           borderRadius: BorderRadius.circular(5)),
                       child: FlatButton(
                           onPressed: () {
-                            print('next button was tap');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => VisitCard()));
                           },
                           child: Center(
                             child: Text(

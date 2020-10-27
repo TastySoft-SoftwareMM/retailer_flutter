@@ -191,7 +191,6 @@ class _CartItemScreenState extends State<CartItemScreen> {
     return Padding(
       padding: const EdgeInsets.only(top: 4, right: 6, left: 6),
       child: ExpansionTitle(
-        backgroundColor: Style.Colors.dropBackgroundColor,
         initiallyExpanded: false,
         headerBackgroundColor: Style.Colors.mainColor,
         iconColor: Style.Colors.textColor,
@@ -203,6 +202,9 @@ class _CartItemScreenState extends State<CartItemScreen> {
           // print(value);
         },
         children: [
+          SizedBox(
+            height: 4,
+          ),
           getChildren(),
         ],
       ),
@@ -328,159 +330,173 @@ class _CartItemScreenState extends State<CartItemScreen> {
         getByCharacter.clear();
         _items.forEach((element) {
           getByCharacter.add(
-            Row(
-              children: [
-                Container(
-                  height: 100,
-                  width: width * 0.25,
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Image.asset(
-                        'assets/icon/sp_bread1.jpg',
-                        height: 100,
-                        fit: BoxFit.fitHeight,
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: 100,
+                    width: width * 0.25,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Image.asset(
+                          'assets/icon/sp_bread1.jpg',
+                          height: 100,
+                          fit: BoxFit.fitHeight,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  height: 100,
-                  width: width * 0.7,
-                  child: Card(
-                    child: Column(
-                      children: [
-                        Spacer(),
-                        Container(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                  Container(
+                    height: 100,
+                    width: width * 0.7,
+                    child: Card(
+                      child: Column(
+                        children: [
+                          Spacer(),
+                          Container(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 4, right: 4, top: 4),
+                                  child: Container(
+                                      width: secWidth * 0.8,
+                                      child: Text(
+                                        "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
+                                        maxLines: 3,
+                                        overflow: TextOverflow.clip,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          height: 1,
+                                        ),
+                                      )),
+                                ),
+                                Spacer(),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(right: 10, top: 10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      print('delete was tap');
+                                    },
+                                    child: ImageIcon(
+                                      AssetImage('assets/icon/delete.png'),
+                                      size: 23,
+                                      color: Style.Colors.mainColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                          Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 4, right: 4, top: 4),
-                                child: Container(
-                                    width: secWidth * 0.8,
-                                    child: Text(
-                                      "Bread flour can be substituted with all-purpose flour, but you have to keep in mind that bread flour, since it has a higher gluten content, requires more liquid. When using all-purpose flour you can either add more flour (usually 1 tbsp per 1 cup flour) or add less water.",
-                                      maxLines: 3,
-                                      overflow: TextOverflow.clip,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        height: 1,
+                              Container(
+                                height: 40,
+                                width: secWidth * 0.5,
+                                child: Card(
+                                  color: Colors.grey[50],
+                                  elevation: 0,
+                                  child: Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          print('minus one was tap');
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: secWidth * 0.15,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 8,
+                                                top: 8,
+                                                bottom: 8,
+                                                left: 4),
+                                            child: ImageIcon(
+                                              AssetImage(
+                                                  'assets/icon/minus.png'),
+                                              color: Style.Colors.mainColor,
+                                              size: 16,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    )),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 10, top: 10),
-                                child: InkWell(
-                                  onTap: () {
-                                    print('delete was tap');
-                                  },
-                                  child: ImageIcon(
-                                    AssetImage('assets/icon/delete.png'),
-                                    size: 23,
-                                    color: Style.Colors.mainColor,
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 5),
+                                        child: Container(
+                                          width: secWidth * 0.15,
+                                          child: TextField(
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500),
+                                            controller: qtyController,
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.only(bottom: 14),
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          print('object');
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: secWidth * 0.15,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, top: 10, bottom: 10),
+                                            child: ImageIcon(
+                                              AssetImage('assets/icon/add.png'),
+                                              color: Style.Colors.mainColor,
+                                              size: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        Spacer(),
-                        Row(
-                          children: [
-                            Container(
-                              height: 40,
-                              width: secWidth * 0.5,
-                              child: Card(
-                                color: Colors.grey[50],
-                                elevation: 0,
-                                child: Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        print('minus one was tap');
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: secWidth * 0.15,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 8,
-                                              top: 8,
-                                              bottom: 8,
-                                              left: 4),
-                                          child: ImageIcon(
-                                            AssetImage('assets/icon/minus.png'),
-                                            color: Style.Colors.mainColor,
-                                            size: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      child: Container(
-                                        width: secWidth * 0.15,
-                                        child: TextField(
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                          controller: qtyController,
-                                          textAlign: TextAlign.center,
-                                          decoration: InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.only(bottom: 14),
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        print('object');
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: secWidth * 0.15,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8, top: 10, bottom: 10),
-                                          child: ImageIcon(
-                                            AssetImage('assets/icon/add.png'),
-                                            color: Style.Colors.mainColor,
-                                            size: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              '100',
-                              style: Style.headingTextStyle,
-                            ),
-                            Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 4),
-                              child: Text(
-                                '200',
+                              Spacer(),
+                              Text(
+                                '100',
                                 style: Style.headingTextStyle,
                               ),
-                            )
-                          ],
-                        )
-                      ],
+                              Spacer(),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Text(
+                                  '200',
+                                  style: Style.headingTextStyle,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           );
         });
