@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:retailer/screens/main/main-screen.dart';
+import 'package:retailer/screens/mandatorytasks/cart-item.dart';
+import 'package:retailer/screens/mandatorytasks/orderList.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'style/theme.dart' as Style;
 
@@ -19,6 +22,6 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Login());
+        home: MainScreen());
   }
 }

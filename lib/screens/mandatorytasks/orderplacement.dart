@@ -83,32 +83,37 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
   Widget recommendStockWidget() {
     return Padding(
       padding: EdgeInsets.only(top: 5),
-      child: custom.ExpansionTitle(
-        headerBackgroundColor: Colors.red,
-        iconColor: Colors.white,
-        title: Container(
-          child: Text(
-            "Recommend Stocks",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        children: <Widget>[
-          Container(
-            height: 570,
-            child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return recomandItemWidget();
-              },
+      child: Card(
+        color: Colors.transparent,
+        elevation: 3,
+              child: custom.ExpansionTitle(
+          backgroundColor: Colors.white,
+          headerBackgroundColor: Colors.red,
+          iconColor: Colors.white,
+          title: Container(
+            child: Text(
+              "Recommend Stocks",
+              style: TextStyle(color: Colors.white),
             ),
           ),
-          Column(
-            children: [
-              showMore(),
-              addToCart(),
-            ],
-          ),
-        ],
+          children: <Widget>[
+            Container(
+              height: 570,
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return recomandItemWidget();
+                },
+              ),
+            ),
+            Column(
+              children: [
+                showMore(),
+                addToCart(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -116,9 +121,11 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
   Widget browseAllItemWidget() {
     return Padding(
       padding: EdgeInsets.only(top: 5),
-      child: Container(
-        color: Style.Colors.dropBackgroundColor,
+      child: Card(
+        color: Colors.transparent,
         child: custom.ExpansionTitle(
+          backgroundColor: Colors.white,
+
           headerBackgroundColor: Colors.red,
           iconColor: Colors.white,
           title: Container(

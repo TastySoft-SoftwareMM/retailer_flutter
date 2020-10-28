@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:retailer/custom/custom_expansion_title.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import '../../style/theme.dart' as Style;
@@ -12,6 +13,8 @@ class OrderListScreen extends StatefulWidget {
 }
 
 class _OrderListScreenState extends State<OrderListScreen> {
+  String currentTime = DateFormat("dd/MM/yyyy").format(DateTime.now());
+
   TextEditingController qtyController = TextEditingController();
   var width;
   @override
@@ -30,68 +33,161 @@ class _OrderListScreenState extends State<OrderListScreen> {
           Flexible(
             child: ListView(
               children: [
-                SizedBox(
-                  height: 4,
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 6, right: 6),
-                  height: 54,
-                  color: Colors.red[100],
-                  child: Center(
-                    child: Text(
-                      'Order Products',
-                      style: Style.headingTextStyle,
+                SizedBox(height: 4,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 4),
+                  child: Card(
+                    color: Colors.transparent,
+                    elevation: 3,
+                    child: ExpansionTitle(
+                      backgroundColor: Colors.white,
+                      initiallyExpanded: false,
+                      headerBackgroundColor: Style.Colors.mainColor,
+                      iconColor: Style.Colors.textColor,
+                      title: Row(
+                        children: [
+                          Text(
+                            '20394239820000',
+                            style: TextStyle(color: Style.Colors.textColor),
+                          ),
+                          Spacer(),
+                          Text(
+                            '${currentTime.toString()} ',
+                            style: TextStyle(color: Style.Colors.textColor),
+                          )
+                        ],
+                      ),
+                      children: [
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4, right: 4),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 10, bottom: 10),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Remark',
+                                    style: Style.headingTextStyle,
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                      alignment: Alignment.topRight,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      child: Text(
+                                        'Test Comment',
+                                        maxLines: 8,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 15),
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 4, left: 8, right: 8),
+                          height: 54,
+                          color: Colors.red[100],
+                          child: Center(
+                            child: Text(
+                              'Return Products',
+                              style: Style.headingTextStyle,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: getExpansion(),
+                        ),
+                        getBal(),
+                        SizedBox(
+                          height: 8,
+                        )
+                      ],
                     ),
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 4),
+                  child: Card(
+                    color: Colors.transparent,
+                    elevation: 3,
+                    child: ExpansionTitle(
+                      backgroundColor: Colors.white,
+                      initiallyExpanded: false,
+                      headerBackgroundColor: Style.Colors.mainColor,
+                      iconColor: Style.Colors.textColor,
+                      title: Row(
+                        children: [
+                          Text(
+                            '20394239820000',
+                            style: TextStyle(color: Style.Colors.textColor),
+                          ),
+                          Spacer(),
+                          Text(
+                            '${currentTime.toString()}',
+                            style: TextStyle(color: Style.Colors.textColor),
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      getExpansion(),
-                      getBal(),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 6, right: 6),
-                  height: 45,
-                  color: Colors.red[100],
-                  child: Center(
-                    child: Text(
-                      'Return Products',
-                      style: Style.headingTextStyle,
+                      children: [
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4, right: 4),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8, right: 8, top: 10, bottom: 10),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Remark',
+                                    style: Style.headingTextStyle,
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                      alignment: Alignment.topRight,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      child: Text(
+                                        'Test Comment',
+                                        maxLines: 8,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 15),
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 4, left: 8, right: 8),
+                          height: 54,
+                          color: Colors.red[100],
+                          child: Center(
+                            child: Text(
+                              'Order Products',
+                              style: Style.headingTextStyle,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: getExpansion(),
+                        ),
+                        getBal(),
+                        SizedBox(
+                          height: 8,
+                        )
+                      ],
                     ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      getExpansion(),
-                      getBal(),
-                    ],
                   ),
                 ),
               ],
@@ -102,39 +198,20 @@ class _OrderListScreenState extends State<OrderListScreen> {
     );
   }
 
-  Widget getRemark() {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Card(
-        child: TextField(
-          maxLines: 4,
-          decoration: InputDecoration(
-              alignLabelWithHint: true,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              labelText: "Remark :",
-              labelStyle: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
-                  height: 1.2,
-                  color: Colors.black),
-              fillColor: Colors.white,
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(8)),
-        ),
-      ),
-    );
-  }
-
   Widget getExpansion() {
     return Padding(
-      padding: const EdgeInsets.only(top: 4, right: 6, left: 6),
+      padding: const EdgeInsets.only(right: 8, left: 8),
       child: ExpansionTitle(
         initiallyExpanded: false,
         headerBackgroundColor: Style.Colors.mainColor,
         iconColor: Style.Colors.textColor,
-        title: Text(
-          'SP Bakery',
-          style: TextStyle(color: Style.Colors.textColor),
+        title: Row(
+          children: [
+            Text(
+              'SP Bakery',
+              style: TextStyle(color: Style.Colors.textColor),
+            ),
+          ],
         ),
         onExpansionChanged: (value) {
           // print(value);
@@ -142,30 +219,6 @@ class _OrderListScreenState extends State<OrderListScreen> {
         children: [
           SizedBox(
             height: 4,
-          ),
-          Card(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 10),
-              child: Row(
-                children: [
-                  Text(
-                    'Remark',
-                    style: Style.headingTextStyle,
-                  ),
-                  Spacer(),
-                  Container(
-                      alignment: Alignment.topRight,
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      child: Text(
-                        'Test Comment',
-                        maxLines: 8,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 15),
-                      )),
-                ],
-              ),
-            ),
           ),
           getChildren(),
         ],
@@ -275,7 +328,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
   }
 
   getChildren() {
-    var secWidth = MediaQuery.of(context).size.width * 0.7 - 10;
+    var secWidth = MediaQuery.of(context).size.width * 0.65;
 
     List _items = [
       'SP Bread',
@@ -292,84 +345,80 @@ class _OrderListScreenState extends State<OrderListScreen> {
         getByCharacter.clear();
         _items.forEach((element) {
           getByCharacter.add(
-            Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
               child: Row(
                 children: [
                   Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                     height: 100,
-                    width: width * 0.25,
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Image.asset(
-                          'assets/icon/sp_bread1.jpg',
-                          height: 100,
-                          fit: BoxFit.fitHeight,
-                        ),
+                    width: width * 0.22,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Image.asset(
+                        'assets/icon/sp_bread1.jpg',
+                        height: 100,
+                        fit: BoxFit.fitHeight,
                       ),
                     ),
                   ),
+                  Spacer(),
                   Container(
                     height: 100,
-                    width: width * 0.7,
-                    child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Spacer(),
-                          Container(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8, right: 4, top: 4),
-                              child: Container(
-                                  width: secWidth * 0.8,
-                                  child: Text(
-                                    element.toString(),
-                                    maxLines: 3,
-                                    overflow: TextOverflow.clip,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      height: 1,
-                                    ),
-                                  )),
-                            ),
+                    width: width * 0.68,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Spacer(),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 4, top: 4),
+                            child: Container(
+                                width: secWidth * 0.8,
+                                child: Text(
+                                  element.toString(),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    height: 1,
+                                  ),
+                                )),
                           ),
-                          Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  '5',
-                                  style: Style.headingTextStyle,
-                                ),
-                                Spacer(),
-                                Text(
-                                  '200',
-                                  style: Style.headingTextStyle,
-                                ),
-                                Spacer(),
-                                Text(
-                                  '1000',
-                                  style: Style.headingTextStyle,
-                                )
-                              ],
-                            ),
+                        ),
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                '5',
+                                style: Style.headingTextStyle,
+                              ),
+                              Spacer(),
+                              Text(
+                                '200',
+                                style: Style.headingTextStyle,
+                              ),
+                              Spacer(),
+                              Text(
+                                '1000',
+                                style: Style.headingTextStyle,
+                              )
+                            ],
                           ),
-                          Spacer(),
-                        ],
-                      ),
+                        ),
+                        Spacer(),
+                      ],
                     ),
                   )
                 ],

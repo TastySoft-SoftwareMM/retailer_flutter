@@ -110,9 +110,10 @@ class _MainScreenState extends State<MainScreen> {
     List<Widget> getByCharacter = [];
     return ListView.builder(
       itemBuilder: (context, index) => Card(
-        elevation: 0,
+        color: Colors.transparent,
+        elevation: 3,
         child: custom.ExpansionTitle(
-          backgroundColor: Style.Colors.dropBackgroundColor,
+          backgroundColor: Colors.white,
           initiallyExpanded: false,
           headerBackgroundColor: Style.Colors.mainColor,
           iconColor: Style.Colors.textColor,
