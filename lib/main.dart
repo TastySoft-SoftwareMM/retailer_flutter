@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/main/main-screen.dart';
-import 'package:retailer/screens/mandatorytasks/cart-item.dart';
-import 'package:retailer/screens/mandatorytasks/orderList.dart';
-import 'package:retailer/screens/user/login.dart';
+import 'screens/main/main-screen.dart';
 import 'style/theme.dart' as Style;
 
 void main() {
