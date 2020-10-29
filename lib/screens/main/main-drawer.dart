@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:retailer/screens/mandatorytasks/orderList.dart';
-import 'package:retailer/screens/user/profile.dart';
+import 'package:retailer/screens/user/profile/profile.dart';
 import '../../style/theme.dart' as Style;
 
 class MainDrawer extends StatefulWidget {
