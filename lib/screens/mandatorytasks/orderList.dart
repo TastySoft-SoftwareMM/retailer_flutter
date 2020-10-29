@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:retailer/custom/custom_expansion_title.dart';
+
+import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
+    as customwithslidable;
+import 'package:retailer/custom/custom_expansion_title.dart' as custom;
+
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/mandatorytasks/orderEdit.dart';
 import '../../style/theme.dart' as Style;
 import 'package:http/http.dart' as http;
-
-// import '../../custom/custom_expansion_title.dart' as custom;
 
 class OrderListScreen extends StatefulWidget {
   @override
@@ -34,102 +36,82 @@ class _OrderListScreenState extends State<OrderListScreen> {
           CheckinShop(),
           Flexible(
               child: ListView.builder(
-                itemCount: 4,
+            itemCount: 4,
             itemBuilder: (context, index) => Padding(
               padding: const EdgeInsets.only(left: 4, right: 4),
-              child: Slidable(
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: 'Edit',
-                    foregroundColor: Colors.red,
-                    color: Colors.white,
-                    iconWidget: Icon(
-                      Icons.edit_outlined,
-                      color: Style.Colors.mainColor,
-                      size: 16,
-                    ),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => OrderEditScreen())),
-                  ),
-                ],
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: 0.1,
-                child: Card(
-                  color: Colors.transparent,
-                  elevation: 3,
-                  child: ExpansionTitle(
-                    backgroundColor: Colors.white,
-                    initiallyExpanded: false,
-                    headerBackgroundColor: Style.Colors.mainColor,
-                    iconColor: Style.Colors.textColor,
-                    title: Row(
-                      children: [
-                        Text(
-                          '20394239820000',
-                          style: TextStyle(color: Style.Colors.textColor),
-                        ),
-                        Spacer(),
-                        Text(
-                          '${currentTime.toString()} ',
-                          style: TextStyle(color: Style.Colors.textColor),
-                        )
-                      ],
-                    ),
+              child: Card(
+                color: Colors.transparent,
+                elevation: 3,
+                child: customwithslidable.ExpansionTitle(
+                  backgroundColor: Colors.white,
+                  initiallyExpanded: false,
+                  headerBackgroundColor: Style.Colors.mainColor,
+                  iconColor: Style.Colors.textColor,
+                  title: Row(
                     children: [
-                      SizedBox(
-                        height: 4,
+                      Text(
+                        '20394239820000',
+                        style: TextStyle(color: Style.Colors.textColor),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 4),
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8, right: 8, top: 10, bottom: 10),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Remark',
-                                  style: Style.headingTextStyle,
-                                ),
-                                Spacer(),
-                                Container(
-                                    alignment: Alignment.topRight,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                    child: Text(
-                                      'Test Comment',
-                                      maxLines: 8,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: 15),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 4, left: 8, right: 8),
-                        height: 54,
-                        color: Colors.red[100],
-                        child: Center(
-                          child: Text(
-                            'Return Products',
-                            style: Style.headingTextStyle,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: getExpansion(),
-                      ),
-                      getBal(),
-                      SizedBox(
-                        height: 8,
+                      Spacer(),
+                      Text(
+                        '${currentTime.toString()} ',
+                        style: TextStyle(color: Style.Colors.textColor),
                       )
                     ],
                   ),
+                  children: [
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4, right: 4),
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8, right: 8, top: 10, bottom: 10),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Remark',
+                                style: Style.headingTextStyle,
+                              ),
+                              Spacer(),
+                              Container(
+                                  alignment: Alignment.topRight,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                  child: Text(
+                                    'Test Comment',
+                                    maxLines: 8,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 15),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 4, left: 8, right: 8),
+                      height: 54,
+                      color: Colors.red[100],
+                      child: Center(
+                        child: Text(
+                          'Return Products',
+                          style: Style.headingTextStyle,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: getExpansion(),
+                    ),
+                    getBal(),
+                    SizedBox(
+                      height: 8,
+                    )
+                  ],
                 ),
               ),
             ),
@@ -142,7 +124,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
   Widget getExpansion() {
     return Padding(
       padding: const EdgeInsets.only(right: 8, left: 8),
-      child: ExpansionTitle(
+      child: custom.ExpansionTitle(
         initiallyExpanded: false,
         headerBackgroundColor: Style.Colors.mainColor,
         iconColor: Style.Colors.textColor,
