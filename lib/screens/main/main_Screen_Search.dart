@@ -226,7 +226,7 @@ class DataSearch extends SearchDelegate {
         color: Colors.transparent,
         elevation: 3,
         child: custom.ExpansionTitle(
-          backgroundColor: Colors.white,
+          backgroundColor: Style.Colors.dropBackgroundColor,
           initiallyExpanded: false,
           headerBackgroundColor: Style.Colors.mainColor,
           iconColor: Style.Colors.textColor,
