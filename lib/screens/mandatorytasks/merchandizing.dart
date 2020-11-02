@@ -70,22 +70,28 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
                 _items.forEach((element) {
                   getByCharacter.add(
                     Card(
-                      color: Colors.white,
+                      
+                      color: Colors.green[800],
                       child: Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                        child: ListTile(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MerchandizingEdit()));
-                          },
-                          title: Text(element),
-                          trailing: IconButton(
-                            onPressed: () {
-                              print('List was tap');
+                        padding: EdgeInsets.only(left: 3),
+                        child: Container(
+                          color: Colors.white,
+                          child: ListTile(
+                            
+                            // leading: Divider(color: Colors.blue,),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MerchandizingEdit()));
                             },
-                            icon: Icon(Icons.list),
+                            title: Text(element),
+                            trailing: IconButton(
+                              onPressed: () {
+                                print('List was tap');
+                              },
+                              icon: Icon(Icons.list),
+                            ),
                           ),
                         ),
                       ),

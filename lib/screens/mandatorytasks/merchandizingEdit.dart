@@ -73,24 +73,52 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                               ),
                             ),
                           )
-                        : InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ViewImage(
-                                            _imageList[index],
-                                          )));
-                            },
-                            child: Container(
-                              child: ClipRRect(
-                                child: Image.file(
-                                  _imageList[index],
-                                  fit: BoxFit.cover,
+                        : Container(
+                          child: Stack(
+                            fit: StackFit.passthrough,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ViewImage(
+                                                _imageList[index],
+                                              )));
+                                },
+                                child: Container(
+                                  child: ClipRRect(
+                                    child: Image.file(
+                                      _imageList[index],
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              Positioned(
+                                  right: 2,
+                                  top: 2,
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _imageList.remove(
+                                          _imageList[index],
+                                        );
+                                      });
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 12,
+                                      backgroundColor: Colors.white,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Style.Colors.mainColor,
+                                      ),
+                                    ),
+                                  )),
+                            ],
                           ),
+                        ),
                   );
                 }),
               ),
@@ -124,10 +152,10 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
       child: Container(
-        height: 60,
+        height: 80,
         child: Card(
           child: TextField(
-            maxLines: 4,
+            maxLines: 8,
             decoration: InputDecoration(
                 alignLabelWithHint: true,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
