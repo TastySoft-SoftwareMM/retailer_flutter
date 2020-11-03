@@ -103,7 +103,7 @@ class _SyncDataState extends State<SyncData> {
                   color: Style.Colors.mainColor,
                   onPressed: () async {
                     if (downloadData == true) {
-                  await    testFunction();
+                      await testFunction();
 
                       Navigator.pushReplacement(
                           context,

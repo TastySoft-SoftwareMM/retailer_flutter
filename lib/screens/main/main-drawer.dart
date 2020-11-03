@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:retailer/screens/mandatorytasks/orderList.dart';
+import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/screens/user/profile/profile.dart';
 import '../../style/theme.dart' as Style;
 
@@ -92,7 +93,10 @@ class _MainDrawerState extends State<MainDrawer> {
               child: SizedBox(
                 width: double.infinity,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => Login()));
+                  },
                   child: Text("Logout"),
                   color: Style.Colors.mainColor,
                   textColor: Style.Colors.textColor,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:retailer/screens/main/main-screen.dart';
 import 'package:retailer/screens/user/sign_up.dart';
+import 'package:retailer/screens/user/syncData/syncData.dart';
+import 'package:retailer/services/online_service.dart';
 import '../../style/theme.dart' as Style;
 
 class Login extends StatefulWidget {
@@ -14,6 +16,10 @@ class _LoginState extends State<Login> {
   var width;
 
   TextEditingController userIdController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+
+  String _userId;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -122,7 +128,7 @@ class _LoginState extends State<Login> {
                     height: 15,
                   ),
                   getTextField(
-                      textEditingController: userIdController,
+                      textEditingController: passController,
                       label: 'Password',
                       iconPath: 'assets/icon/lock.png'),
                   SizedBox(
@@ -149,11 +155,18 @@ class _LoginState extends State<Login> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainScreen()));
+                    onPressed: () async {
+                      print(this.userIdController.text);
+                      var check = await getOrgId(
+                          this.userIdController.text, this.passController.text);
+                      print("login $check");
+
+                      if (check == "success") {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyncData()));
+                      } else {}
                     },
                   ),
                   SizedBox(
@@ -197,7 +210,6 @@ class _LoginState extends State<Login> {
       String iconPath}) {
     return TextFormField(
       style: TextStyle(),
-      obscureText: true,
       controller: textEditingController,
       decoration: InputDecoration(
         labelText: label,
