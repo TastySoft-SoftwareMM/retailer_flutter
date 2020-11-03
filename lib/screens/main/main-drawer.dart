@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:retailer/screens/mandatorytasks/orderList.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/screens/user/profile/profile.dart';
@@ -201,7 +201,19 @@ class _MainDrawerState extends State<MainDrawer> {
                                 MaterialPageRoute(
                                     builder: (context) => OrderListScreen()));
                           } else {
-                            showToast();
+                            showToast('Select Shop',
+                                context: context,
+                                animation: StyledToastAnimation.slideFromTop,
+                                reverseAnimation:
+                                    StyledToastAnimation.slideToTop,
+                                position: StyledToastPosition.top,
+                                startOffset: Offset(0.0, -3.0),
+                                reverseEndOffset: Offset(0.0, -3.0),
+                                duration: Duration(seconds: 4),
+                                //Animation duration   animDuration * 2 <= duration
+                                animDuration: Duration(seconds: 1),
+                                curve: Curves.elasticOut,
+                                reverseCurve: Curves.fastOutSlowIn);
                           }
                         },
                         child: Center(
@@ -223,16 +235,5 @@ class _MainDrawerState extends State<MainDrawer> {
             EdgeInsets.only(left: 15, top: 10, right: 10, bottom: 15),
       ),
     );
-  }
-
-  showToast() {
-    return Fluttertoast.showToast(
-        msg: "Select Shop",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 16.0);
   }
 }

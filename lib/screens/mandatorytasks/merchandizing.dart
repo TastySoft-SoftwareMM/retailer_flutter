@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
+import 'package:retailer/screens/main/main_Screen_Search.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizingEdit.dart';
 import '../../style/theme.dart' as Style;
 
@@ -32,8 +33,19 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text("Merchandizing"),
+        actions: [
+          IconButton(icon: Icon(Icons.search), onPressed: (){
+            showSearch(
+            context: context,
+            delegate: DataSearch(
+              "Search...",
+            ));
+          })
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(5.0),
