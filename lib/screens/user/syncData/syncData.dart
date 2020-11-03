@@ -9,7 +9,6 @@ class SyncData extends StatefulWidget {
 
 class _SyncDataState extends State<SyncData> {
   String _selectedType = 'Download';
-  bool downloadData = false;
   bool loading = false;
   double value = 0.0;
   @override
@@ -34,29 +33,31 @@ class _SyncDataState extends State<SyncData> {
                 ),
               ),
               loading
-                  ? Container(
-                      padding: EdgeInsets.only(
-                          top: 15, right: 8, left: 8, bottom: 15),
-                      height: 45,
+                  ? Padding(
+                      padding:
+                          EdgeInsets.only(right: 8, top: 8, left: 8, bottom: 8),
                       child: Center(
                         child: new Stack(
                             fit: StackFit.passthrough,
                             children: <Widget>[
                               Container(
-                                height: 30,
+                                height: 20,
                                 child: LinearProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Style.Colors.mainColor),
-                                  backgroundColor: Colors.grey[200],
+                                  backgroundColor: Colors.grey[300],
                                   value: value,
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.lerp(Alignment.topLeft,
-                                    Alignment.topRight, value * 0.5),
-                                child: Text(
-                                  (value * 100).toStringAsFixed(0),
-                                  style: Style.whiteTextStyle,
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Align(
+                                  alignment: Alignment.lerp(Alignment.topLeft,
+                                      Alignment.topRight, value * 0.5),
+                                  child: Text(
+                                    (value * 100).toStringAsFixed(0) + '%',
+                                    style: Style.whiteTextStyle,
+                                  ),
                                 ),
                               ),
                             ]),
@@ -102,20 +103,14 @@ class _SyncDataState extends State<SyncData> {
                 child: FlatButton(
                   color: Style.Colors.mainColor,
                   onPressed: () async {
-                    if (downloadData == true) {
-                      await testFunction();
+                    await testFunction();
 
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainScreen()));
-                    } else if (downloadData == false) {
-                      testFunction();
-                    }
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => MainScreen()));
                   },
                   child: Center(
                     child: Text(
-                      downloadData ? 'Start' : 'Download Stock Images',
+                      'Start',
                       style: Style.whiteTextStyle,
                     ),
                   ),
@@ -146,7 +141,6 @@ class _SyncDataState extends State<SyncData> {
     setState(() {
       loading = false;
       value = 0.0;
-      downloadData = true;
     });
   }
 
