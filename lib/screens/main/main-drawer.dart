@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:retailer/screens/mandatorytasks/orderList.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/screens/user/profile/profile.dart';
+import 'package:retailer/screens/user/syncData/toast.dart';
 import '../../style/theme.dart' as Style;
 
 class MainDrawer extends StatefulWidget {
@@ -195,24 +195,13 @@ class _MainDrawerState extends State<MainDrawer> {
                           if (selected != 0) {
                             Navigator.pop(context, true);
                             // showLoading();
+
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => OrderListScreen()));
                           } else {
-                            showToast('Select Shop',
-                                context: context,
-                                animation: StyledToastAnimation.slideFromTop,
-                                reverseAnimation:
-                                    StyledToastAnimation.slideToTop,
-                                position: StyledToastPosition.top,
-                                startOffset: Offset(0.0, -3.0),
-                                reverseEndOffset: Offset(0.0, -3.0),
-                                duration: Duration(seconds: 4),
-                                //Animation duration   animDuration * 2 <= duration
-                                animDuration: Duration(seconds: 1),
-                                curve: Curves.elasticOut,
-                                reverseCurve: Curves.fastOutSlowIn);
+                            return ShowToast().getToast(context,'Select Shop');
                           }
                         },
                         child: Center(
