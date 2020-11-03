@@ -195,7 +195,6 @@ class _MainDrawerState extends State<MainDrawer> {
                           if (selected != 0) {
                             Navigator.pop(context, true);
                             // showLoading();
-
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
