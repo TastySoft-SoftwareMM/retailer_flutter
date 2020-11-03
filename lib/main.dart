@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:retailer/screens/main/main-screen.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
 import 'style/theme.dart' as Style;
@@ -20,6 +21,6 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Login());
+        home: MainScreen());
   }
 }

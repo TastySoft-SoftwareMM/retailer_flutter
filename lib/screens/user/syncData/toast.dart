@@ -3,7 +3,7 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 
 class ShowToast {
   getToast(BuildContext context, String message) {
-    return showToast('Select Shop',
+    return showToast(message,
         context: context,
         animation: StyledToastAnimation.slideFromTop,
         reverseAnimation: StyledToastAnimation.slideToTop,

@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:retailer/screens/main/main-screen.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
+import 'package:retailer/screens/user/syncData/toast.dart';
 import 'package:retailer/services/online_service.dart';
 import '../../style/theme.dart' as Style;
 
@@ -166,7 +167,9 @@ class _LoginState extends State<Login> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SyncData()));
-                      } else {}
+                      } else {
+                        return ShowToast().getToast(context, 'Fail');
+                      }
                     },
                   ),
                   SizedBox(

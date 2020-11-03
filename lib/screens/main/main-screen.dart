@@ -37,36 +37,38 @@ class _MainScreenState extends State<MainScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-              backgroundColor: Color(0xFFF5F5F5),
-              appBar: AppBar(
-                title: Text("Retailer"),
-                actions: [
-                  IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        showSearch(
-                            context: context,
-                            delegate: DataSearch(
-                              "Search...",
-                            ));
-                      })
-                ],
-              ),
-              drawer: MainDrawer(),
-              body: loading?Center(
+        backgroundColor: Color(0xFFF5F5F5),
+        appBar: AppBar(
+          title: Text("Retailer"),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: DataSearch(
+                        "Search...",
+                      ));
+                })
+          ],
+        ),
+        drawer: MainDrawer(),
+        body: loading
+            ? Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor:
                       new AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
                 ),
-              ):Column(
+              )
+            : Column(
                 children: [
                   Container(
                       height: 60, child: createUploadMerchandizingWidget()),
                   Expanded(child: getExpansionList()),
                 ],
               ),
-            ),
+      ),
     );
   }
 
@@ -110,8 +112,7 @@ class _MainScreenState extends State<MainScreen> {
     List<Widget> getByCharacter = [];
     return ListView.builder(
       itemBuilder: (context, index) => Card(
-        color: Colors.transparent,
-        elevation: 3,
+        color: Style.Colors.dropBackgroundColor,
         child: custom.ExpansionTitle(
           backgroundColor: Style.Colors.dropBackgroundColor,
           initiallyExpanded: false,

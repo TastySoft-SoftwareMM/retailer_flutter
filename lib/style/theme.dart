@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Colors {
   static const Color mainColor = const Color(0xFFe53935);
-  static const Color dropBackgroundColor = const Color.fromRGBO(0, 0, 0, 0.12);
+  static const Color dropBackgroundColor = const Color(0xFFBDBDBD);
   static const Color iconColor = const Color(0xFF999999);
   static const Color textColor = const Color(0xFFFFFFFF);
 
@@ -27,7 +27,6 @@ final TextStyle headingPrimaryTextStyle = TextStyle(
   height: 1.2,
   fontWeight: FontWeight.w500,
   color: Colors.mainColor,
-  
 );
 
 final TextStyle secondTextStyle = TextStyle(
