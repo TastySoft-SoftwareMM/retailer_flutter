@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/main/visit-card.dart';
-import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import '../../style/theme.dart' as Style;
 import 'package:intl/intl.dart';
 
 class CheckInAlert {
   checkInDialog(BuildContext context, String state) {
     List<String> _checkInList = ['Check In', 'Store Closed'];
-    String _selectedType; // Option 2
+    String _selectedType;
     DateFormat dateFormat = DateFormat("dd/MM/yyyy-HH:mm aaa");
 
     String currentTime = dateFormat.format(DateTime.now());
