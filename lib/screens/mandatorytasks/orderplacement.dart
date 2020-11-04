@@ -156,7 +156,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                 padding: const EdgeInsets.only(left:8.0),
                 child: Container(
                   height: 110,
-                  width: width * 0.72,
+                  width: width * 0.72-1.5,
                   child: Card(
                     child: Column(
                       children: [
@@ -398,8 +398,10 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
               )
             ],
           ),
+          decoration: BoxDecoration(
 
 
+          ),
         ),
       ),
       itemCount: 10,
@@ -435,7 +437,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                 padding: const EdgeInsets.only(left:8.0),
                 child: Container(
                   height: 110,
-                  width: width * 0.72,
+                  width: width * 0.72-1.5,
                   child: Card(
                     child: Column(
                       children: [
