@@ -4,8 +4,9 @@ import 'package:retailer/screens/main/main-screen.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
 import 'package:retailer/screens/user/syncData/toast.dart';
-import 'package:retailer/services/online_service.dart';
+import 'package:retailer/services/online_service.dart' as online_service;
 import '../../style/theme.dart' as Style;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -158,7 +159,7 @@ class _LoginState extends State<Login> {
                     ),
                     onPressed: () async {
                       print(this.userIdController.text);
-                      var check = await getOrgId(
+                      var check = await online_service.getOrgId(
                           this.userIdController.text, this.passController.text);
                       print("login $check");
 
@@ -256,12 +257,22 @@ class _ChangeUrlPageState extends State<ChangeUrlPage> {
   final _fomkey = GlobalKey<FormState>();
   TextEditingController urlController = TextEditingController();
   bool enable = false;
+
+  void initSate() async {
+    if (urlController.text.isEmpty) {
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
+      if (preferences.getString('mainurl') == null) {
+        urlController.text = online_service.mainUrl;
+      } else {
+        urlController.text = preferences.getString('mainurl');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (urlController.text.isEmpty) {
-      urlController.text =
-          'http://52.253.88.71:8084/madbrepository/?fbclid=IwAR1Xrl508ZX3Cca714S5CcALeebob912uEWVfgMk9s60Z1YbCYqgSKIektY';
-    }
+    initSate();
     return Scaffold(
       appBar: AppBar(
         title: Text('URL'),
@@ -319,9 +330,11 @@ class _ChangeUrlPageState extends State<ChangeUrlPage> {
   changeUrl(bool value) async {
     switch (value) {
       case true:
+        final SharedPreferences preferences =
+            await SharedPreferences.getInstance();
+        preferences.setString("mainurl", urlController.text);
         Navigator.pop(context, true);
         break;
-
       case false:
         setState(() {
           enable = true;
