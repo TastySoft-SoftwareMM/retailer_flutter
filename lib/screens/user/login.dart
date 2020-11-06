@@ -14,7 +14,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   var width;
-  bool isLoading = false;
   TextEditingController userIdController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
@@ -23,201 +22,191 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
-    return isLoading
-        ? getLoading()
-        : Scaffold(
-            resizeToAvoidBottomPadding: true,
-            body: Form(
-              key: _formKey,
-              child: ListView(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      PopupMenuButton<dynamic>(
-                        offset: Offset(10, 10),
-                        onSelected: (value) => onMenuSelection(value),
-                        icon: Icon(Icons.more_vert, color: Colors.black),
-                        itemBuilder: (BuildContext contex) {
-                          return [
-                            PopupMenuItem<PopupMenuChoices>(
-                              height: 30,
-                              enabled: false,
-                              child: Center(
-                                  child: Text(
-                                'Setting',
-                                style: TextStyle(color: Colors.black),
-                              )),
-                            ),
-                            PopupMenuDivider(
-                              height: 2,
-                            ),
-                            PopupMenuItem<PopupMenuChoices>(
-                              height: 50,
-                              value: PopupMenuChoices.url,
-                              child: Container(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "URL",
-                                    ),
-                                    Spacer(),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        left: width * 0.2,
-                                      ),
-                                      child: Icon(Icons.keyboard_arrow_right),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            PopupMenuItem<PopupMenuChoices>(
-                              enabled: false,
-                              height: 30,
-                              child: Container(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Version 1.2.43",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    Spacer(),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ];
-                        },
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 25, left: 25, right: 25),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Image.asset(
-                            'assets/login.png',
-                            height: MediaQuery.of(context).size.height / 3,
-                            fit: BoxFit.fitHeight,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Login Now',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text('Please sign in to continue',
-                            style: TextStyle(color: Colors.black)),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        getTextField(
-                          textEditingController: userIdController,
-                          label: 'User ID',
-                          iconPath: 'assets/icon/id.png',
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        getTextField(
-                            textEditingController: passController,
-                            label: 'Password',
-                            iconPath: 'assets/icon/lock.png'),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            print('forgot password was tap');
-                          },
-                          child: Center(
-                              child: Text(
-                            'Forgot Password?',
-                            style: Style.headingPrimaryTextStyle,
-                          )),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        FlatButton(
-                          color: Style.Colors.mainColor,
-                          child: Center(
+    return Scaffold(
+      resizeToAvoidBottomPadding: true,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                PopupMenuButton<dynamic>(
+                  offset: Offset(10, 10),
+                  onSelected: (value) => onMenuSelection(value),
+                  icon: Icon(Icons.more_vert, color: Colors.black),
+                  itemBuilder: (BuildContext contex) {
+                    return [
+                      PopupMenuItem<PopupMenuChoices>(
+                        height: 30,
+                        enabled: false,
+                        child: Center(
                             child: Text(
-                              'LOGIN',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            print(this.userIdController.text);
-                            var check = await getOrgId(
-                                this.userIdController.text,
-                                this.passController.text);
-                            print("login $check");
-
-                            if (check == "success") {
-                              setState(() {
-                                isLoading = false;
-                              });
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SyncData()));
-                            } else {
-                              setState(() {
-                                isLoading = false;
-                              });
-                              getToast(context, 'Fail');
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Center(
-                            child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Don\'t have an account? ',
-                              style: TextStyle(),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignUpPage()));
-                              },
-                              child: Text(
-                                ' Sign up',
-                                style: Style.headingPrimaryTextStyle,
-                              ),
-                            ),
-                          ],
+                          'Setting',
+                          style: TextStyle(color: Colors.black),
                         )),
-                      ],
+                      ),
+                      PopupMenuDivider(
+                        height: 2,
+                      ),
+                      PopupMenuItem<PopupMenuChoices>(
+                        height: 50,
+                        value: PopupMenuChoices.url,
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Text(
+                                "URL",
+                              ),
+                              Spacer(),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: width * 0.2,
+                                ),
+                                child: Icon(Icons.keyboard_arrow_right),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem<PopupMenuChoices>(
+                        enabled: false,
+                        height: 30,
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Text(
+                                "Version 1.2.43",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ];
+                  },
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Image.asset(
+                      'assets/login.png',
+                      height: MediaQuery.of(context).size.height / 3,
+                      fit: BoxFit.fitHeight,
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Login Now',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('Please sign in to continue',
+                      style: TextStyle(color: Colors.black)),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  getTextField(
+                    textEditingController: userIdController,
+                    label: 'User ID',
+                    iconPath: 'assets/icon/id.png',
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  getTextField(
+                      textEditingController: passController,
+                      label: 'Password',
+                      iconPath: 'assets/icon/lock.png'),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      print('forgot password was tap');
+                    },
+                    child: Center(
+                        child: Text(
+                      'Forgot Password?',
+                      style: Style.headingPrimaryTextStyle,
+                    )),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  FlatButton(
+                    color: Style.Colors.mainColor,
+                    child: Center(
+                      child: Text(
+                        'LOGIN',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    onPressed: () async {
+                      loading(
+                        context,
+                      );
+                      var check = await getOrgId(
+                          this.userIdController.text, this.passController.text);
+                      print("login $check");
+
+                      if (check == "success") {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyncData()));
+                      } else {
+                        getToast(context, 'Fail');
+                        Navigator.pop(context, true);
+
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Center(
+                      child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don\'t have an account? ',
+                        style: TextStyle(),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignUpPage()));
+                        },
+                        child: Text(
+                          ' Sign up',
+                          style: Style.headingPrimaryTextStyle,
+                        ),
+                      ),
+                    ],
+                  )),
                 ],
               ),
             ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 
   getTextField(
