@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/mandatorytasks/orderplacement.dart';
+import 'package:provider/provider.dart';
 import 'package:retailer/screens/user/login.dart';
+import 'package:retailer/stateManagment/loginStateVM.dart';
 import 'style/theme.dart' as Style;
 
 void main() {
@@ -20,6 +21,13 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: OrderPlacementScreen());
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_) => NewLoginViewModel(),
+            )
+          ],
+          child: Login(),
+        ));
   }
 }

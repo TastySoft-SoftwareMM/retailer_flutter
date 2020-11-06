@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
 import 'package:retailer/screens/user/syncData/toast.dart';
-import 'package:retailer/services/online_service.dart';
+import 'package:retailer/stateManagment/loginStateVM.dart';
 import '../../style/theme.dart' as Style;
 
 class Login extends StatefulWidget {
@@ -16,11 +17,13 @@ class _LoginState extends State<Login> {
   var width;
   TextEditingController userIdController = TextEditingController();
   TextEditingController passController = TextEditingController();
-
-  String _userId;
+  NewLoginViewModel newLoginViewModel;
+  // String _userId;
 
   @override
   Widget build(BuildContext context) {
+    newLoginViewModel = Provider.of<NewLoginViewModel>(context);
+
     width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: true,
@@ -158,10 +161,12 @@ class _LoginState extends State<Login> {
                       loading(
                         context,
                       );
-                      var check = await getOrgId(
+                      newLoginViewModel = Provider.of<NewLoginViewModel>(
+                          context,
+                          listen: false);
+                      await newLoginViewModel.checkLogin(
                           this.userIdController.text, this.passController.text);
-                      print("login $check");
-
+                      var check = newLoginViewModel.check;
                       if (check == "success") {
                         Navigator.pushReplacement(
                             context,
@@ -170,7 +175,6 @@ class _LoginState extends State<Login> {
                       } else {
                         getToast(context, 'Fail');
                         Navigator.pop(context, true);
-
                       }
                     },
                   ),
