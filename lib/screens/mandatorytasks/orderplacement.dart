@@ -96,7 +96,6 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
         children: <Widget>[
           SizedBox(height: 4,),
           RecomandItemWidget(),
-          showMore(),
           addToCart(),
         ],
       ),
@@ -684,32 +683,21 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
     );
   }
 
-  showMore() {
-    return FlatButton(
-      onPressed: () {
-        /*...*/
-      },
-      child: Text(
-        "Load More",
-        style: TextStyle(
-          color: Colors.red,
-        ),
-      ),
-    );
-  }
-
   addToCart() {
-    return Container(
-      width: 480,
-      child: FlatButton(
-        color: Colors.red,
-        textColor: Colors.white,
-        padding: EdgeInsets.all(8.0),
-        splashColor: Colors.deepOrange,
-        onPressed: () {},
-        child: Text(
-          "Add to Cart",
-          style: TextStyle(fontSize: 15.0),
+    return Padding(
+      padding: const EdgeInsets.only(left:9.0,right: 11.5),
+      child: Container(
+        width: 480,
+        child: FlatButton(
+          color: Colors.red,
+          textColor: Colors.white,
+          padding: EdgeInsets.all(8.0),
+          splashColor: Colors.deepOrange,
+          onPressed: () {},
+          child: Text(
+            "Add to Cart",
+            style: TextStyle(fontSize: 15.0),
+          ),
         ),
       ),
     );
