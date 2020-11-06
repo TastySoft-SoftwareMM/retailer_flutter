@@ -9,21 +9,6 @@ class OnlineService {
   String mainUrl = "http://52.255.142.115:8084/madbrepository/"; //default link
 
   Future httpRequest(urlname, param) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    var url = '$mainUrl' + urlname;
-    return http
-        .post(Uri.encodeFull(url), body: param, headers: {
-          'Accept': 'text/html,application/json',
-          'Content-Type': 'application/json',
-          'Content-Over': preferences.getString('orgId')
-        })
-        .timeout(Duration(seconds: 20))
-        .catchError((error) {
-          print(error);
-        });
-  }
-
-  Future httpRequestForLogin(urlname, param) async {
     try {
       final SharedPreferences preferences =
           await SharedPreferences.getInstance();
@@ -55,7 +40,7 @@ class OnlineService {
 
     var param = jsonEncode({"userId": "$phNo", "password": "$password"}), check;
 
-    final response = await httpRequestForLogin('main/logindebug/mit', param);
+    final response = await httpRequest('main/logindebug/mit', param);
 
     if (response != null) {
       if (response.statusCode == 200) {

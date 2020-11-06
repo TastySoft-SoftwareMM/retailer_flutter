@@ -277,7 +277,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                   height: 40,
                                   width: secWidth * 0.35,
                                   child: Card(
-                                    color: Colors.grey[50],
+                                    color: Colors.grey[350],
                                     elevation: 0,
                                     child: Row(
                                       children: [
