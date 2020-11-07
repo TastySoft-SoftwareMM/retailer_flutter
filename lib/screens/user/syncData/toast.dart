@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:intl/intl.dart';
 import 'package:retailer/style/theme.dart' as Style;
 
+var date = DateTime.now();
+DateFormat dateFormat = DateFormat("yyyyMMdd");
+String getDate = dateFormat.format(date);
 getToast(BuildContext context, String message) {
   return showToast(message,
       context: context,

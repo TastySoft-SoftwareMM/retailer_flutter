@@ -35,36 +35,42 @@ class OnlineService {
     }
   }
 
-  Future<String> getOrgId(phNo, password) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    var param = jsonEncode({"userId": "$phNo", "password": "$password"}), check;
+  Future<LoginModel> getOrgId(phNo, password) async {
+    var param = jsonEncode({"userId": "788571913", "password": "123"});
 
     final response = await httpRequest('main/logindebug/mit', param);
-
-    if (response != null) {
-      if (response.statusCode == 200) {
-        final result = json.decode(response.body);
-        var changeRes = LoginModel.fromJson(result);
-        if (changeRes.orgId != "" && changeRes.orgId != null) {
-          if (changeRes.orgId != '' &&
-              changeRes.userId != '' &&
-              changeRes.userType == "saleperson") {
-            preferences.setString('orgId', changeRes.orgId);
-            check = 'success';
-          } else {
-            check = 'fail';
-          }
-        } else {
-          check = 'fail';
-        }
-      } else {
-        print(response.statusCode);
-        check = "Server Error " + response.statusCode.toString() + " !";
-      }
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      LoginModel getLoginDetail = LoginModel.fromJson(result);
+      return getLoginDetail;
     } else {
-      check = 'Connection Fail!';
+      throw Exception("Failled to get top news");
     }
-    return check;
+  }
+
+  getMainScreenList(
+      {String spsysKey,
+      String teamsysKey,
+      String userType,
+      String date}) async {
+    var param = jsonEncode({
+      "spsyskey": "$spsysKey",
+      "teamsyskey": "$teamsysKey",
+      "usertype": "$userType",
+      "date": "$date",
+    });
+    print(spsysKey);
+    print(teamsysKey);
+    print(userType);
+    print(date);
+    final response = await httpRequest('shop/getshopall', param);
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      print(result);
+      // LoginModel getLoginDetail = LoginModel.fromJson(result);
+      // return getLoginDetail;
+    } else {
+      throw Exception(response.statusCode);
+    }
   }
 }

@@ -158,24 +158,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     onPressed: () async {
-                      loading(
-                        context,
-                      );
-                      newLoginViewModel = Provider.of<NewLoginViewModel>(
-                          context,
-                          listen: false);
-                      await newLoginViewModel.checkLogin(
-                          this.userIdController.text, this.passController.text);
-                      var check = newLoginViewModel.check;
-                      if (check == "success") {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SyncData()));
-                      } else {
-                        getToast(context, 'Fail');
-                        Navigator.pop(context, true);
-                      }
+                      await check();
                     },
                   ),
                   SizedBox(
@@ -211,6 +194,30 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  check() async {
+    loading(
+      context,
+    );
+    newLoginViewModel = Provider.of<NewLoginViewModel>(context, listen: false);
+    await newLoginViewModel.checkLogin(
+        this.userIdController.text, this.passController.text);
+    var check = newLoginViewModel.check;
+    if (check.orgId != "" && check.orgId != null) {
+      if (check.orgId != '' &&
+          check.userId != '' &&
+          check.userType == "saleperson") {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => SyncData()));
+      } else {
+        getToast(context, 'Fail');
+        Navigator.pop(context, true);
+      }
+    } else {
+      getToast(context, 'Fail');
+      Navigator.pop(context, true);
+    }
   }
 
   getTextField(
