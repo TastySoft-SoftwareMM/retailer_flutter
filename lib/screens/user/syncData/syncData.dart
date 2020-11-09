@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/main/main-screen.dart';
-import 'package:retailer/stateManagment/loginStateVM.dart';
+import 'package:retailer/stateManagment/functional_provider.dart';
 import 'package:retailer/style/theme.dart' as Style;
 
 class SyncData extends StatefulWidget {
@@ -11,13 +10,13 @@ class SyncData extends StatefulWidget {
 }
 
 class _SyncDataState extends State<SyncData> {
-  NewLoginViewModel newLoginViewModel;
+  ViewModelFunction viewModelFunction;
   String _selectedType = 'Download';
   bool loading = false;
   double value = 0.0;
   @override
   Widget build(BuildContext context) {
-    newLoginViewModel = Provider.of<NewLoginViewModel>(context);
+    viewModelFunction = Provider.of<ViewModelFunction>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -109,10 +108,11 @@ class _SyncDataState extends State<SyncData> {
                 child: FlatButton(
                   color: Style.Colors.mainColor,
                   onPressed: () async {
-                    await syncDataFunction();
-
-                    // Navigator.pushReplacement(context,
-                    //     MaterialPageRoute(builder: (context) => MainScreen()));
+                    if (loading == false) {
+                      await syncDataFunction();
+                    } else {
+                      return null;
+                    }
                   },
                   child: Center(
                     child: Text(
@@ -130,27 +130,29 @@ class _SyncDataState extends State<SyncData> {
   }
 
   Future<void> syncDataFunction() async {
-    await newLoginViewModel.getMainList();
+    setState(() {
+      print('object');
+      loading = true;
+    });
+    await viewModelFunction.getMainList();
+    await Future.doWhile(() async {
+      await Future.delayed(Duration(milliseconds: 1));
+      setState(() {
+        value += 0.01;
+      });
+      if (value >= 1) {
+        return false;
+      }
+      return true;
+    }).timeout(Duration(seconds: 5));
+    setState(() {
+      loading = false;
+      value = 0.0;
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => MainScreen()));
+    });
   }
 
-  // setState(() {
-  //   loading = true;
-  // });
-  // await Future.doWhile(() async {
-  //   await Future.delayed(Duration(milliseconds: 10));
-  //   setState(() {
-  //     value += 0.01;
-  //   });
-  //   if (value >= 1) {
-  //     return false;
-  //   }
-  //   return true;
-  // });
-  // // .timeout(Duration(seconds: 20)).then(print).catchError(print);
-  // setState(() {
-  //   loading = false;
-  //   value = 0.0;
-  // });
   showToSelected() {
     return showDialog<void>(
       barrierDismissible: true,

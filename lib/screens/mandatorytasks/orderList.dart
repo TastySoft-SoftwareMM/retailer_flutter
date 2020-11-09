@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
 import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
@@ -7,7 +6,6 @@ import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
 import 'package:retailer/custom/custom_expansion_title.dart' as custom;
 
 import 'package:retailer/screens/components/checkin-shop.dart';
-import 'package:retailer/screens/mandatorytasks/orderEdit.dart';
 import '../../style/theme.dart' as Style;
 import 'package:http/http.dart' as http;
 

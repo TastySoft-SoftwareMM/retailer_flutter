@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
 import 'package:retailer/screens/user/syncData/toast.dart';
-import 'package:retailer/stateManagment/loginStateVM.dart';
+import 'package:retailer/stateManagment/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
 class Login extends StatefulWidget {
@@ -17,12 +17,12 @@ class _LoginState extends State<Login> {
   var width;
   TextEditingController userIdController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  NewLoginViewModel newLoginViewModel;
+  ViewModelFunction newLoginViewModel;
   // String _userId;
 
   @override
   Widget build(BuildContext context) {
-    newLoginViewModel = Provider.of<NewLoginViewModel>(context);
+    newLoginViewModel = Provider.of<ViewModelFunction>(context);
 
     width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -200,7 +200,7 @@ class _LoginState extends State<Login> {
     loading(
       context,
     );
-    newLoginViewModel = Provider.of<NewLoginViewModel>(context, listen: false);
+    newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
     await newLoginViewModel.checkLogin(
         this.userIdController.text, this.passController.text);
     var check = newLoginViewModel.check;

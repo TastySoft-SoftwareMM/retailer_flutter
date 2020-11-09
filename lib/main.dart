@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/user/login.dart';
-import 'package:retailer/screens/user/syncData/syncData.dart';
-import 'package:retailer/stateManagment/loginStateVM.dart';
+import 'package:retailer/stateManagment/functional_provider.dart';
 import 'screens/user/login.dart';
 import 'style/theme.dart' as Style;
+
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
-        create: (_) => NewLoginViewModel(),
+        create: (_) => ViewModelFunction(),
       )
     ],
     child: MyApp(),

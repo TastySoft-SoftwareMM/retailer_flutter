@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/main/checkInAlert.dart';
 import 'package:retailer/screens/main/main_Screen_Search.dart';
+import 'package:retailer/stateManagment/functional_provider.dart';
 import './main-drawer.dart';
 import '../../style/theme.dart' as Style;
 import 'main-drawer.dart';
@@ -14,25 +17,21 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool loading = true;
-  List<String> expansionList = [
-    'My list of stores for visit : 12/30',
-    'Other list John Doe:',
-  ];
-
-  List<Item> _items = Item.getItems();
+  ViewModelFunction viewModelFunction;
+  List<ShopByListM> listByUserCode;
 
   var width;
   var height;
   @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    viewModelFunction = Provider.of<ViewModelFunction>(context);
+    if (listByUserCode == null) {
+      listByUserCode = new List<ShopByListM>();
+      getData();
+    }
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -61,12 +60,16 @@ class _MainScreenState extends State<MainScreen> {
                       new AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
                 ),
               )
-            : Column(
-                children: [
-                  Container(
-                      height: 60, child: createUploadMerchandizingWidget()),
-                  Expanded(child: getExpansionList()),
-                ],
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    viewModelFunction.check.merchandizer == 'true'
+                        ? Container()
+                        : createUploadMerchandizingWidget(),
+                    getShopByUser(),
+                    getShopByTeam(),
+                  ],
+                ),
               ),
       ),
     );
@@ -108,9 +111,11 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget getExpansionList() {
+  Widget getShopByUser() {
     List<Widget> getByCharacter = [];
     return ListView.builder(
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
       itemBuilder: (context, index) => Card(
         color: Style.Colors.dropBackgroundColor,
         child: custom.ExpansionTitle(
@@ -122,12 +127,12 @@ class _MainScreenState extends State<MainScreen> {
             child: Row(
               children: [
                 Text(
-                  expansionList[index].toString(),
+                  "My lists of store for visit:",
                   style: TextStyle(color: Style.Colors.textColor),
                 ),
                 Spacer(),
                 Text(
-                  '0 / 3',
+                  '0 / ${viewModelFunction.shopsByUser.length}',
                   style: TextStyle(color: Style.Colors.textColor),
                 ),
               ],
@@ -141,13 +146,14 @@ class _MainScreenState extends State<MainScreen> {
               builder: (BuildContext context,
                   AsyncSnapshot<http.Response> response) {
                 getByCharacter.clear();
-                _items.forEach((element) {
+                viewModelFunction.shopsByUser.forEach((element) {
                   getByCharacter.add(
                     Card(
                       color: Colors.white,
                       child: InkWell(
                         onTap: () {
-                          CheckInAlert().checkInDialog(context, element._state);
+                          CheckInAlert()
+                              .checkInDialog(context, element.shopname);
                         },
                         child: Padding(
                           padding: EdgeInsets.only(top: 10.0),
@@ -156,13 +162,13 @@ class _MainScreenState extends State<MainScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Text(element._name,
+                                  child: Text(element.shopname,
                                       style: Style.headingTextStyle),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(4.0),
                                   child: Text(
-                                    element._state,
+                                    element.shopname,
                                     style: Style.statusSuccessTextStyle,
                                   ),
                                 )
@@ -172,10 +178,10 @@ class _MainScreenState extends State<MainScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    element._phone,
+                                    element.personph,
                                     style: Style.secondTextStyle,
                                   ),
-                                  Text(element._address,
+                                  Text(element.address,
                                       style: Style.secondTextStyle)
                                 ]),
                           ),
@@ -191,83 +197,115 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      itemCount: expansionList.length,
+      itemCount: viewModelFunction.shopsByUser.length == null ? 1 : 0,
     );
   }
 
-  getData() async {
-    await Future.delayed(Duration(seconds: 3));
+  Widget getShopByTeam() {
+    List<Widget> getByCharacter = [];
+    return ListView.builder(
+      physics: ClampingScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (context, index) => Card(
+        color: Style.Colors.dropBackgroundColor,
+        child: custom.ExpansionTitle(
+          backgroundColor: Style.Colors.dropBackgroundColor,
+          initiallyExpanded: false,
+          headerBackgroundColor: Style.Colors.mainColor,
+          iconColor: Style.Colors.textColor,
+          title: Container(
+            child: Row(
+              children: [
+                Text(
+                  "Other lists ( " + listByUserCode[index].shopname + " )",
+                  style: TextStyle(color: Style.Colors.textColor),
+                ),
+                Spacer(),
+                Text(
+                  '0 / ${listByUserCode.length}',
+                  style: TextStyle(color: Style.Colors.textColor),
+                ),
+              ],
+            ),
+          ),
+          onExpansionChanged: (value) {
+            // print(value);
+          },
+          children: [
+            new FutureBuilder(
+              builder: (BuildContext context,
+                  AsyncSnapshot<http.Response> response) {
+                getByCharacter.clear();
+                List<ShopByListM> list = viewModelFunction.shopsByTeam
+                    .where((p) =>
+                        p.usercode.contains(listByUserCode[index].usercode))
+                    .toList();
+                list.forEach((element) {
+                  getByCharacter.add(
+                    Card(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          CheckInAlert()
+                              .checkInDialog(context, element.shopname);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: ListTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(element.shopname,
+                                      style: Style.headingTextStyle),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    element.shopname,
+                                    style: Style.statusSuccessTextStyle,
+                                  ),
+                                )
+                              ],
+                            ),
+                            subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    element.personph,
+                                    style: Style.secondTextStyle,
+                                  ),
+                                  Text(element.address,
+                                      style: Style.secondTextStyle)
+                                ]),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                });
+
+                return new Column(children: getByCharacter);
+              },
+            ),
+          ],
+        ),
+      ),
+      itemCount: listByUserCode.length ?? 0,
+    );
+  }
+
+  getData() {
+    List<String> getByTeam = [];
+    listByUserCode.clear();
+    viewModelFunction.shopsByTeam.forEach((allList) {
+      if (!getByTeam.contains(allList.usercode)) {
+        getByTeam.add(allList.usercode);
+        listByUserCode.add(allList);
+      }
+    });
     setState(() {
       loading = false;
     });
-  }
-}
-
-class Item {
-  int _id;
-  String _name;
-  String _phone;
-  String _address;
-  String _state;
-
-  Item(this._id, this._name, this._phone, this._address, this._state);
-
-  static List<Item> getItems() {
-    return <Item>[
-      Item(
-          0,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'complete'),
-      Item(
-          1,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'pending'),
-      Item(
-          2,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'complete'),
-      Item(
-          3,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'pending'),
-      Item(
-          4,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'complete'),
-      Item(
-          5,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'pending'),
-      Item(
-          6,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'complete'),
-      Item(
-          7,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'pending'),
-      Item(
-          8,
-          "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          '09123456789',
-          'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n',
-          'complete'),
-    ];
   }
 }
