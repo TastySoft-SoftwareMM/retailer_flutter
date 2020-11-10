@@ -60,16 +60,25 @@ class _MainScreenState extends State<MainScreen> {
                       new AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
                 ),
               )
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    viewModelFunction.check.merchandizer == 'true'
-                        ? Container()
-                        : createUploadMerchandizingWidget(),
-                    getShopByUser(),
-                    getShopByTeam(),
-                  ],
-                ),
+            : Column(
+                children: [
+                  viewModelFunction.check.merchandizer == 'true'
+                      ? Container()
+                      : createUploadMerchandizingWidget(),
+                  Container(
+                    height: height - 140,
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Column(
+                          children: [
+                            getShopByUser(),
+                            getShopByTeam(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
       ),
     );
@@ -79,15 +88,16 @@ class _MainScreenState extends State<MainScreen> {
   Widget createUploadMerchandizingWidget() {
     return Container(
       height: 60,
-      decoration: new BoxDecoration(
-          border: Border(
-              bottom: BorderSide(width: 0.6, color: Style.Colors.borderColor))),
+      // decoration: new BoxDecoration(
+      //     border: Border(
+      //         bottom: BorderSide(width: 0.6, color: Style.Colors.borderColor))),
       child: Padding(
         padding: EdgeInsets.all(5.0),
         child: SizedBox(
           width: double.infinity,
           height: 45.0,
           child: RaisedButton(
+            elevation: 0,
             onPressed: () {
               print('Upload Merchandizing was tap');
             },
@@ -148,42 +158,49 @@ class _MainScreenState extends State<MainScreen> {
                 getByCharacter.clear();
                 viewModelFunction.shopsByUser.forEach((element) {
                   getByCharacter.add(
-                    Card(
-                      color: Colors.white,
-                      child: InkWell(
-                        onTap: () {
-                          CheckInAlert()
-                              .checkInDialog(context, element.shopname);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(element.shopname,
-                                      style: Style.headingTextStyle),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Text(
-                                    element.shopname,
-                                    style: Style.statusSuccessTextStyle,
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 4, left: 4, right: 4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.white),
+                        child: InkWell(
+                          onTap: () {
+                            CheckInAlert()
+                                .checkInDialog(context, element.shopname);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 10.0),
+                            child: ListTile(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(element.shopname,
+                                        style: Style.headingTextStyle),
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Text(
+                                      element.shopname,
+                                      style: Style.statusSuccessTextStyle,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      element.personph,
+                                      style: Style.secondTextStyle,
+                                    ),
+                                    Text(element.address,
+                                        style: Style.secondTextStyle)
+                                  ]),
                             ),
-                            subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    element.personph,
-                                    style: Style.secondTextStyle,
-                                  ),
-                                  Text(element.address,
-                                      style: Style.secondTextStyle)
-                                ]),
                           ),
                         ),
                       ),
@@ -191,7 +208,14 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 });
 
-                return new Column(children: getByCharacter);
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 4,
+                    ),
+                    new Column(children: getByCharacter),
+                  ],
+                );
               },
             ),
           ],
@@ -217,10 +241,12 @@ class _MainScreenState extends State<MainScreen> {
             child: Row(
               children: [
                 Container(
-                  width: width*0.7,
+                  width: width * 0.6,
                   child: Text(
                     "Other lists ( " + listByUserCode[index].username + " )",
-                    style: TextStyle(color: Style.Colors.textColor,),
+                    style: TextStyle(
+                      color: Style.Colors.textColor,
+                    ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -247,42 +273,49 @@ class _MainScreenState extends State<MainScreen> {
                     .toList();
                 list.forEach((element) {
                   getByCharacter.add(
-                    Card(
-                      color: Colors.white,
-                      child: InkWell(
-                        onTap: () {
-                          CheckInAlert()
-                              .checkInDialog(context, element.shopname);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(element.shopname,
-                                      style: Style.headingTextStyle),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Text(
-                                    element.shopname,
-                                    style: Style.statusSuccessTextStyle,
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 4, left: 4, right: 4),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.white),
+                        child: InkWell(
+                          onTap: () {
+                            CheckInAlert()
+                                .checkInDialog(context, element.shopname);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 10.0),
+                            child: ListTile(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(element.shopname,
+                                        style: Style.headingTextStyle),
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Text(
+                                      element.shopname,
+                                      style: Style.statusSuccessTextStyle,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      element.personph,
+                                      style: Style.secondTextStyle,
+                                    ),
+                                    Text(element.address,
+                                        style: Style.secondTextStyle)
+                                  ]),
                             ),
-                            subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    element.personph,
-                                    style: Style.secondTextStyle,
-                                  ),
-                                  Text(element.address,
-                                      style: Style.secondTextStyle)
-                                ]),
                           ),
                         ),
                       ),
@@ -290,7 +323,14 @@ class _MainScreenState extends State<MainScreen> {
                   );
                 });
 
-                return new Column(children: getByCharacter);
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 4,
+                    ),
+                    new Column(children: getByCharacter),
+                  ],
+                );
               },
             ),
           ],

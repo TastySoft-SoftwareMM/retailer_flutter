@@ -193,7 +193,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                   title: Text('Take Photo'),
                   onTap: () {
                     Navigator.pop(context, true);
-                    getImage(ImageSource.gallery);
+                    getImage(ImageSource.camera);
                   },
                 ),
               ],
