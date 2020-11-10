@@ -197,7 +197,7 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      itemCount: viewModelFunction.shopsByUser.length == null ? 1 : 0,
+      itemCount: viewModelFunction.shopsByUser.length == null ? 0 : 1,
     );
   }
 
@@ -216,9 +216,14 @@ class _MainScreenState extends State<MainScreen> {
           title: Container(
             child: Row(
               children: [
-                Text(
-                  "Other lists ( " + listByUserCode[index].shopname + " )",
-                  style: TextStyle(color: Style.Colors.textColor),
+                Container(
+                  width: width*0.7,
+                  child: Text(
+                    "Other lists ( " + listByUserCode[index].username + " )",
+                    style: TextStyle(color: Style.Colors.textColor,),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
                 ),
                 Spacer(),
                 Text(
@@ -296,12 +301,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   getData() {
+    print('get data is working');
     List<String> getByTeam = [];
     listByUserCode.clear();
     viewModelFunction.shopsByTeam.forEach((allList) {
       if (!getByTeam.contains(allList.usercode)) {
         getByTeam.add(allList.usercode);
         listByUserCode.add(allList);
+        print('object' + '$listByUserCode');
       }
     });
     setState(() {

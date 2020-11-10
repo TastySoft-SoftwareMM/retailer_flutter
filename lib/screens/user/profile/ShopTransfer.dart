@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class transferWidget extends StatefulWidget {
+class TransferWidget extends StatefulWidget {
   @override
-  _transferWidgetState createState() => _transferWidgetState();
+  _TransferWidgetState createState() => _TransferWidgetState();
 }
 
-class _transferWidgetState extends State<transferWidget> {
+class _TransferWidgetState extends State<TransferWidget> {
 
   String _dropDownValue;
   @override

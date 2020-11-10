@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
-import 'package:retailer/screens/components/loading.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
+import 'package:retailer/screens/user/syncData/toast.dart';
 import '../../style/theme.dart' as Style;
 import '../../custom/custom_expansion_title.dart' as custom;
 
@@ -67,8 +67,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      RecommendStockWidget('Recommend Stocks'),
-                      BrowseAllitemWidget('Browse All Items'),
+                      recommendStockWidget('Recommend Stocks'),
+                      browseAllitemWidget('Browse All Items'),
                     ],
                   ),
                 ),
@@ -80,7 +80,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
     );
   }
 
-  Widget RecommendStockWidget(String title) {
+  Widget recommendStockWidget(String title) {
     return Padding(
       padding: EdgeInsets.only(top: 5),
       child: custom.ExpansionTitle(
@@ -94,15 +94,17 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
           ),
         ),
         children: <Widget>[
-          SizedBox(height: 4,),
-          RecomandItemWidget(),
+          SizedBox(
+            height: 4,
+          ),
+          recomandItemWidget(),
           addToCart(),
         ],
       ),
     );
   }
 
-  Widget BrowseAllitemWidget(String title) {
+  Widget browseAllitemWidget(String title) {
     return Padding(
       padding: EdgeInsets.only(top: 5),
       child: custom.ExpansionTitle(
@@ -116,17 +118,16 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
           ),
         ),
         children: <Widget>[
-          SizedBox(height: 4,),
-          BrowseItemWidget(),
+          SizedBox(
+            height: 4,
+          ),
+          browseItemWidget(),
         ],
       ),
     );
   }
 
-
-
-
-  Widget RecomandItemWidget() {
+  Widget recomandItemWidget() {
     var secWidth = MediaQuery.of(context).size.width * 0.7 - 10;
     var width = MediaQuery.of(context).size.width - 10;
     return ListView.builder(
@@ -153,10 +154,10 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(right:4.0),
+                  padding: const EdgeInsets.only(right: 4.0),
                   child: Container(
                     height: 110,
-                    width: width * 0.72-1.5,
+                    width: width * 0.72 - 1.5,
                     child: Card(
                       child: Column(
                         children: [
@@ -168,12 +169,9 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 4,
-                                    right: 4,
-                                    top: 8
-                                ),
+                                    left: 4, right: 4, top: 8),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left:4.0),
+                                  padding: const EdgeInsets.only(left: 4.0),
                                   child: Container(
                                       width: secWidth * 0.7,
                                       child: Text(
@@ -208,10 +206,10 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(left:8.0),
+                                      padding: const EdgeInsets.only(left: 8.0),
                                       child: Container(
                                         height: 40,
-                                        width: secWidth * 0.08-3.2,
+                                        width: secWidth * 0.08 - 3.2,
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(
@@ -238,34 +236,38 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      right: 8,
-                                                      top: 8,
-                                                      bottom: 8,
-                                                      left: 4),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8,
+                                                          top: 8,
+                                                          bottom: 8,
+                                                          left: 4),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/minus.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                              const EdgeInsets.only(bottom: 5),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 5),
                                               child: Container(
                                                 width: secWidth * 0.1,
                                                 child: TextField(
                                                   style: TextStyle(
                                                       fontSize: 15,
-                                                      fontWeight: FontWeight.w500),
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                   controller: qtyController,
                                                   textAlign: TextAlign.center,
                                                   decoration: InputDecoration(
                                                     contentPadding:
-                                                    EdgeInsets.only(bottom: 14),
+                                                        EdgeInsets.only(
+                                                            bottom: 14),
                                                     border: InputBorder.none,
                                                   ),
                                                 ),
@@ -279,12 +281,16 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 8, top: 10, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8,
+                                                          top: 10,
+                                                          bottom: 10),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/add.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
@@ -333,34 +339,38 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      right: 8,
-                                                      top: 8,
-                                                      bottom: 8,
-                                                      left: 4),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8,
+                                                          top: 8,
+                                                          bottom: 8,
+                                                          left: 4),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/minus.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                              const EdgeInsets.only(bottom: 5),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 5),
                                               child: Container(
                                                 width: secWidth * 0.1,
                                                 child: TextField(
                                                   style: TextStyle(
                                                       fontSize: 15,
-                                                      fontWeight: FontWeight.w500),
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                   controller: expqtyController,
                                                   textAlign: TextAlign.center,
                                                   decoration: InputDecoration(
                                                     contentPadding:
-                                                    EdgeInsets.only(bottom: 14),
+                                                        EdgeInsets.only(
+                                                            bottom: 14),
                                                     border: InputBorder.none,
                                                   ),
                                                 ),
@@ -374,12 +384,16 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 8, top: 10, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8,
+                                                          top: 10,
+                                                          bottom: 10),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/add.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
@@ -402,17 +416,14 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
               )
             ],
           ),
-          decoration: BoxDecoration(
-
-
-          ),
+          decoration: BoxDecoration(),
         ),
       ),
       itemCount: 10,
     );
   }
 
-  Widget BrowseItemWidget() {
+  Widget browseItemWidget() {
     var secWidth = MediaQuery.of(context).size.width * 0.7 - 10;
     var width = MediaQuery.of(context).size.width - 10;
     return ListView.builder(
@@ -438,11 +449,11 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                 ),
               ),
               Expanded(
-                child :Padding(
-                  padding: const EdgeInsets.only(right:4.0),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
                   child: Container(
                     height: 110,
-                    width: width * 0.72-1.5,
+                    width: width * 0.72 - 1.5,
                     child: Card(
                       child: Column(
                         children: [
@@ -454,14 +465,11 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 4,
-                                    right: 4,
-                                    top: 8
-                                ),
+                                    left: 4, right: 4, top: 8),
                                 child: Container(
                                     width: secWidth * 0.7,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left:4.0),
+                                      padding: const EdgeInsets.only(left: 4.0),
                                       child: Text(
                                         'Attack on Titan',
                                         maxLines: 3,
@@ -496,7 +504,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                       padding: const EdgeInsets.only(left: 8),
                                       child: Container(
                                         height: 40,
-                                        width: secWidth * 0.08-3.2,
+                                        width: secWidth * 0.08 - 3.2,
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: Text(
@@ -523,34 +531,38 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      right: 8,
-                                                      top: 8,
-                                                      bottom: 8,
-                                                      left: 4),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8,
+                                                          top: 8,
+                                                          bottom: 8,
+                                                          left: 4),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/minus.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                              const EdgeInsets.only(bottom: 5),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 5),
                                               child: Container(
                                                 width: secWidth * 0.1,
                                                 child: TextField(
                                                   style: TextStyle(
                                                       fontSize: 15,
-                                                      fontWeight: FontWeight.w500),
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                   controller: qtyController,
                                                   textAlign: TextAlign.center,
                                                   decoration: InputDecoration(
                                                     contentPadding:
-                                                    EdgeInsets.only(bottom: 14),
+                                                        EdgeInsets.only(
+                                                            bottom: 14),
                                                     border: InputBorder.none,
                                                   ),
                                                 ),
@@ -564,12 +576,16 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 8, top: 10, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8,
+                                                          top: 10,
+                                                          bottom: 10),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/add.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
@@ -618,34 +634,38 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      right: 8,
-                                                      top: 8,
-                                                      bottom: 8,
-                                                      left: 4),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8,
+                                                          top: 8,
+                                                          bottom: 8,
+                                                          left: 4),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/minus.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                              const EdgeInsets.only(bottom: 5),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 5),
                                               child: Container(
                                                 width: secWidth * 0.1,
                                                 child: TextField(
                                                   style: TextStyle(
                                                       fontSize: 15,
-                                                      fontWeight: FontWeight.w500),
+                                                      fontWeight:
+                                                          FontWeight.w500),
                                                   controller: expqtyController,
                                                   textAlign: TextAlign.center,
                                                   decoration: InputDecoration(
                                                     contentPadding:
-                                                    EdgeInsets.only(bottom: 14),
+                                                        EdgeInsets.only(
+                                                            bottom: 14),
                                                     border: InputBorder.none,
                                                   ),
                                                 ),
@@ -659,12 +679,16 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                                 height: 40,
                                                 width: secWidth * 0.1,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 8, top: 10, bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8,
+                                                          top: 10,
+                                                          bottom: 10),
                                                   child: ImageIcon(
                                                     AssetImage(
                                                         'assets/icon/add.png'),
-                                                    color: Style.Colors.mainColor,
+                                                    color:
+                                                        Style.Colors.mainColor,
                                                     size: 16,
                                                   ),
                                                 ),
@@ -695,7 +719,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
 
   addToCart() {
     return Padding(
-      padding: const EdgeInsets.only(left:8 ,right: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       child: Container(
         width: 480,
         child: FlatButton(
@@ -724,9 +748,11 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
     Widget continueButton = FlatButton(
       child: Text("Yes"),
       onPressed: () {
+        loading(
+          context,
+        );
         setState(() {
-          LoadingScreen load = new LoadingScreen();
-          this.val = load.hello;
+          this.val = 'hello';
           print(this.val);
         });
       },

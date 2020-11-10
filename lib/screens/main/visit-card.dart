@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
-import 'package:retailer/screens/components/loading.dart';
 import 'package:retailer/screens/main/main-drawer.dart';
 import 'package:retailer/screens/main/main-screen.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizing.dart';
 import 'package:retailer/screens/mandatorytasks/orderplacement.dart';
+import 'package:retailer/screens/user/syncData/toast.dart';
 import '../../style/theme.dart' as Style;
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -19,7 +19,7 @@ class VisitCard extends StatefulWidget {
 
 class _VisitCardState extends State<VisitCard> {
   bool isSwitched = false;
-  bool _first = false;
+  bool first = false;
   List<VisitCardModel> visitcards = [
     checkout,
     inventorycheck,
@@ -150,8 +150,9 @@ class _VisitCardState extends State<VisitCard> {
             new CupertinoPageRoute(builder: (context) => MerchandizingScreen()));
         break;
       case 4:
-        LoadingScreen load = new LoadingScreen();
-        print(load.hello);
+         loading(
+          context,
+        );
         Navigator.push(
             context,
             new CupertinoPageRoute(
@@ -179,7 +180,7 @@ class _VisitCardState extends State<VisitCard> {
                 onChanged: (value) {
                   setState(() {
                     isSwitched = value;
-                    _first = value;
+                    first = value;
                     print(isSwitched);
                   });
                 },

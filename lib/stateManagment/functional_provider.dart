@@ -12,7 +12,11 @@ class ViewModelFunction with ChangeNotifier {
   List<ShopByListM> shopsByUser;
 
   checkLogin(String userId, String pass) async {
-    this.check = await OnlineService().getOrgId(userId, pass);
+    this.check = await OnlineService()
+        .getOrgId(userId, pass)
+        .timeout(Duration(seconds: 5), onTimeout: () {
+      return null;
+    });
 
     notifyListeners();
   }

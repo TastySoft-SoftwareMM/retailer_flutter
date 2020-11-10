@@ -44,6 +44,7 @@ class OnlineService {
       LoginModel getLoginDetail = LoginModel.fromJson(result);
       return getLoginDetail;
     } else {
+      print(response.statusCode);
       throw Exception("Failled to get top news");
     }
   }

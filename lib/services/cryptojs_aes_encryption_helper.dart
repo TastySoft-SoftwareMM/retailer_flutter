@@ -26,7 +26,7 @@ String encryptAESCryptoJS(String plainText, String passphrase) {
 getIvs() {
   final salt = genRandomWithNonZero(8);
   var keyndIV = deriveKeyAndIV('password', salt);
-  final key = encrypt.Key(keyndIV.item1);
+  // final key = encrypt.Key(keyndIV.item1);
   final iv = encrypt.IV(keyndIV.item2);
   return iv;
 }
@@ -60,7 +60,7 @@ Tuple2<Uint8List, Uint8List> deriveKeyAndIV(String passphrase, Uint8List salt) {
   Uint8List preHash = Uint8List(0);
 
   while (!enoughBytesForKey) {
-    int preHashLength = currentHash.length + password.length + salt.length;
+    // int preHashLength = currentHash.length + password.length + salt.length;
     if (currentHash.length > 0)
       preHash = Uint8List.fromList(currentHash + password + salt);
     else

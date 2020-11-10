@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class teamWidget extends StatefulWidget {
+class TeamWidget extends StatefulWidget {
   @override
-  _teamWidgetState createState() => _teamWidgetState();
+  _TeamWidgetState createState() => _TeamWidgetState();
 }
 
-class _teamWidgetState extends State<teamWidget> {
+class _TeamWidgetState extends State<TeamWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(

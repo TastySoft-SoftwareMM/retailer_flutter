@@ -170,8 +170,8 @@ class _ProfileState extends State<Profile> {
             height: MediaQuery.of(context).size.height,
             child: TabBarView(children: [
               userShopWidget(),
-              teamWidget(),
-              transferWidget(),
+              TeamWidget(),
+              TransferWidget(),
               PasswordWidget(),
             ]),
           ),
