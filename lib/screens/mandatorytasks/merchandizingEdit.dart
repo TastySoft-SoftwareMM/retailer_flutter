@@ -1,8 +1,8 @@
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import '../../style/theme.dart' as Style;
 
 class MerchandizingEdit extends StatefulWidget {
@@ -11,7 +11,10 @@ class MerchandizingEdit extends StatefulWidget {
 }
 
 class _MerchandizingEditState extends State<MerchandizingEdit> {
-  List<File> _imageList = [];
+  List<Asset> assetArray = [];
+  List<File> fileImageArray = [];
+
+  var pickedByCamera;
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +54,9 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,
-                children: List.generate(_imageList.length + 1, (index) {
+                children: List.generate(fileImageArray.length + 1, (index) {
                   return Container(
-                    child: index + 1 > _imageList.length
+                    child: index + 1 > fileImageArray.length
                         ? InkWell(
                             onTap: () {
                               _settingModalBottomSheet(context);
@@ -84,13 +87,13 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ViewImage(
-                                                  _imageList[index],
+                                                  fileImageArray[index],
                                                 )));
                                   },
                                   child: Container(
                                     child: ClipRRect(
                                       child: Image.file(
-                                        _imageList[index],
+                                        fileImageArray[index],
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -102,8 +105,8 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
-                                          _imageList.remove(
-                                            _imageList[index],
+                                          fileImageArray.remove(
+                                            fileImageArray[index],
                                           );
                                         });
                                       },
@@ -187,14 +190,14 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                     title: Text('Gallery '),
                     onTap: () {
                       Navigator.pop(context, true);
-                      getMutipleImage();
+                      loadAssets();
                     }),
                 ListTile(
                   leading: Icon(Icons.camera_alt_outlined),
                   title: Text('Take Photo'),
                   onTap: () {
                     Navigator.pop(context, true);
-                    getImage(ImageSource.camera);
+                    getImage();
                   },
                 ),
               ],
@@ -203,29 +206,49 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         });
   }
 
-  Future getImage(ImageSource imageSource) async {
+  Future getImage() async {
     final picker = ImagePicker();
-
-    final pickedFile = await picker.getImage(source: imageSource);
-    setState(() {
-      if (pickedFile != null) {
-        _imageList.add(File(pickedFile.path));
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
-
-  Future getMutipleImage() async {
-    List<File> result = await FilePicker.getMultiFile();
-    if (result != null) {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      File picked = File(pickedFile.path);
       setState(() {
-        _imageList.addAll(result);
+        fileImageArray.add(picked);
       });
     } else {
-      // User canceled the picker
+      print('No image selected.');
+    }
+  }
+
+  Future<void> loadAssets() async {
+    try {
+      assetArray = await MultiImagePicker.pickImages(
+        maxImages: 300,
+        enableCamera: false,
+        selectedAssets: assetArray,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#FFe53935",
+          actionBarTitle: "Select images",
+          allViewTitle: "All Photo",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#FFe53935",
+          statusBarColor: "#FFe53935",
+        ),
+      );
+    } on Exception catch (e) {
+      print(e.toString());
     }
 
+    assetArray.forEach((imageAsset) async {
+      final filePath =
+          await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
+      File tempFile = File(filePath);
+      if (tempFile.existsSync()) {
+        setState(() {
+          fileImageArray.add(tempFile);
+        });
+      }
+    });
   }
 }
 
