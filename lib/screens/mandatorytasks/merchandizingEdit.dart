@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../style/theme.dart' as Style;
@@ -74,51 +75,51 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                             ),
                           )
                         : Container(
-                          child: Stack(
-                            fit: StackFit.passthrough,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ViewImage(
-                                                _imageList[index],
-                                              )));
-                                },
-                                child: Container(
-                                  child: ClipRRect(
-                                    child: Image.file(
-                                      _imageList[index],
-                                      fit: BoxFit.cover,
+                            child: Stack(
+                              fit: StackFit.passthrough,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ViewImage(
+                                                  _imageList[index],
+                                                )));
+                                  },
+                                  child: Container(
+                                    child: ClipRRect(
+                                      child: Image.file(
+                                        _imageList[index],
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                  right: 2,
-                                  top: 2,
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _imageList.remove(
-                                          _imageList[index],
-                                        );
-                                      });
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 12,
-                                      backgroundColor: Colors.white,
-                                      child: Icon(
-                                        Icons.close,
-                                        size: 18,
-                                        color: Style.Colors.mainColor,
+                                Positioned(
+                                    right: 2,
+                                    top: 2,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          _imageList.remove(
+                                            _imageList[index],
+                                          );
+                                        });
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 12,
+                                        backgroundColor: Colors.white,
+                                        child: Icon(
+                                          Icons.close,
+                                          size: 18,
+                                          color: Style.Colors.mainColor,
+                                        ),
                                       ),
-                                    ),
-                                  )),
-                            ],
+                                    )),
+                              ],
+                            ),
                           ),
-                        ),
                   );
                 }),
               ),
@@ -186,7 +187,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                     title: Text('Gallery '),
                     onTap: () {
                       Navigator.pop(context, true);
-                      getImage(ImageSource.gallery);
+                      getMutipleImage();
                     }),
                 ListTile(
                   leading: Icon(Icons.camera_alt_outlined),
@@ -213,6 +214,18 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         print('No image selected.');
       }
     });
+  }
+
+  Future getMutipleImage() async {
+    List<File> result = await FilePicker.getMultiFile();
+    if (result != null) {
+      setState(() {
+        _imageList.addAll(result);
+      });
+    } else {
+      // User canceled the picker
+    }
+
   }
 }
 
