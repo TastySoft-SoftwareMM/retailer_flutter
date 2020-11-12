@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/main/checkInAlert.dart';
 import 'package:retailer/screens/main/main_Screen_Search.dart';
-import 'package:retailer/stateManagment/functional_provider.dart';
+import 'package:retailer/services/functional_provider.dart';
 import './main-drawer.dart';
 import '../../style/theme.dart' as Style;
 import 'main-drawer.dart';
@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
               )
             : Column(
                 children: [
-                  viewModelFunction.check.merchandizer == 'true'
+                  viewModelFunction.getLoginDetail.merchandizer == 'true'
                       ? Container()
                       : createUploadMerchandizingWidget(),
                   Container(

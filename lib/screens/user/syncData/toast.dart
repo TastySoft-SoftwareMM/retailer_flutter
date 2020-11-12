@@ -15,7 +15,7 @@ getToast(BuildContext context, String message) {
       startOffset: Offset(0.0, -3.0),
       reverseEndOffset: Offset(0.0, -3.0),
       duration: Duration(seconds: 4),
-      animDuration: Duration(seconds: 1),
+      animDuration: Duration(seconds: 2),
       curve: Curves.elasticOut,
       reverseCurve: Curves.fastOutSlowIn);
 }

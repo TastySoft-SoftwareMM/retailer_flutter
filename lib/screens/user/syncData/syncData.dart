@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/main/main-screen.dart';
-import 'package:retailer/stateManagment/functional_provider.dart';
+import 'package:retailer/services/functional_provider.dart';
 import 'package:retailer/style/theme.dart' as Style;
 
 class SyncData extends StatefulWidget {

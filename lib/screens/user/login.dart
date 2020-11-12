@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
 import 'package:retailer/screens/user/syncData/toast.dart';
-import 'package:retailer/stateManagment/functional_provider.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
 class Login extends StatefulWidget {
@@ -235,19 +235,35 @@ class _LoginState extends State<Login> {
     newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
     await newLoginViewModel.checkLogin(
         this.userIdController.text, this.passController.text);
-    var check = newLoginViewModel.check;
-    if (check.orgId != "" && check.orgId != null) {
-      if (check.orgId != '' &&
-          check.userId != '' &&
-          check.userType == "saleperson") {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => SyncData()));
+    int statusCode = newLoginViewModel.statusCode;
+
+    if (statusCode == 200) {
+      if (newLoginViewModel.getLoginDetail != null) {
+        if (newLoginViewModel.getLoginDetail.orgId != "" &&
+            newLoginViewModel.getLoginDetail.orgId != null &&
+            newLoginViewModel.getLoginDetail.userId != '' &&
+            newLoginViewModel.getLoginDetail.userType == "saleperson") {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => SyncData()));
+        } else {
+          getToast(context, 'Invalid User ID (or) Password');
+          Navigator.pop(context, true);
+        }
       } else {
-        getToast(context, 'Fail');
+        getToast(context, 'Invalid User ID (or) Password');
         Navigator.pop(context, true);
       }
+    } else if (statusCode == 404) {
+      getToast(context, 'Invalid URL !. Please check your URL');
+      Navigator.pop(context, true);
+    } else if (statusCode == 401 ||
+        statusCode == 403 ||
+        statusCode == 500 ||
+        statusCode == 502) {
+      getToast(context, 'Sever error !. Try again later');
+      Navigator.pop(context, true);
     } else {
-      getToast(context, 'Fail');
+      getToast(context, "unknown error !");
       Navigator.pop(context, true);
     }
   }
@@ -261,7 +277,11 @@ class _LoginState extends State<Login> {
       keyboardType:
           TextInputType.numberWithOptions(decimal: false, signed: true),
       validator: validFunction,
-      onChanged: (value) {},
+      onChanged: (value) {
+        // setState(() {
+        //   textEditingController.text = value;
+        // });
+      },
       style: TextStyle(),
       controller: textEditingController,
       decoration: InputDecoration(

@@ -1,10 +1,50 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:retailer/models/all_shop_saleList.dart';
 import 'package:retailer/models/loginModel.dart';
+import 'package:retailer/models/shopByListModel.dart';
+import 'package:retailer/screens/user/syncData/toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class OnlineService {
+class ViewModelFunction with ChangeNotifier {
+  LoginModel getLoginDetail;
+  AllShopSaleList allShopSaleList;
+  List<ShopByListM> shopsByTeam;
+  List<ShopByListM> shopsByUser;
+  int statusCode;
+  checkLogin(String userId, String pass) async {
+    var param = jsonEncode({"userId": userId, "password": pass});
+    final http.Response response =
+        await httpRequest('main/logindebug/mit', param, '');
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      getLoginDetail = LoginModel.fromJson(result);
+    }
+    statusCode = response.statusCode;
+
+    notifyListeners();
+  }
+
+  getMainList() async {
+    this.allShopSaleList = await getMainScreenList(
+            spsysKey: getLoginDetail.syskey,
+            teamsysKey: getLoginDetail.teamSyskey,
+            userType: getLoginDetail.userType,
+            date: getDate,
+            orgId: getLoginDetail.orgId)
+        .timeout(Duration(seconds: 8), onTimeout: () {
+      return null;
+    });
+    this.shopsByTeam = allShopSaleList.shopsByTeam
+        .map((e) => ShopByListM.fromJson(e))
+        .toList();
+    this.shopsByUser = allShopSaleList.shopsByUser
+        .map((e) => ShopByListM.fromJson(e))
+        .toList();
+    notifyListeners();
+  }
+
   String mainUrl = "http://52.255.142.115:8084/madbrepository/"; //default link
 
   Future httpRequest(urlname, param, String ordId) async {
@@ -31,21 +71,6 @@ class OnlineService {
           });
     } catch (e) {
       print(e.errMsg());
-    }
-  }
-
-  Future<LoginModel> getOrgId(phNo, password) async {
-    var param = jsonEncode({"userId": "788571913", "password": "123"});
-
-    final http.Response response =
-        await httpRequest('main/logindebug/mit', param, '');
-    if (response.statusCode == 200) {
-      final result = json.decode(response.body);
-      LoginModel getLoginDetail = LoginModel.fromJson(result);
-      return getLoginDetail;
-    } else {
-      print(response.statusCode);
-      throw Exception("Failled to get top news");
     }
   }
 
