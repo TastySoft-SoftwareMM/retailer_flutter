@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:compressimage/compressimage.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
+// import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+// import 'package:multi_image_picker/multi_image_picker.dart';
 import '../../style/theme.dart' as Style;
 
 class MerchandizingEdit extends StatefulWidget {
@@ -11,7 +13,7 @@ class MerchandizingEdit extends StatefulWidget {
 }
 
 class _MerchandizingEditState extends State<MerchandizingEdit> {
-  List<Asset> assetArray = [];
+  // List<Asset> assetArray = [];
   List<File> fileImageArray = [];
 
   var pickedByCamera;
@@ -190,7 +192,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                     title: Text('Gallery '),
                     onTap: () {
                       Navigator.pop(context, true);
-                      loadAssets();
+                      getMultipleImage();
                     }),
                 ListTile(
                   leading: Icon(Icons.camera_alt_outlined),
@@ -206,50 +208,64 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         });
   }
 
+  Future getMultipleImage() async {
+    var result = await FilePicker.getMultiFile(
+      type: FileType.image,
+    );
+    if (result != null) {
+      result.forEach((element) async {
+        await CompressImage.compress(
+            imageSrc: element.path, desiredQuality: 80);
+        setState(() {
+          fileImageArray.add(element);
+        });
+      });
+    }
+  }
+
   Future getImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     if (pickedFile != null) {
       File picked = File(pickedFile.path);
+      await CompressImage.compress(imageSrc: picked.path, desiredQuality: 80);
       setState(() {
         fileImageArray.add(picked);
       });
-    } else {
-      print('No image selected.');
     }
   }
 
-  Future<void> loadAssets() async {
-    try {
-      assetArray = await MultiImagePicker.pickImages(
-        maxImages: 300,
-        enableCamera: false,
-        selectedAssets: assetArray,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#FFe53935",
-          actionBarTitle: "Select images",
-          allViewTitle: "All Photo",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#FFe53935",
-          statusBarColor: "#FFe53935",
-        ),
-      );
-    } on Exception catch (e) {
-      print(e.toString());
-    }
+  // Future<void> loadAssets() async {
+  //   try {
+  //     assetArray = await MultiImagePicker.pickImages(
+  //       maxImages: 300,
+  //       enableCamera: false,
+  //       selectedAssets: assetArray,
+  //       cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+  //       materialOptions: MaterialOptions(
+  //         actionBarColor: "#FFe53935",
+  //         actionBarTitle: "Select images",
+  //         allViewTitle: "All Photo",
+  //         useDetailsView: false,
+  //         selectCircleStrokeColor: "#FFe53935",
+  //         statusBarColor: "#FFe53935",
+  //       ),
+  //     );
+  //   } on Exception catch (e) {
+  //     print(e.toString());
+  //   }
 
-    assetArray.forEach((imageAsset) async {
-      final filePath =
-          await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
-      File tempFile = File(filePath);
-      if (tempFile.existsSync()) {
-        setState(() {
-          fileImageArray.add(tempFile);
-        });
-      }
-    });
-  }
+  //   assetArray.forEach((imageAsset) async {
+  //     final filePath =
+  //         await FlutterAbsolutePath.getAbsolutePath(imageAsset.identifier);
+  //     File tempFile = File(filePath);
+  //     if (tempFile.existsSync()) {
+  //       setState(() {
+  //         fileImageArray.add(tempFile);
+  //       });
+  //     }
+  //   });
+  // }
 }
 
 class ViewImage extends StatelessWidget {
