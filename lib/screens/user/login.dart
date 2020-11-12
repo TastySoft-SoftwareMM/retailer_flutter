@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
@@ -125,14 +126,43 @@ class _LoginState extends State<Login> {
                     textEditingController: userIdController,
                     label: 'User ID',
                     iconPath: 'assets/icon/id.png',
+                    validFunction: (value) {
+                      String errorMessage;
+
+                      String pattern = r'(^(?:[+]9)?[0-9]{9,12}$)';
+                      RegExp regExp = new RegExp(pattern);
+                      if (value.length == 0) {
+                        setState(() {
+                          errorMessage = 'please fill User ID';
+                        });
+                      } else if (!regExp.hasMatch(value)) {
+                        setState(() {
+                          errorMessage = 'Invalid User ID';
+                        });
+                      }
+
+                      return errorMessage;
+                    },
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   getTextField(
-                      textEditingController: passController,
-                      label: 'Password',
-                      iconPath: 'assets/icon/lock.png'),
+                    textEditingController: passController,
+                    label: 'Password',
+                    iconPath: 'assets/icon/lock.png',
+                    validFunction: (value) {
+                      String errorMessage;
+
+                      if (value.length == 0) {
+                        setState(() {
+                          errorMessage = 'please fill Password';
+                        });
+                      }
+
+                      return errorMessage;
+                    },
+                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -158,7 +188,9 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     onPressed: () async {
-                      await check();
+                      if (_formKey.currentState.validate()) {
+                        await check();
+                      }
                     },
                   ),
                   SizedBox(
@@ -223,8 +255,13 @@ class _LoginState extends State<Login> {
   getTextField(
       {TextEditingController textEditingController,
       String label,
-      String iconPath}) {
+      String iconPath,
+      Function(String validator) validFunction}) {
     return TextFormField(
+      keyboardType:
+          TextInputType.numberWithOptions(decimal: false, signed: true),
+      validator: validFunction,
+      onChanged: (value) {},
       style: TextStyle(),
       controller: textEditingController,
       decoration: InputDecoration(
