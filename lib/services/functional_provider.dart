@@ -20,8 +20,9 @@ class ViewModelFunction with ChangeNotifier {
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       getLoginDetail = LoginModel.fromJson(result);
+    } else {
+      statusCode = response.statusCode;
     }
-    statusCode = response.statusCode;
 
     notifyListeners();
   }

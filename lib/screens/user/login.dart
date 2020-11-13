@@ -235,9 +235,8 @@ class _LoginState extends State<Login> {
     newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
     await newLoginViewModel.checkLogin(
         this.userIdController.text, this.passController.text);
-    int statusCode = newLoginViewModel.statusCode;
 
-    if (statusCode == 200) {
+    if (newLoginViewModel.statusCode == 200) {
       if (newLoginViewModel.getLoginDetail != null) {
         if (newLoginViewModel.getLoginDetail.orgId != "" &&
             newLoginViewModel.getLoginDetail.orgId != null &&
@@ -253,17 +252,17 @@ class _LoginState extends State<Login> {
         getToast(context, 'Invalid User ID (or) Password');
         Navigator.pop(context, true);
       }
-    } else if (statusCode == 404) {
+    } else if (newLoginViewModel.statusCode == 404) {
       getToast(context, 'Invalid URL !. Please check your URL');
       Navigator.pop(context, true);
-    } else if (statusCode == 401 ||
-        statusCode == 403 ||
-        statusCode == 500 ||
-        statusCode == 502) {
+    } else if (newLoginViewModel.statusCode == 401 ||
+        newLoginViewModel.statusCode == 403 ||
+        newLoginViewModel.statusCode == 500 ||
+        newLoginViewModel.statusCode == 502) {
       getToast(context, 'Sever error !. Try again later');
       Navigator.pop(context, true);
     } else {
-      getToast(context, "unknown error !");
+      getToast(context, "Invalid User ID (or) Password");
       Navigator.pop(context, true);
     }
   }
