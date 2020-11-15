@@ -9,6 +9,8 @@ void main() {
     providers: [
       ChangeNotifierProvider(
         create: (_) => ViewModelFunction(),
+
+          
       )
     ],
     child: MyApp(),
