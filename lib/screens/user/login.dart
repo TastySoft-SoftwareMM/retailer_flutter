@@ -124,7 +124,7 @@ class _LoginState extends State<Login> {
                   ),
                   TextFormField(
                     validator: (val) {
-                      String pattern = r'(^(?:[+]9)?[0-9]{9,12}$)';
+                      String pattern = r'(^(?:[+]9)?[0-9]{3,12}$)';
                       RegExp regExp = new RegExp(pattern);
                       setState(() {
                         if (val.length == 0) {
@@ -197,9 +197,7 @@ class _LoginState extends State<Login> {
                     height: 15,
                   ),
                   InkWell(
-                    onTap: () {
-                      print('forgot password was tap');
-                    },
+                    onTap: () {},
                     child: Center(
                         child: Text(
                       'Forgot Password?',

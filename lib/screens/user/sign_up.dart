@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   TextFormField(
                     validator: (val) {
-                      String pattern = r'(^(?:[+]9)?[0-9]{9,12}$)';
+                      String pattern = r'(^(?:[+]9)?[0-9]{3,12}$)';
                       RegExp regExp = new RegExp(pattern);
                       setState(() {
                         if (val.length == 0) {
@@ -216,9 +216,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     onPressed: () async {
-                      print(nameController.text);
                       _formKey.currentState.validate();
-
                       if (nameError == null &&
                           phoneError == null &&
                           passError == null &&
@@ -263,9 +261,19 @@ class _SignUpPageState extends State<SignUpPage> {
     loading(
       context,
     );
+    String formatPhone;
+    if (phNumberController.text.startsWith('09')) {
+      formatPhone = phNumberController.text.replaceFirst('09', '+959');
+    } else if (phNumberController.text.startsWith('959')) {
+      formatPhone = phNumberController.text.replaceFirst('959', '+959');
+    } else if (phNumberController.text.length < 10) {
+      formatPhone = '+959' + phNumberController.text;
+    }
+    _formKey.currentState.validate();
+
     newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
-    await newLoginViewModel.signUp(nameController.text,
-        this.phNumberController.text, passwordController.text);
+    await newLoginViewModel.signUp(
+        nameController.text, formatPhone, passwordController.text);
 
     if (newLoginViewModel.statusCode == 200) {
       if (newLoginViewModel.signUpDetail != null) {

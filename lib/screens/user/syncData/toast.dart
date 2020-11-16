@@ -25,7 +25,7 @@ void loading(BuildContext context) {
   try {
     Dialogs.showLoadingDialog(context, _keyLoader);
   } catch (error) {
-    print(error);
+    return null;
   }
 }
 
@@ -47,7 +47,8 @@ class Dialogs {
                         child: CircularProgressIndicator(
                       backgroundColor: Colors.white,
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
                     ))
                   ]));
         });

@@ -131,7 +131,6 @@ class _SyncDataState extends State<SyncData> {
 
   Future<void> syncDataFunction() async {
     setState(() {
-      print('object');
       loading = true;
     });
     await viewModelFunction.getMainList();

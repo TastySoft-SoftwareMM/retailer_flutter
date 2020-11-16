@@ -98,9 +98,7 @@ class _MainScreenState extends State<MainScreen> {
           height: 45.0,
           child: RaisedButton(
             elevation: 0,
-            onPressed: () {
-              print('Upload Merchandizing was tap');
-            },
+            onPressed: () {},
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,9 +146,7 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-          onExpansionChanged: (value) {
-            // print(value);
-          },
+          onExpansionChanged: (value) {},
           children: [
             new FutureBuilder(
               builder: (BuildContext context,
@@ -259,9 +255,7 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-          onExpansionChanged: (value) {
-            // print(value);
-          },
+          onExpansionChanged: (value) {},
           children: [
             new FutureBuilder(
               builder: (BuildContext context,
@@ -341,14 +335,12 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   getData() {
-    print('get data is working');
     List<String> getByTeam = [];
     listByUserCode.clear();
     viewModelFunction.shopsByTeam.forEach((allList) {
       if (!getByTeam.contains(allList.usercode)) {
         getByTeam.add(allList.usercode);
         listByUserCode.add(allList);
-        print('object' + '$listByUserCode');
       }
     });
     setState(() {

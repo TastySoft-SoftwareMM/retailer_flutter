@@ -93,11 +93,9 @@ class ViewModelFunction with ChangeNotifier {
             "Content-Over": "$ordId",
           })
           .timeout(Duration(seconds: 20))
-          .catchError((error) {
-            print(error);
-          });
+          .catchError((error) {});
     } catch (e) {
-      print(e.toString());
+      return null;
     }
   }
 

@@ -166,7 +166,7 @@ class DataSearch extends SearchDelegate {
                 .length !=
             0)
         .toList();
-    // print('this is result $result');
+
     if (result.isEmpty) {
       widget = Center(
         child: Text('no result found'),
@@ -207,7 +207,6 @@ class DataSearch extends SearchDelegate {
     //   );
     // } else {
 
-    //   // print('this is result $result');
     //   if (suggestion.isEmpty) {
     //     sugWidget = Center(
     //       child: Text('no result found'),
