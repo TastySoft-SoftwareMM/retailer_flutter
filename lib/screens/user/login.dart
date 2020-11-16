@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
@@ -19,7 +18,8 @@ class _LoginState extends State<Login> {
   TextEditingController userIdController = TextEditingController();
   TextEditingController passController = TextEditingController();
   ViewModelFunction newLoginViewModel;
-  // String _userId;
+  String userIdErr;
+  String passErr;
 
   @override
   Widget build(BuildContext context) {
@@ -122,45 +122,75 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 15,
                   ),
-                  getTextField(
-                    textEditingController: userIdController,
-                    label: 'User ID',
-                    iconPath: 'assets/icon/id.png',
-                    validFunction: (value) {
-                      String errorMessage;
-
+                  TextFormField(
+                    validator: (val) {
                       String pattern = r'(^(?:[+]9)?[0-9]{9,12}$)';
                       RegExp regExp = new RegExp(pattern);
-                      if (value.length == 0) {
-                        setState(() {
-                          errorMessage = 'please fill User ID';
-                        });
-                      } else if (!regExp.hasMatch(value)) {
-                        setState(() {
-                          errorMessage = 'Invalid User ID';
-                        });
-                      }
+                      setState(() {
+                        if (val.length == 0) {
+                          userIdErr = 'please fill Phone number';
+                        } else if (!regExp.hasMatch(val)) {
+                          userIdErr = 'Invalid Phone number';
+                        }
+                      });
 
-                      return errorMessage;
+                      return null;
+                    },
+                    style: TextStyle(),
+                    controller: userIdController,
+                    keyboardType:TextInputType.number,
+                    decoration: InputDecoration(
+                      errorText: userIdErr,
+                      labelText: 'User Id',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(
+                          15,
+                        ),
+                        child: ImageIcon(
+                          AssetImage('assets/icon/id.png'),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        userIdErr = null;
+                      });
                     },
                   ),
                   SizedBox(
                     height: 15,
                   ),
-                  getTextField(
-                    textEditingController: passController,
-                    label: 'Password',
-                    iconPath: 'assets/icon/lock.png',
-                    validFunction: (value) {
-                      String errorMessage;
+                  TextFormField(
+                    obscureText: true,
+                    validator: (val) {
+                      setState(() {
+                        if (val.length == 0) {
+                          passErr = 'please fill Password';
+                        }
+                      });
 
-                      if (value.length == 0) {
-                        setState(() {
-                          errorMessage = 'please fill Password';
-                        });
-                      }
-
-                      return errorMessage;
+                      return null;
+                    },
+                    style: TextStyle(),
+                    controller: passController,
+                    decoration: InputDecoration(
+                      errorText: passErr,
+                      labelText: 'Password',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(
+                          15,
+                        ),
+                        child: ImageIcon(
+                          AssetImage('assets/icon/lock.png'),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        passErr = null;
+                      });
                     },
                   ),
                   SizedBox(
@@ -188,7 +218,8 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     onPressed: () async {
-                      if (_formKey.currentState.validate()) {
+                      _formKey.currentState.validate();
+                      if (userIdErr == null && passErr == null) {
                         await check();
                       }
                     },
@@ -233,7 +264,7 @@ class _LoginState extends State<Login> {
       context,
     );
     newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
-    await newLoginViewModel.checkLogin(
+    await newLoginViewModel.login(
         this.userIdController.text, this.passController.text);
 
     if (newLoginViewModel.statusCode == 200) {
@@ -265,37 +296,6 @@ class _LoginState extends State<Login> {
       getToast(context, "Invalid User ID (or) Password");
       Navigator.pop(context, true);
     }
-  }
-
-  getTextField(
-      {TextEditingController textEditingController,
-      String label,
-      String iconPath,
-      Function(String validator) validFunction}) {
-    return TextFormField(
-      keyboardType:
-          TextInputType.numberWithOptions(decimal: false, signed: true),
-      validator: validFunction,
-      onChanged: (value) {
-        // setState(() {
-        //   textEditingController.text = value;
-        // });
-      },
-      style: TextStyle(),
-      controller: textEditingController,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(fontSize: 15),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(
-            15,
-          ),
-          child: ImageIcon(
-            AssetImage(iconPath),
-          ),
-        ),
-      ),
-    );
   }
 
   onMenuSelection(PopupMenuChoices value) async {

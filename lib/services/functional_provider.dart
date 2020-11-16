@@ -13,13 +13,16 @@ class ViewModelFunction with ChangeNotifier {
   List<ShopByListM> shopsByTeam;
   List<ShopByListM> shopsByUser;
   int statusCode;
-  checkLogin(String userId, String pass) async {
+  String signUpDetail;
+  login(String userId, String pass) async {
     var param = jsonEncode({"userId": userId, "password": pass});
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
-      getLoginDetail = LoginModel.fromJson(result);
+      print(result);
+      // getLoginDetail = LoginModel.fromJson(result);
+
     } else {
       statusCode = response.statusCode;
     }
@@ -43,6 +46,29 @@ class ViewModelFunction with ChangeNotifier {
     this.shopsByUser = allShopSaleList.shopsByUser
         .map((e) => ShopByListM.fromJson(e))
         .toList();
+    notifyListeners();
+  }
+
+  signUp(
+    String userName,
+    String phone,
+    String pass,
+  ) async {
+    var param = jsonEncode({
+      "userId": phone,
+      "userName": userName,
+      "password": pass,
+      "passcode": ""
+    });
+    final http.Response response =
+        await httpRequest('main/signup/mit', param, '');
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      signUpDetail = result['message'];
+    } else {
+      statusCode = response.statusCode;
+    }
+
     notifyListeners();
   }
 
@@ -71,7 +97,7 @@ class ViewModelFunction with ChangeNotifier {
             print(error);
           });
     } catch (e) {
-      print(e.errMsg());
+      print(e.toString());
     }
   }
 

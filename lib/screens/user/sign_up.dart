@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/main/main-screen.dart';
+import 'package:provider/provider.dart';
+import 'package:retailer/screens/user/login.dart';
+import 'package:retailer/screens/user/syncData/toast.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
 class SignUpPage extends StatefulWidget {
@@ -9,15 +12,21 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  String nameError;
+  String phoneError;
+  String passError;
+  String comfirmPassError;
   TextEditingController nameController = TextEditingController();
   TextEditingController phNumberController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
+  ViewModelFunction newLoginViewModel;
 
   TextEditingController comfirmpasswordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    newLoginViewModel = Provider.of<ViewModelFunction>(context);
+
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -50,33 +59,151 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  getTextField(
-                      textEditingController: nameController,
-                      label: 'Name',
-                      iconPath: 'assets/icon/user.png'),
+                  TextFormField(
+                    validator: (val) {
+                      if (val.isEmpty) {
+                        setState(() {
+                          nameError = 'please fill Name';
+                        });
+                      }
+                      return null; // Return null to handle error manually.
+                    },
+                    style: TextStyle(),
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      errorText: nameError,
+                      labelText: 'Name',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(
+                          15,
+                        ),
+                        child: ImageIcon(
+                          AssetImage('assets/icon/user.png'),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        nameError = null;
+                      });
+                    },
+                  ),
                   SizedBox(
                     height: 15,
                   ),
-                  getTextField(
-                    textEditingController: phNumberController,
-                    label: 'Phone number',
-                    iconPath: 'assets/icon/contact.png',
+                  TextFormField(
+                    validator: (val) {
+                      String pattern = r'(^(?:[+]9)?[0-9]{9,12}$)';
+                      RegExp regExp = new RegExp(pattern);
+                      setState(() {
+                        if (val.length == 0) {
+                          phoneError = 'please fill Phone number';
+                        } else if (!regExp.hasMatch(val)) {
+                          phoneError = 'Invalid Phone number';
+                        }
+                      });
+
+                      return null;
+                    },
+                    style: TextStyle(),
+                    controller: phNumberController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      errorText: phoneError,
+                      labelText: 'Phone number',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(
+                          15,
+                        ),
+                        child: ImageIcon(
+                          AssetImage('assets/icon/contact.png'),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        phoneError = null;
+                      });
+                    },
                   ),
                   SizedBox(
                     height: 15,
                   ),
-                  getTextField(
-                    textEditingController: passwordController,
-                    label: 'Password',
-                    iconPath: 'assets/icon/lock.png',
+                  TextFormField(
+                    obscureText: true,
+                    validator: (val) {
+                      setState(() {
+                        if (val.length == 0) {
+                          passError = 'please fill Password';
+                        }
+                      });
+
+                      return null;
+                    },
+                    style: TextStyle(),
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      errorText: passError,
+                      labelText: 'Password',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(
+                          15,
+                        ),
+                        child: ImageIcon(
+                          AssetImage('assets/icon/lock.png'),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        passError = null;
+                      });
+                    },
                   ),
                   SizedBox(
                     height: 15,
                   ),
-                  getTextField(
-                      textEditingController: comfirmpasswordController,
-                      label: 'Comfirm Password',
-                      iconPath: 'assets/icon/lock.png'),
+                  TextFormField(
+                    obscureText: true,
+                    validator: (val) {
+                      setState(() {
+                        if (val.length == 0) {
+                          comfirmPassError = 'please fill Comfirm password';
+                        } else if (comfirmpasswordController.text !=
+                            passwordController.text) {
+                          comfirmPassError = "Password do not match";
+                        }
+                      });
+
+                      return null;
+                    },
+                    style: TextStyle(),
+                    controller: comfirmpasswordController,
+                    decoration: InputDecoration(
+                      errorText: comfirmPassError,
+                      labelText: 'Comfirm password',
+                      labelStyle: TextStyle(fontSize: 15),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(
+                          15,
+                        ),
+                        child: ImageIcon(
+                          AssetImage('assets/icon/lock.png'),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        comfirmPassError = null;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -88,11 +215,16 @@ class _SignUpPageState extends State<SignUpPage> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainScreen()));
+                    onPressed: () async {
+                      print(nameController.text);
+                      _formKey.currentState.validate();
+
+                      if (nameError == null &&
+                          phoneError == null &&
+                          passError == null &&
+                          comfirmPassError == null) {
+                        check();
+                      }
                     },
                   ),
                   SizedBox(
@@ -127,25 +259,42 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  getTextField(
-      {TextEditingController textEditingController,
-      String label,
-      String iconPath}) {
-    return TextFormField(
-      obscureText: true,
-      controller: textEditingController,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: TextStyle(fontSize: 15),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(
-            18,
-          ),
-          child: ImageIcon(
-            AssetImage(iconPath),
-          ),
-        ),
-      ),
+  check() async {
+    loading(
+      context,
     );
+    newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
+    await newLoginViewModel.signUp(nameController.text,
+        this.phNumberController.text, passwordController.text);
+
+    if (newLoginViewModel.statusCode == 200) {
+      if (newLoginViewModel.signUpDetail != null) {
+        if (newLoginViewModel.signUpDetail == "SUCCESS") {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => Login()));
+        } else if (newLoginViewModel.signUpDetail == "IDEXIST") {
+          getToast(context, 'User Id already exist');
+          Navigator.pop(context, true);
+        } else if (newLoginViewModel.signUpDetail == "Fail") {
+          getToast(context, 'Saving Fail');
+          Navigator.pop(context, true);
+        }
+      } else {
+        getToast(context, 'Saving Fail');
+        Navigator.pop(context, true);
+      }
+    } else if (newLoginViewModel.statusCode == 404) {
+      getToast(context, 'Invalid URL !. Please check your URL');
+      Navigator.pop(context, true);
+    } else if (newLoginViewModel.statusCode == 401 ||
+        newLoginViewModel.statusCode == 403 ||
+        newLoginViewModel.statusCode == 500 ||
+        newLoginViewModel.statusCode == 502) {
+      getToast(context, 'Sever error !. Try again later');
+      Navigator.pop(context, true);
+    } else {
+      getToast(context, "Invalid User ID (or) Password");
+      Navigator.pop(context, true);
+    }
   }
 }
