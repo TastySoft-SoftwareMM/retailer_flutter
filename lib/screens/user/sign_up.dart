@@ -290,7 +290,7 @@ class _SignUpPageState extends State<SignUpPage> {
         newLoginViewModel.statusCode == 403 ||
         newLoginViewModel.statusCode == 500 ||
         newLoginViewModel.statusCode == 502) {
-      getToast(context, 'Sever error !. Try again later');
+      getToast(context, 'Server error !. Try again later');
       Navigator.pop(context, true);
     } else {
       getToast(context, "Invalid User ID (or) Password");

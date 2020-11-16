@@ -138,7 +138,7 @@ class _LoginState extends State<Login> {
                     },
                     style: TextStyle(),
                     controller: userIdController,
-                    keyboardType:TextInputType.number,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       errorText: userIdErr,
                       labelText: 'User Id',
@@ -266,7 +266,6 @@ class _LoginState extends State<Login> {
     newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
     await newLoginViewModel.login(
         this.userIdController.text, this.passController.text);
-
     if (newLoginViewModel.statusCode == 200) {
       if (newLoginViewModel.getLoginDetail != null) {
         if (newLoginViewModel.getLoginDetail.orgId != "" &&
@@ -290,7 +289,7 @@ class _LoginState extends State<Login> {
         newLoginViewModel.statusCode == 403 ||
         newLoginViewModel.statusCode == 500 ||
         newLoginViewModel.statusCode == 502) {
-      getToast(context, 'Sever error !. Try again later');
+      getToast(context, 'Server error !. Try again later');
       Navigator.pop(context, true);
     } else {
       getToast(context, "Invalid User ID (or) Password");

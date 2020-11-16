@@ -15,14 +15,13 @@ class ViewModelFunction with ChangeNotifier {
   int statusCode;
   String signUpDetail;
   login(String userId, String pass) async {
-    var param = jsonEncode({"userId": userId, "password": pass});
+    var param = jsonEncode({"userId": '788571913', "password": '123'});
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
-      print(result);
-      // getLoginDetail = LoginModel.fromJson(result);
-
+      getLoginDetail = LoginModel.fromJson(result);
+      statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
     }
@@ -65,6 +64,7 @@ class ViewModelFunction with ChangeNotifier {
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       signUpDetail = result['message'];
+      statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
     }
