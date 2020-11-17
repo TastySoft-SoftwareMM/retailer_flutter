@@ -15,7 +15,7 @@ class ViewModelFunction with ChangeNotifier {
   int statusCode;
   String signUpDetail;
   login(String userId, String pass) async {
-    var param = jsonEncode({"userId": '788571913', "password": '123'});
+    var param = jsonEncode({"userId": '$userId', "password": '$pass'});
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
     if (response.statusCode == 200) {
@@ -25,7 +25,6 @@ class ViewModelFunction with ChangeNotifier {
     } else {
       statusCode = response.statusCode;
     }
-
     notifyListeners();
   }
 
@@ -117,6 +116,7 @@ class ViewModelFunction with ChangeNotifier {
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+
       AllShopSaleList allShopSaleList = AllShopSaleList.fromJson(result);
       return allShopSaleList;
     } else {

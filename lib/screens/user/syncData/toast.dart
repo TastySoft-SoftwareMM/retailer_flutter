@@ -20,6 +20,18 @@ getToast(BuildContext context, String message) {
       reverseCurve: Curves.fastOutSlowIn);
 }
 
+String getPhoneFormat(String message) {
+  String formatedPhone;
+  if (message.startsWith('09')) {
+    formatedPhone = message.replaceFirst('09', '+959');
+  } else if (message.startsWith('959')) {
+    formatedPhone = message.replaceFirst('959', '+959');
+  } else if (message.length < 10) {
+    formatedPhone = '+959' + message;
+  }
+  return formatedPhone;
+}
+
 final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 void loading(BuildContext context) {
   try {

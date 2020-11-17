@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:retailer/screens/mandatorytasks/orderList.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/screens/user/profile/profile.dart';
 import 'package:retailer/screens/user/syncData/toast.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
 class MainDrawer extends StatefulWidget {
@@ -11,8 +13,12 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+  ViewModelFunction newLoginViewModel;
+
   @override
   Widget build(BuildContext context) {
+    newLoginViewModel = Provider.of<ViewModelFunction>(context);
+
     return Drawer(
       child: Column(
         // Important: Remove any padding from the ListView.
@@ -111,13 +117,6 @@ class _MainDrawerState extends State<MainDrawer> {
 
   showAlertDialog() {
     int selected = 0;
-    List selectShopList = [
-      'Shwo Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)',
-      'Thidar Store (သီတာစတိုး)',
-      'Toe Kyaw Kyaw (တိုးကျော်ကျော်)',
-      'Shwe Poe (ရွှေပိုး)',
-      'Myo Myanmar (မျိုးမြန်မာ)'
-    ];
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -146,14 +145,15 @@ class _MainDrawerState extends State<MainDrawer> {
                                 color: Style.Colors.mainColor,
                               )
                             : Icon(Icons.radio_button_off),
-                        title: Text(selectShopList[index]),
+                        title:
+                            Text(newLoginViewModel.shopsByUser[index].shopname),
                         onTap: () {
                           setState(() {
                             selected = index + 1;
                           });
                         },
                       ),
-                      itemCount: selectShopList.length,
+                      itemCount: newLoginViewModel.shopsByUser.length ?? 0,
                     )
                   ],
                 ),
@@ -201,7 +201,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                 MaterialPageRoute(
                                     builder: (context) => OrderListScreen()));
                           } else {
-                          getToast(context,'Select Shop');
+                            getToast(context, 'Select Shop');
                           }
                         },
                         child: Center(

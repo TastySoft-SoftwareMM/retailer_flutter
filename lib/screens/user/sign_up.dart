@@ -261,17 +261,9 @@ class _SignUpPageState extends State<SignUpPage> {
     loading(
       context,
     );
-    String formatPhone;
-    if (phNumberController.text.startsWith('09')) {
-      formatPhone = phNumberController.text.replaceFirst('09', '+959');
-    } else if (phNumberController.text.startsWith('959')) {
-      formatPhone = phNumberController.text.replaceFirst('959', '+959');
-    } else if (phNumberController.text.length < 10) {
-      formatPhone = '+959' + phNumberController.text;
-    }
-    _formKey.currentState.validate();
 
     newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
+    String formatPhone = getPhoneFormat(phNumberController.text);
     await newLoginViewModel.signUp(
         nameController.text, formatPhone, passwordController.text);
 

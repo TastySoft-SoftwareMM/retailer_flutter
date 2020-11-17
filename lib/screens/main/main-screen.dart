@@ -16,22 +16,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool loading = true;
-  ViewModelFunction viewModelFunction;
-  List<ShopByListM> listByUserCode;
+  ViewModelFunction model;
 
   var width;
   var height;
   @override
   @override
   Widget build(BuildContext context) {
+    model = Provider.of<ViewModelFunction>(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    viewModelFunction = Provider.of<ViewModelFunction>(context);
-    if (listByUserCode == null) {
-      listByUserCode = new List<ShopByListM>();
-      getData();
-    }
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -52,34 +46,26 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
         drawer: MainDrawer(),
-        body: loading
-            ? Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  valueColor:
-                      new AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-                ),
-              )
-            : Column(
-                children: [
-                  viewModelFunction.getLoginDetail.merchandizer == 'true'
-                      ? Container()
-                      : createUploadMerchandizingWidget(),
-                  Container(
-                    height: height - 140,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        child: Column(
-                          children: [
-                            getShopByUser(),
-                            getShopByTeam(),
-                          ],
-                        ),
-                      ),
-                    ),
+        body: Column(
+          children: [
+            model.getLoginDetail.merchandizer == 'true'
+                ? Container()
+                : createUploadMerchandizingWidget(),
+            Container(
+              height: height - 140,
+              child: SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: [
+                      getShopByUser(),
+                      getShopByTeam(),
+                    ],
                   ),
-                ],
+                ),
               ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -88,9 +74,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget createUploadMerchandizingWidget() {
     return Container(
       height: 60,
-      // decoration: new BoxDecoration(
-      //     border: Border(
-      //         bottom: BorderSide(width: 0.6, color: Style.Colors.borderColor))),
       child: Padding(
         padding: EdgeInsets.all(5.0),
         child: SizedBox(
@@ -120,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget getShopByUser() {
-    List<Widget> getByCharacter = [];
+    List<Widget> getByTeam = [];
     return ListView.builder(
       physics: ClampingScrollPhysics(),
       shrinkWrap: true,
@@ -140,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Spacer(),
                 Text(
-                  '0 / ${viewModelFunction.shopsByUser.length}',
+                  '0 / ${model.shopsByUser.length}',
                   style: TextStyle(color: Style.Colors.textColor),
                 ),
               ],
@@ -151,9 +134,9 @@ class _MainScreenState extends State<MainScreen> {
             new FutureBuilder(
               builder: (BuildContext context,
                   AsyncSnapshot<http.Response> response) {
-                getByCharacter.clear();
-                viewModelFunction.shopsByUser.forEach((element) {
-                  getByCharacter.add(
+                getByTeam.clear();
+                model.shopsByUser.forEach((element) {
+                  getByTeam.add(
                     Padding(
                       padding:
                           const EdgeInsets.only(bottom: 4, left: 4, right: 4),
@@ -180,9 +163,11 @@ class _MainScreenState extends State<MainScreen> {
                                   Padding(
                                     padding: EdgeInsets.all(4.0),
                                     child: Text(
-                                      element.shopname,
-                                      style: Style.statusSuccessTextStyle,
-                                    ),
+                                        getCurrentTypeSting(
+                                            element.status.currentType),
+                                        style: getCurrentTypeTS(
+                                          element.status.currentType,
+                                        )),
                                   )
                                 ],
                               ),
@@ -209,7 +194,7 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(
                       height: 4,
                     ),
-                    new Column(children: getByCharacter),
+                    new Column(children: getByTeam),
                   ],
                 );
               },
@@ -217,12 +202,80 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      itemCount: viewModelFunction.shopsByUser.length == null ? 0 : 1,
+      itemCount: model.shopsByUser.length == null ? 0 : 1,
     );
   }
 
+  TextStyle getCurrentTypeTS(String currentType) {
+    TextStyle textStyle;
+    switch (currentType) {
+      case "CHECKIN":
+        {
+          textStyle = Style.statuspendingTextStyle;
+        }
+        break;
+
+      case "CHECKOUT":
+        {
+          textStyle = Style.statusSuccessTextStyle;
+        }
+        break;
+      case "STORECLOSED":
+        {
+          textStyle = Style.statustmpTextStyle;
+        }
+        break;
+      case "TEMPCHECKOUT":
+        {
+          textStyle = Style.statustmpTextStyle;
+        }
+        break;
+
+      default:
+        {
+          textStyle = TextStyle();
+        }
+        break;
+    }
+    return textStyle;
+  }
+
+  String getCurrentTypeSting(String currentType) {
+    String value;
+    switch (currentType) {
+      case "CHECKIN":
+        {
+          value = "Pending";
+        }
+        break;
+
+      case "CHECKOUT":
+        {
+          value = "Complete";
+        }
+        break;
+      case "STORECLOSED":
+        {
+          value = "Store Closed";
+        }
+        break;
+      case "TEMPCHECKOUT":
+        {
+          value = "Temporary Checkout";
+        }
+        break;
+
+      default:
+        {
+          value = '';
+        }
+        break;
+    }
+    return value;
+  }
+
   Widget getShopByTeam() {
-    List<Widget> getByCharacter = [];
+    List<Widget> getByTeam = [];
     return ListView.builder(
       physics: ClampingScrollPhysics(),
       shrinkWrap: true,
@@ -239,7 +292,7 @@ class _MainScreenState extends State<MainScreen> {
                 Container(
                   width: width * 0.6,
                   child: Text(
-                    "Other lists ( " + listByUserCode[index].username + " )",
+                    "Other lists ( " + model.shopsByTeam[index].username + " )",
                     style: TextStyle(
                       color: Style.Colors.textColor,
                     ),
@@ -249,7 +302,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Spacer(),
                 Text(
-                  '0 / ${listByUserCode.length}',
+                  '0 / ${model.shopsByTeam.length}',
                   style: TextStyle(color: Style.Colors.textColor),
                 ),
               ],
@@ -260,13 +313,13 @@ class _MainScreenState extends State<MainScreen> {
             new FutureBuilder(
               builder: (BuildContext context,
                   AsyncSnapshot<http.Response> response) {
-                getByCharacter.clear();
-                List<ShopByListM> list = viewModelFunction.shopsByTeam
+                getByTeam.clear();
+                List<ShopByListM> list = model.shopsByTeam
                     .where((p) =>
-                        p.usercode.contains(listByUserCode[index].usercode))
+                        p.usercode.contains(model.shopsByTeam[index].usercode))
                     .toList();
                 list.forEach((element) {
-                  getByCharacter.add(
+                  getByTeam.add(
                     Padding(
                       padding:
                           const EdgeInsets.only(bottom: 4, left: 4, right: 4),
@@ -322,7 +375,7 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(
                       height: 4,
                     ),
-                    new Column(children: getByCharacter),
+                    new Column(children: getByTeam),
                   ],
                 );
               },
@@ -330,21 +383,7 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      itemCount: listByUserCode.length ?? 0,
+      itemCount: model.shopsByTeam.length ?? 0,
     );
-  }
-
-  getData() {
-    List<String> getByTeam = [];
-    listByUserCode.clear();
-    viewModelFunction.shopsByTeam.forEach((allList) {
-      if (!getByTeam.contains(allList.usercode)) {
-        getByTeam.add(allList.usercode);
-        listByUserCode.add(allList);
-      }
-    });
-    setState(() {
-      loading = false;
-    });
   }
 }

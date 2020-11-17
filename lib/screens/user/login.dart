@@ -17,13 +17,13 @@ class _LoginState extends State<Login> {
   var width;
   TextEditingController userIdController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  ViewModelFunction newLoginViewModel;
+  ViewModelFunction model;
   String userIdErr;
   String passErr;
 
   @override
   Widget build(BuildContext context) {
-    newLoginViewModel = Provider.of<ViewModelFunction>(context);
+    model = Provider.of<ViewModelFunction>(context);
 
     width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -261,15 +261,16 @@ class _LoginState extends State<Login> {
     loading(
       context,
     );
-    newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
-    await newLoginViewModel.login(
-        this.userIdController.text, this.passController.text);
-    if (newLoginViewModel.statusCode == 200) {
-      if (newLoginViewModel.getLoginDetail != null) {
-        if (newLoginViewModel.getLoginDetail.orgId != "" &&
-            newLoginViewModel.getLoginDetail.orgId != null &&
-            newLoginViewModel.getLoginDetail.userId != '' &&
-            newLoginViewModel.getLoginDetail.userType == "saleperson") {
+    model = Provider.of<ViewModelFunction>(context, listen: false);
+    String formatPhone = getPhoneFormat(userIdController.text);
+    await model.login(formatPhone, this.passController.text);
+    if (model.statusCode == 200) {
+      if (model.getLoginDetail != null) {
+        if (model.getLoginDetail.orgId != "" &&
+                model.getLoginDetail.orgId != null &&
+                model.getLoginDetail.userId != '' &&
+                model.getLoginDetail.userType == "saleperson" ||
+            model.getLoginDetail.userType == "storeowner") {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => SyncData()));
         } else {
@@ -280,13 +281,13 @@ class _LoginState extends State<Login> {
         getToast(context, 'Invalid User ID (or) Password');
         Navigator.pop(context, true);
       }
-    } else if (newLoginViewModel.statusCode == 404) {
+    } else if (model.statusCode == 404) {
       getToast(context, 'Invalid URL !. Please check your URL');
       Navigator.pop(context, true);
-    } else if (newLoginViewModel.statusCode == 401 ||
-        newLoginViewModel.statusCode == 403 ||
-        newLoginViewModel.statusCode == 500 ||
-        newLoginViewModel.statusCode == 502) {
+    } else if (model.statusCode == 401 ||
+        model.statusCode == 403 ||
+        model.statusCode == 500 ||
+        model.statusCode == 502) {
       getToast(context, 'Server error !. Try again later');
       Navigator.pop(context, true);
     } else {

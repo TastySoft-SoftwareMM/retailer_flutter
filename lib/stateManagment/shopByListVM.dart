@@ -108,3 +108,15 @@ class ShopByListVM {
     return _shopByListM.tranid;
   }
 }
+
+class StatusVM {
+  Status _status;
+  StatusVM({Status status}) : _status = status;
+  String get status {
+    return _status.currentType;
+  }
+
+  String get message {
+    return _status.message;
+  }
+}

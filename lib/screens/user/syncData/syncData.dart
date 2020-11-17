@@ -10,13 +10,13 @@ class SyncData extends StatefulWidget {
 }
 
 class _SyncDataState extends State<SyncData> {
-  ViewModelFunction viewModelFunction;
+  ViewModelFunction model;
   String _selectedType = 'Download';
   bool loading = false;
   double value = 0.0;
   @override
   Widget build(BuildContext context) {
-    viewModelFunction = Provider.of<ViewModelFunction>(context);
+    model = Provider.of<ViewModelFunction>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -133,7 +133,7 @@ class _SyncDataState extends State<SyncData> {
     setState(() {
       loading = true;
     });
-    await viewModelFunction.getMainList();
+    await model.getMainList();
     await Future.doWhile(() async {
       await Future.delayed(Duration(milliseconds: 1));
       setState(() {

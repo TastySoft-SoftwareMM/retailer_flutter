@@ -25,7 +25,7 @@ class ShopByListM {
   final String townid;
   final String wardid;
   final String tranid;
-
+  final Status status;
   ShopByListM(
       {this.isSaleOrderLessRouteShop,
       this.address,
@@ -52,38 +52,51 @@ class ShopByListM {
       this.townshipid,
       this.townid,
       this.wardid,
-      this.tranid});
+      this.tranid,
+      this.status});
 
   factory ShopByListM.fromJson(
     Map<String, dynamic> json,
   ) {
     return ShopByListM(
-      isSaleOrderLessRouteShop: json['isSaleOrderLessRouteShop'],
-      address: json['address'],
-      shopsyskey: json['shopsyskey'],
-      long: json['long'],
-      phoneno: json['phoneno'],
-      zonecode: json['zonecode'],
-      shopcode: json['shopcode'],
-      shopname: json['shopname'],
-      shopnamemm: json['shopnamemm'],
-      teamcode: json['teamcode'],
-      usercode: json['usercode'],
-      user: json['user'],
-      lat: json['lat'],
-      email: json['email'],
-      username: json['username'],
-      pluscode: json['pluscode'],
-      mimu: json['mimu'],
-      street: json['street'],
-      personph: json['personph'],
-      personname: json['personname'],
-      stateid: json['stateid'],
-      districtid: json['districtid'],
-      townshipid: json['townshipid'],
-      townid: json['townid'],
-      wardid: json['wardid'],
-      tranid: json['tranid'],
-    );
+        isSaleOrderLessRouteShop: json['isSaleOrderLessRouteShop'],
+        address: json['address'],
+        shopsyskey: json['shopsyskey'],
+        long: json['long'],
+        phoneno: json['phoneno'],
+        zonecode: json['zonecode'],
+        shopcode: json['shopcode'],
+        shopname: json['shopname'],
+        shopnamemm: json['shopnamemm'],
+        teamcode: json['teamcode'],
+        usercode: json['usercode'],
+        user: json['user'],
+        lat: json['lat'],
+        email: json['email'],
+        username: json['username'],
+        pluscode: json['pluscode'],
+        mimu: json['mimu'],
+        street: json['street'],
+        personph: json['personph'],
+        personname: json['personname'],
+        stateid: json['stateid'],
+        districtid: json['districtid'],
+        townshipid: json['townshipid'],
+        townid: json['townid'],
+        wardid: json['wardid'],
+        tranid: json['tranid'],
+        status: Status.fromJson(json['status']));
+  }
+}
+
+class Status {
+  final String currentType;
+  final String message;
+  Status({this.currentType, this.message});
+
+  factory Status.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return Status(currentType: json['currentType'], message: json['message']);
   }
 }
