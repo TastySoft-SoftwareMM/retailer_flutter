@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/mandatorytasks/orderList.dart';
+import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/screens/user/profile/profile.dart';
-import 'package:retailer/screens/user/syncData/toast.dart';
 import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
@@ -13,11 +13,11 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawerState extends State<MainDrawer> {
-  ViewModelFunction newLoginViewModel;
+  ViewModelFunction model;
 
   @override
   Widget build(BuildContext context) {
-    newLoginViewModel = Provider.of<ViewModelFunction>(context);
+    model = Provider.of<ViewModelFunction>(context);
 
     return Drawer(
       child: Column(
@@ -146,14 +146,14 @@ class _MainDrawerState extends State<MainDrawer> {
                               )
                             : Icon(Icons.radio_button_off),
                         title:
-                            Text(newLoginViewModel.shopsByUser[index].shopname),
+                            Text(model.shopsByUser[index].shopname),
                         onTap: () {
                           setState(() {
                             selected = index + 1;
                           });
                         },
                       ),
-                      itemCount: newLoginViewModel.shopsByUser.length ?? 0,
+                      itemCount: model.shopsByUser.length ?? 0,
                     )
                   ],
                 ),

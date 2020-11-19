@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:retailer/models/all_shop_saleList.dart';
 import 'package:retailer/models/loginModel.dart';
 import 'package:retailer/models/shopByListModel.dart';
-import 'package:retailer/screens/user/syncData/toast.dart';
+import 'package:retailer/screens/public/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;

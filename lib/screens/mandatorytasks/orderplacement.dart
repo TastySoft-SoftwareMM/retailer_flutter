@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
-import 'package:retailer/screens/user/syncData/toast.dart';
+import 'package:retailer/screens/public/widget.dart';
 import '../../style/theme.dart' as Style;
 import '../../custom/custom_expansion_title.dart' as custom;
 

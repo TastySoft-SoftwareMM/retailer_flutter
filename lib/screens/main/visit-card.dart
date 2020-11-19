@@ -8,7 +8,7 @@ import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizing.dart';
 import 'package:retailer/screens/mandatorytasks/orderplacement.dart';
-import 'package:retailer/screens/user/syncData/toast.dart';
+import 'package:retailer/screens/public/widget.dart';
 import '../../style/theme.dart' as Style;
 import 'package:flutter_svg/flutter_svg.dart';
 

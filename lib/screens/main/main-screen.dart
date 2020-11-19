@@ -48,17 +48,19 @@ class _MainScreenState extends State<MainScreen> {
         drawer: MainDrawer(),
         body: Column(
           children: [
-            model.getLoginDetail.merchandizer == 'true'
-                ? Container()
-                : createUploadMerchandizingWidget(),
+            model == null
+                ? model.getLoginDetail.merchandizer == 'true'
+                    ? Container()
+                    : createUploadMerchandizingWidget()
+                : Container(),
             Container(
               height: height - 140,
               child: SingleChildScrollView(
                 child: Container(
                   child: Column(
                     children: [
-                      getShopByUser(),
-                      getShopByTeam(),
+                      model == null ? getShopByUser() : Container(),
+                      model == null ? getShopByTeam() : Container(),
                     ],
                   ),
                 ),
@@ -275,6 +277,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget getShopByTeam() {
+    // var list = model.shopsByTeam.where((element) => element.usercode= ).toList();
+    model.shopsByTeam.forEach((element) {
+      
+    });
+
     List<Widget> getByTeam = [];
     return ListView.builder(
       physics: ClampingScrollPhysics(),
