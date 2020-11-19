@@ -59,8 +59,8 @@ class _MainScreenState extends State<MainScreen> {
                 child: Container(
                   child: Column(
                     children: [
-                      model == null ? getShopByUser() : Container(),
-                      model == null ? getShopByTeam() : Container(),
+                      model == null ? Container() : getShopByUser(),
+                      model == null ? Container() : getShopByTeam(),
                     ],
                   ),
                 ),
@@ -277,12 +277,18 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget getShopByTeam() {
-    // var list = model.shopsByTeam.where((element) => element.usercode= ).toList();
-    model.shopsByTeam.forEach((element) {
-      
-    });
-
     List<Widget> getByTeam = [];
+    List<ShopByListM> filteredList =
+        model.shopsByTeam.fold([], (current, next) {
+      ShopByListM isExist = current.firstWhere((element) {
+        return element.usercode == next.usercode;
+      }, orElse: () => null);
+
+      if (isExist == null) {
+        current.add(next);
+      }
+      return current;
+    });
     return ListView.builder(
       physics: ClampingScrollPhysics(),
       shrinkWrap: true,
@@ -299,7 +305,7 @@ class _MainScreenState extends State<MainScreen> {
                 Container(
                   width: width * 0.6,
                   child: Text(
-                    "Other lists ( " + model.shopsByTeam[index].username + " )",
+                    "Other lists ( " + filteredList[index].username + " )",
                     style: TextStyle(
                       color: Style.Colors.textColor,
                     ),
@@ -309,7 +315,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Spacer(),
                 Text(
-                  '0 / ${model.shopsByTeam.length}',
+                  '0 / ${filteredList.length}',
                   style: TextStyle(color: Style.Colors.textColor),
                 ),
               ],
@@ -390,7 +396,7 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      itemCount: model.shopsByTeam.length ?? 0,
+      itemCount: filteredList.length ?? 0,
     );
   }
 }
