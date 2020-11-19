@@ -49,10 +49,10 @@ class _MainScreenState extends State<MainScreen> {
         body: Column(
           children: [
             model == null
-                ? model.getLoginDetail.merchandizer == 'true'
+                ? Container()
+                : model.getLoginDetail.merchandizer == 'true'
                     ? Container()
-                    : createUploadMerchandizingWidget()
-                : Container(),
+                    : createUploadMerchandizingWidget(),
             Container(
               height: height - 140,
               child: SingleChildScrollView(
