@@ -7,6 +7,7 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 
 String encryptAESCryptoJS(String plainText, String passphrase) {
   try {
+  
     final salt = genRandomWithNonZero(8);
     var keyndIV = deriveKeyAndIV(passphrase, salt);
     final key = encrypt.Key(keyndIV.item1);
