@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -26,236 +28,248 @@ class _LoginState extends State<Login> {
     model = Provider.of<ViewModelFunction>(context);
 
     width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                PopupMenuButton<dynamic>(
-                  offset: Offset(10, 10),
-                  onSelected: (value) => onMenuSelection(value),
-                  icon: Icon(Icons.more_vert, color: Colors.black),
-                  itemBuilder: (BuildContext contex) {
-                    return [
-                      PopupMenuItem<PopupMenuChoices>(
-                        height: 30,
-                        enabled: false,
-                        child: Center(
-                            child: Text(
-                          'Setting',
-                          style: TextStyle(color: Colors.black),
-                        )),
-                      ),
-                      PopupMenuDivider(
-                        height: 2,
-                      ),
-                      PopupMenuItem<PopupMenuChoices>(
-                        height: 50,
-                        value: PopupMenuChoices.url,
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Text(
-                                "URL",
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: width * 0.2,
-                                ),
-                                child: Icon(Icons.keyboard_arrow_right),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      PopupMenuItem<PopupMenuChoices>(
-                        enabled: false,
-                        height: 30,
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Text(
-                                "Version 1.2.43",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ];
-                  },
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
+    return WillPopScope(
+      onWillPop: () {
+        return back();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomPadding: true,
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(
-                    child: Image.asset(
-                      'assets/login.png',
-                      height: MediaQuery.of(context).size.height / 3,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'Login Now',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('Please sign in to continue',
-                      style: TextStyle(color: Colors.black)),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    validator: (val) {
-                      String pattern = r'(^(?:[+]9)?[0-9]{3,12}$)';
-                      RegExp regExp = new RegExp(pattern);
-                      setState(() {
-                        if (val.length == 0) {
-                          userIdErr = 'please fill Phone number';
-                        } else if (!regExp.hasMatch(val)) {
-                          userIdErr = 'Invalid Phone number';
-                        }
-                      });
-
-                      return null;
-                    },
-                    style: TextStyle(),
-                    controller: userIdController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      errorText: userIdErr,
-                      labelText: 'User Id',
-                      labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(
-                          15,
+                  PopupMenuButton<dynamic>(
+                    offset: Offset(10, 10),
+                    onSelected: (value) => onMenuSelection(value),
+                    icon: Icon(Icons.more_vert, color: Colors.black),
+                    itemBuilder: (BuildContext contex) {
+                      return [
+                        PopupMenuItem<PopupMenuChoices>(
+                          height: 30,
+                          enabled: false,
+                          child: Center(
+                              child: Text(
+                            'Setting',
+                            style: TextStyle(color: Colors.black),
+                          )),
                         ),
-                        child: ImageIcon(
-                          AssetImage('assets/icon/id.png'),
+                        PopupMenuDivider(
+                          height: 2,
                         ),
-                      ),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        userIdErr = null;
-                      });
+                        PopupMenuItem<PopupMenuChoices>(
+                          height: 50,
+                          value: PopupMenuChoices.url,
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Text(
+                                  "URL",
+                                ),
+                                Spacer(),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: width * 0.2,
+                                  ),
+                                  child: Icon(Icons.keyboard_arrow_right),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        PopupMenuItem<PopupMenuChoices>(
+                          enabled: false,
+                          height: 30,
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Version 1.2.43",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ];
                     },
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    validator: (val) {
-                      setState(() {
-                        if (val.length == 0) {
-                          passErr = 'please fill Password';
-                        }
-                      });
-
-                      return null;
-                    },
-                    style: TextStyle(),
-                    controller: passController,
-                    decoration: InputDecoration(
-                      errorText: passErr,
-                      labelText: 'Password',
-                      labelStyle: TextStyle(fontSize: 15),
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.all(
-                          15,
-                        ),
-                        child: ImageIcon(
-                          AssetImage('assets/icon/lock.png'),
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        passErr = null;
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Center(
-                        child: Text(
-                      'Forgot Password?',
-                      style: Style.headingPrimaryTextStyle,
-                    )),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  FlatButton(
-                    color: Style.Colors.mainColor,
-                    child: Center(
-                      child: Text(
-                        'LOGIN',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    onPressed: () async {
-                      _formKey.currentState.validate();
-                      if (userIdErr == null && passErr == null) {
-                        await check();
-                      }
-                    },
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Center(
-                      child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Don\'t have an account? ',
-                        style: TextStyle(),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUpPage()));
-                        },
-                        child: Text(
-                          ' Sign up',
-                          style: Style.headingPrimaryTextStyle,
-                        ),
-                      ),
-                    ],
-                  )),
                 ],
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: 25, left: 25, right: 25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Image.asset(
+                        'assets/login.png',
+                        height: MediaQuery.of(context).size.height / 3,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Login Now',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('Please sign in to continue',
+                        style: TextStyle(color: Colors.black)),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      validator: (val) {
+                        String pattern = r'(^(?:[+]9)?[0-9]{3,12}$)';
+                        RegExp regExp = new RegExp(pattern);
+                        setState(() {
+                          if (val.length == 0) {
+                            userIdErr = 'please fill Phone number';
+                          } else if (!regExp.hasMatch(val)) {
+                            userIdErr = 'Invalid Phone number';
+                          }
+                        });
+
+                        return null;
+                      },
+                      style: TextStyle(),
+                      controller: userIdController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        errorText: userIdErr,
+                        labelText: 'User Id',
+                        labelStyle: TextStyle(fontSize: 15),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(
+                            15,
+                          ),
+                          child: ImageIcon(
+                            AssetImage('assets/icon/id.png'),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          userIdErr = null;
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      obscureText: true,
+                      validator: (val) {
+                        setState(() {
+                          if (val.length == 0) {
+                            passErr = 'please fill Password';
+                          }
+                        });
+
+                        return null;
+                      },
+                      style: TextStyle(),
+                      controller: passController,
+                      decoration: InputDecoration(
+                        errorText: passErr,
+                        labelText: 'Password',
+                        labelStyle: TextStyle(fontSize: 15),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(
+                            15,
+                          ),
+                          child: ImageIcon(
+                            AssetImage('assets/icon/lock.png'),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          passErr = null;
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Center(
+                          child: Text(
+                        'Forgot Password?',
+                        style: Style.headingPrimaryTextStyle,
+                      )),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    FlatButton(
+                      color: Style.Colors.mainColor,
+                      child: Center(
+                        child: Text(
+                          'LOGIN',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      onPressed: () async {
+                        _formKey.currentState.validate();
+                        if (userIdErr == null && passErr == null) {
+                          await check();
+                        }
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Center(
+                        child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Don\'t have an account? ',
+                          style: TextStyle(),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUpPage()));
+                          },
+                          child: Text(
+                            ' Sign up',
+                            style: Style.headingPrimaryTextStyle,
+                          ),
+                        ),
+                      ],
+                    )),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  Future<bool> back() {
+    exit(0);
+    
+  }
+
 
   check() async {
     loading(

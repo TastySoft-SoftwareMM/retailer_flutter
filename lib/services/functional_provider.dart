@@ -14,18 +14,71 @@ class ViewModelFunction with ChangeNotifier {
   List<ShopByListM> shopsByUser;
   int statusCode;
   String signUpDetail;
+  String status;
+  String param;
+  dynamic result;
   login(String userId, String pass) async {
-    var param = jsonEncode({"userId": '$userId', "password": '$pass'});
+    param = jsonEncode({"userId": '$userId', "password": '$pass'});
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       getLoginDetail = LoginModel.fromJson(result);
+      print(result);
+      print(getLoginDetail.password);
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
     }
     notifyListeners();
+  }
+
+  resetPassword(String currentPass, String newpass) async {
+    param = jsonEncode({
+      "id": getLoginDetail.userId,
+      "oldpass": '$currentPass',
+      "newpass": '$newpass'
+    });
+    final http.Response response =
+        await httpRequest('main/reset/mit', param, getLoginDetail.orgId);
+    if (response.statusCode == 200) {
+      result = json.decode(response.body);
+
+      statusCode = response.statusCode;
+      status = result['status'];
+      // if (status == "SUCCESS!") {
+      //   getLoginDetail = null;
+      //   allShopSaleList = null;
+      //   shopsByTeam = null;
+      //   shopsByUser = null;
+      //   statusCode = null;
+
+      // }
+    } else {
+      statusCode = response.statusCode;
+    }
+    notifyListeners();
+  }
+
+  shopTransfer(String shopSysKey, String teamSysKey) async {
+    param = jsonEncode({
+      "date": "$getDate",
+      "t1": "",
+      "userSyskey": getLoginDetail.syskey,
+      "shopSyskey": "$shopSysKey",
+      "n1": "$teamSysKey",
+      "n2": "",
+      "n3": ""
+    });
+    final http.Response response = await httpRequest(
+        'shopPerson/insertUJUN002/', param, getLoginDetail.orgId);
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      status = result['status'];
+      statusCode = response.statusCode;
+    } else {
+      statusCode = response.statusCode;
+    }
   }
 
   getMainList() async {
@@ -52,11 +105,11 @@ class ViewModelFunction with ChangeNotifier {
     String phone,
     String pass,
   ) async {
-    var param = jsonEncode({
+    param = jsonEncode({
       "userId": phone,
       "userName": userName,
       "password": pass,
-      "passcode": ""
+      "passcode": getLoginDetail.orgId
     });
     final http.Response response =
         await httpRequest('main/signup/mit', param, '');
@@ -104,7 +157,7 @@ class ViewModelFunction with ChangeNotifier {
       String userType,
       String date,
       String orgId}) async {
-    var param = jsonEncode({
+    param = jsonEncode({
       "spsyskey": "$spsysKey",
       "teamsyskey": "$teamsysKey",
       "usertype": "$userType",
@@ -120,7 +173,7 @@ class ViewModelFunction with ChangeNotifier {
       AllShopSaleList allShopSaleList = AllShopSaleList.fromJson(result);
       return allShopSaleList;
     } else {
-      throw Exception(response.statusCode);
+      throw Exception(response);
     }
   }
 }

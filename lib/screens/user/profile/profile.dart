@@ -15,18 +15,10 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   ViewModelFunction model;
-  bool loadData = true;
 
   @override
   Widget build(BuildContext context) {
-    if (loadData == true) {
-      model = Provider.of<ViewModelFunction>(context);
-      setState(() {
-        getDate().then((value) {
-          loadData = value;
-        });
-      });
-    }
+    model = Provider.of<ViewModelFunction>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,7 +29,10 @@ class _ProfileState extends State<Profile> {
         child: Column(
           children: [
             headerProfileWidget(),
-            Divider(height: 1,color: Colors.grey,),
+            Divider(
+              height: 1,
+              color: Colors.grey,
+            ),
             _tabSection(context),
           ],
         ),
@@ -73,6 +68,7 @@ class _ProfileState extends State<Profile> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
+            height: 45,
             color: Colors.red[50],
             child: Padding(
               padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5),
@@ -83,7 +79,7 @@ class _ProfileState extends State<Profile> {
                   indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.black,
                   indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                   ),
                   tabs: [
@@ -118,11 +114,5 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
-  }
-
-  Future<bool> getDate() async {
-    await model.login('+959788571913', '123');
-    await model.getMainList();
-    return false;
   }
 }
