@@ -5,7 +5,6 @@ class LoginModel {
   final String syskey;
   final String orgId;
   final String teamSyskey;
-  final String password;
   final String merchandizer;
 
   LoginModel(
@@ -15,7 +14,6 @@ class LoginModel {
       this.syskey,
       this.orgId,
       this.teamSyskey,
-      this.password,
       this.merchandizer});
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
@@ -26,7 +24,6 @@ class LoginModel {
       syskey: json['syskey'],
       orgId: json['orgId'],
       teamSyskey: json['teamSyskey'],
-      password: json['password'],
       merchandizer: json['merchandizer'],
     );
   }

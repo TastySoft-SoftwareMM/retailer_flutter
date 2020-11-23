@@ -24,8 +24,7 @@ class ViewModelFunction with ChangeNotifier {
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       getLoginDetail = LoginModel.fromJson(result);
-      print(result);
-      print(getLoginDetail.password);
+    
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
@@ -46,14 +45,6 @@ class ViewModelFunction with ChangeNotifier {
 
       statusCode = response.statusCode;
       status = result['status'];
-      // if (status == "SUCCESS!") {
-      //   getLoginDetail = null;
-      //   allShopSaleList = null;
-      //   shopsByTeam = null;
-      //   shopsByUser = null;
-      //   statusCode = null;
-
-      // }
     } else {
       statusCode = response.statusCode;
     }
@@ -124,20 +115,14 @@ class ViewModelFunction with ChangeNotifier {
     notifyListeners();
   }
 
-  String mainUrl = "http://52.255.142.115:8084/madbrepository/"; //default link
-
   Future httpRequest(urlname, param, String ordId) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    var mainUrl = preferences.getString('mainUrl') ??
+        "http://52.255.142.115:8084/madbrepository/";
+
     try {
-      final SharedPreferences preferences =
-          await SharedPreferences.getInstance();
-      var mainUrlDynamic = preferences.getString('mainurl'), url;
-
-      if (mainUrlDynamic == null) {
-        url = '$mainUrl' + urlname;
-      } else {
-        url = '$mainUrlDynamic' + urlname;
-      }
-
+      String url = mainUrl + urlname;
+      print(' this is your  => $url');
       return http
           .post(Uri.encodeFull(url), body: param, headers: {
             "Accept": "application/json",

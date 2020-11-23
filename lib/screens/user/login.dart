@@ -7,6 +7,7 @@ import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/screens/user/sign_up.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
 import 'package:retailer/services/functional_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../style/theme.dart' as Style;
 
 class Login extends StatefulWidget {
@@ -267,9 +268,7 @@ class _LoginState extends State<Login> {
 
   Future<bool> back() {
     exit(0);
-    
   }
-
 
   check() async {
     loading(
@@ -336,78 +335,119 @@ class ChangeUrlPage extends StatefulWidget {
 class _ChangeUrlPageState extends State<ChangeUrlPage> {
   final _fomkey = GlobalKey<FormState>();
   TextEditingController urlController = TextEditingController();
+  SharedPreferences preferences;
   bool enable = false;
+  String urlErr;
   @override
   Widget build(BuildContext context) {
     if (urlController.text.isEmpty) {
-      urlController.text =
-          'http://52.253.88.71:8084/madbrepository/?fbclid=IwAR1Xrl508ZX3Cca714S5CcALeebob912uEWVfgMk9s60Z1YbCYqgSKIektY';
+      getUrl();
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('URL'),
-        centerTitle: true,
-      ),
-      body: Form(
-        key: _fomkey,
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: ListView(
-            children: [
-              Text(
-                'URL',
-                style: TextStyle(color: enable ? Colors.black : Colors.grey),
-              ),
-              TextField(
-                enabled: enable,
-                style: TextStyle(color: enable ? Colors.black : Colors.grey),
-                controller: urlController,
-                decoration: InputDecoration(
-                  disabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Style.Colors.mainColor),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Style.Colors.mainColor),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Style.Colors.mainColor),
+    return WillPopScope(
+      onWillPop: () {
+        return back();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('URL'),
+          centerTitle: true,
+        ),
+        body: Form(
+          key: _fomkey,
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: ListView(
+              children: [
+                Text(
+                  'URL',
+                  style: TextStyle(color: enable ? Colors.black : Colors.grey),
+                ),
+                TextFormField(
+                  onTap: () {
+                    setState(() {
+                      this.urlErr = null;
+                    });
+                  },
+                  validator: (val) {
+                    if (val.length == 0) {
+                      setState(() {
+                        urlErr = 'Please fill url';
+                      });
+                    }
+                    return null;
+                  },
+                  enabled: enable,
+                  style: TextStyle(color: enable ? Colors.black : Colors.grey),
+                  controller: urlController,
+                  decoration: InputDecoration(
+                    errorText: urlErr,
+                    disabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Style.Colors.mainColor),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Style.Colors.mainColor),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Style.Colors.mainColor),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              FlatButton(
-                  color: Style.Colors.mainColor,
-                  onPressed: () {
-                    changeUrl(enable);
-                  },
-                  child: Center(
-                    child: Text(
-                      enable ? 'Save' : 'Update',
-                      style: TextStyle(
-                        color: Colors.white,
+                SizedBox(
+                  height: 10,
+                ),
+                FlatButton(
+                    color: Style.Colors.mainColor,
+                    onPressed: () {
+                      setState(() {
+                        if (enable == false) {
+                          enable = true;
+                        } else if (enable == true) {
+                          _fomkey.currentState.validate();
+                          preferences.setString("mainUrl", urlController.text);
+                          getUrl();
+                          if (urlErr == null) {
+                            getToast(context, "update successful");
+                            Navigator.pop(context, true);
+                          }
+                        }
+                      });
+                    },
+                    child: Center(
+                      child: Text(
+                        enable ? 'Save' : 'Update',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ))
-            ],
+                    )),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  changeUrl(bool value) async {
-    switch (value) {
-      case true:
-        Navigator.pop(context, true);
-        break;
+  Future<bool> back() async {
+    bool ba;
+    _fomkey.currentState.validate();
+    setState(() {
+      if (enable == false) {
+        ba = true;
+      } else if (enable == true) {
+        if (urlErr == null && urlController.text != null) {
+          ba = true;
+        } else if (urlErr != null && urlController.text == null) {
+          ba = false;
+        }
+      }
+    });
+    return ba;
+  }
 
-      case false:
-        setState(() {
-          enable = true;
-        });
-        break;
-    }
+  getUrl() async {
+    preferences = await SharedPreferences.getInstance();
+    urlController.text = preferences.getString('mainUrl') ??
+        'http://52.255.142.115:8084/madbrepository/';
   }
 }

@@ -174,7 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           comfirmPassError = 'please fill Comfirm password';
                         } else if (comfirmpasswordController.text !=
                             passwordController.text) {
-                          comfirmPassError = "Password do not match";
+                          comfirmPassError = "Password don't match";
                         }
                       });
 

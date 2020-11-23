@@ -26,118 +26,103 @@ class _PasswordWidgetState extends State<PasswordWidget> {
     model = Provider.of<ViewModelFunction>(context);
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: ListView(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(10),
-              child: TextFormField(
-                validator: (val) {
-                  if (val.length == 0) {
-                    setState(() {
-                      currentErr = "Please fill current password";
-                    });
-                  }
-                  return null;
-                },
-                onTap: () {
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(10),
+            child: TextFormField(
+              validator: (val) {
+                if (val.length == 0) {
                   setState(() {
-                    currentErr = null;
+                    currentErr = "Please fill current password";
                   });
-                },
-                controller: currentPass,
-                decoration: InputDecoration(
-                    errorText: currentErr, labelText: 'Current Password'),
-              ),
+                }
+                return null;
+              },
+              onTap: () {
+                setState(() {
+                  currentErr = null;
+                });
+              },
+              controller: currentPass,
+              decoration: InputDecoration(
+                  errorText: currentErr, labelText: 'Current Password'),
             ),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: TextFormField(
-                onTap: () {
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: TextFormField(
+              onTap: () {
+                setState(() {
+                  newPassErr = null;
+                });
+              },
+              validator: (val) {
+                if (val.length == 0) {
                   setState(() {
-                    newPassErr = null;
+                    newPassErr = "Please fill new password";
                   });
-                },
-                validator: (val) {
-                  if (val.length == 0) {
-                    setState(() {
-                      newPassErr = "Please fill new password";
-                    });
-                  }
-                  return null;
-                },
-                controller: newPass,
-                decoration: InputDecoration(
-                    errorText: newPassErr, labelText: 'New Password'),
-              ),
+                }
+                return null;
+              },
+              controller: newPass,
+              decoration: InputDecoration(
+                  errorText: newPassErr, labelText: 'New Password'),
             ),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: TextFormField(
-                onTap: () {
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: TextFormField(
+              onTap: () {
+                setState(() {
+                  comfirmPassErr = null;
+                });
+              },
+              validator: (val) {
+                if (val.length == 0 || newPass.text != comfirmPass.text) {
                   setState(() {
-                    comfirmPassErr = null;
+                    comfirmPassErr = "password don't match";
                   });
-                },
-                validator: (val) {
-                  if (val.length == 0 || newPass.text != comfirmPass.text) {
-                    setState(() {
-                      comfirmPassErr = "password do not match";
-                    });
-                  }
-                  return null;
-                },
-                controller: comfirmPass,
-                decoration: InputDecoration(
-                    errorText: comfirmPassErr, labelText: 'Confirm Password'),
-              ),
+                }
+                return null;
+              },
+              controller: comfirmPass,
+              decoration: InputDecoration(
+                  errorText: comfirmPassErr, labelText: 'Confirm Password'),
             ),
-            Container(
-              // height:10,
-              // padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: RaisedButton(
-                textColor: Colors.white,
-                color: Colors.red,
-                child: Text('Save'),
-                onPressed: () async {
-                  _formKey.currentState.validate();
-                  if (this.currentErr == null &&
-                      this.newPassErr == null &&
-                      this.comfirmPassErr == null) {
-                    await model.resetPassword(
-                        currentPass.text, comfirmPass.text);
-                    if (model.statusCode == 200) {
-                      if (model.status == "SUCCESS!") {
-                        getToast(context,
-                            "Password reset successful !. Please login agian");
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            width: MediaQuery.of(context).size.width,
+            child: RaisedButton(
+              textColor: Colors.white,
+              color: Colors.red,
+              child: Text('Save'),
+              onPressed: () async {
+                _formKey.currentState.validate();
+                if (this.currentErr == null &&
+                    this.newPassErr == null &&
+                    this.comfirmPassErr == null) {
+                  await model.resetPassword(currentPass.text, comfirmPass.text);
+                  if (model.statusCode == 200) {
+                    if (model.status == "SUCCESS!") {
+                      getToast(context,
+                          "Password reset successful !. Please login agian");
 
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => Login()));
-                      }
-                      if (model.status == "FAIL") {
-                        getToast(context, " Incorrect password ");
-                      }
-                    } else if (model.statusCode != 200) {
-                      getToast(context, "Server error !. Try again later");
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => Login()));
                     }
+                    if (model.status == "FAIL") {
+                      getToast(context, " Incorrect password ");
+                    }
+                  } else if (model.statusCode != 200) {
+                    getToast(context, "Server error !. Try again later");
                   }
-                  // if (currentPass.text != model.getLoginDetail.password) {
-                  //   print(model.getLoginDetail.teamSyskey);
-                  //   print('wrong currentPass');
-                  // }
-                  // if (newPass.text != comfirmPass.text) {
-                  //   print('password do not match');
-                  // } else if (currentPass.text ==
-                  //         model.getLoginDetail.password &&
-                  //     newPass.text == comfirmPass.text) {
-                  //   print('fine all');
-                  // }
-                },
-              ),
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

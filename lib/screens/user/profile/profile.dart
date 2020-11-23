@@ -65,7 +65,6 @@ class _ProfileState extends State<Profile> {
       initialIndex: 1,
       length: 4,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
             height: 45,
@@ -103,7 +102,7 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height-195,
             child: TabBarView(children: [
               UserShop(),
               TeamWidget(),

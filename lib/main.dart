@@ -5,6 +5,11 @@ import 'package:retailer/services/functional_provider.dart';
 import 'style/theme.dart' as Style;
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  // final prefs = await SharedPreferences.getInstance();
+  // String url = prefs.getString('mainUrl');
+  // print(url);
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
@@ -19,7 +24,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
       title: 'Retailer',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -28,7 +32,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home:Login(),
+      home: Login(),
     );
   }
 }

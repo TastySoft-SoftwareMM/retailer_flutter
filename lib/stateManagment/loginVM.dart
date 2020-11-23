@@ -13,10 +13,6 @@ class LoginViewModel {
     return _newLoginModel.orgId;
   }
 
-  String get password {
-    return _newLoginModel.password;
-  }
-
   String get syskey {
     return _newLoginModel.syskey;
   }
