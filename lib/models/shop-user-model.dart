@@ -1,4 +1,4 @@
-class ShopUserModel {
+  class ShopUserModel {
   final String id;
   final String address;
   final String shopsyskey;

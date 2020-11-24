@@ -40,6 +40,7 @@ class ViewModelFunction with ChangeNotifier {
     });
     final http.Response response =
         await httpRequest('main/reset/mit', param, getLoginDetail.orgId);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       result = json.decode(response.body);
 
@@ -63,6 +64,7 @@ class ViewModelFunction with ChangeNotifier {
     });
     final http.Response response = await httpRequest(
         'shopPerson/insertUJUN002/', param, getLoginDetail.orgId);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       status = result['status'];
@@ -70,6 +72,32 @@ class ViewModelFunction with ChangeNotifier {
     } else {
       statusCode = response.statusCode;
     }
+  }
+
+  getStockList() async {
+    param = jsonEncode({
+      'code': '',
+      'desc': '',
+      'vendorSyskey' : '',
+      'brandSysey' : '',
+      'categorySyskey' : '',
+      'packTypeSyskey' : '0',
+      'packSizeSyskey' : '0',
+      'flavorSyskey' : '0',
+    });
+    final http.Response response = await httpRequest(
+        'stock/getstockall', param, getLoginDetail.orgId);
+    if (response.statusCode==200){
+      final result = json.decode(response.body);
+      status = result['status'];
+      statusCode = response.statusCode;
+      var result1 = json.encode  (result);
+      print(statusCode);
+      print(result1);
+    }else{
+      statusCode = response.statusCode;
+    }
+
   }
 
   getMainList() async {
@@ -118,7 +146,7 @@ class ViewModelFunction with ChangeNotifier {
   Future httpRequest(urlname, param, String ordId) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     var mainUrl = preferences.getString('mainUrl') ??
-        "http://52.255.142.115:8084/madbrepository/";
+        "http://52.253.88.71:8084/madbrepository/";
 
     try {
       String url = mainUrl + urlname;

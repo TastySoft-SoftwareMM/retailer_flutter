@@ -135,6 +135,7 @@ class _SyncDataState extends State<SyncData> {
       loading = true;
     });
     await model.getMainList();
+    await model.getStockList();
     await Future.doWhile(() async {
       await Future.delayed(Duration(milliseconds: 1));
       setState(() {

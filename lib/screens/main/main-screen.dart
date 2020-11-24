@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
                     ? Container()
                     : createUploadMerchandizingWidget(),
             Container(
-              height: height - 140,
+              height: height - 152,
               child: SingleChildScrollView(
                 child: Container(
                   child: Column(
