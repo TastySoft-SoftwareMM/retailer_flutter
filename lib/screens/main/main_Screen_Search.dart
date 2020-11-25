@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/main/checkInAlert.dart';
 import '../../style/theme.dart' as Style;
 import '../../custom/custom_expansion_title.dart' as custom;
 import 'package:http/http.dart' as http;
@@ -261,8 +260,8 @@ class DataSearch extends SearchDelegate {
                       color: Colors.white,
                       child: InkWell(
                         onTap: () {
-                          CheckInAlert()
-                              .checkInDialog(context, element['state']);
+                          // CheckInAlert()
+                          //     .checkInDialog(context, element['state'],element);
                         },
                         child: Padding(
                           padding: EdgeInsets.only(top: 10.0),

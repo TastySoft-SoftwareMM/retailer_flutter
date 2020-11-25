@@ -5,11 +5,6 @@ import 'package:retailer/services/functional_provider.dart';
 import 'style/theme.dart' as Style;
 
 void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-
-  // final prefs = await SharedPreferences.getInstance();
-  // String url = prefs.getString('mainUrl');
-  // print(url);
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(

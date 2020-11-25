@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/main/checkInAlert.dart';
@@ -20,13 +21,18 @@ class _MainScreenState extends State<MainScreen> {
 
   var width;
   var height;
+  // bool loading = true;
   @override
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    // if (loading == true) {
+    //   getData();
+    // }
 
+    // return loading == false
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -46,28 +52,20 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
         drawer: MainDrawer(),
-        body: Column(
-          children: [
-            model == null
-                ? Container()
-                : model.getLoginDetail.merchandizer == 'true'
-                    ? Container()
-                    : createUploadMerchandizingWidget(),
-            Container(
-              height: height * 0.52,
-              child: SingleChildScrollView(
-                child: Container(
-                  child: Column(
-                    children: [
-                      model == null ? Container() : getShopByUser(),
-                      model == null ? Container() : getShopByTeam(),
-                    ],
-                  ),
+        body: model == null
+            ? Container()
+            : Container(
+                height: height,
+                child: Column(
+                  children: [
+                    model.getLoginDetail.merchandizer == 'true'
+                        ? Container()
+                        : createUploadMerchandizingWidget(),
+                    Flexible(child: getShopByUser()),
+                    getShopByTeam(),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -104,6 +102,15 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  // getData() async {
+  //   model = Provider.of<ViewModelFunction>(context, listen: false);
+  //   await model.login('+959788571913', '123');
+  //   await model.getMainList();
+  //   setState(() {
+  //     loading = false;
+  //   });
+  // }
+
   Widget getShopByUser() {
     List<Widget> getByTeam = [];
     return ListView.builder(
@@ -113,7 +120,7 @@ class _MainScreenState extends State<MainScreen> {
         color: Style.Colors.dropBackgroundColor,
         child: custom.ExpansionTitle(
           backgroundColor: Style.Colors.dropBackgroundColor,
-          initiallyExpanded: false,
+          initiallyExpanded: true,
           headerBackgroundColor: Style.Colors.mainColor,
           iconColor: Style.Colors.textColor,
           title: Container(
@@ -147,9 +154,8 @@ class _MainScreenState extends State<MainScreen> {
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white),
                         child: InkWell(
-                          onTap: () {
-                            CheckInAlert()
-                                .checkInDialog(context, element.shopname);
+                          onTap: () async {
+                            await _getCurrentLocation(element);
                           },
                           child: Padding(
                             padding: EdgeInsets.only(top: 10.0),
@@ -204,8 +210,30 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      itemCount: model.shopsByUser.length == null ? 0 : 1,
+      itemCount: model.shopsByUser.length >= 1 ? 1 : 0,
     );
+  }
+
+  _getCurrentLocation(ShopByListM element) async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      await Geolocator.requestPermission()
+          .then((LocationPermission permission) {
+        if (permission == LocationPermission.denied) {
+          CheckInAlert().checkInDialog(context, element, null, model);
+        } else if (permission == LocationPermission.always) {
+          Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+              .then((Position value) {
+            CheckInAlert().checkInDialog(context, element, value, model);
+          });
+        }
+      });
+    } else if (permission == LocationPermission.always) {
+      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+          .then((Position value) {
+        CheckInAlert().checkInDialog(context, element, value, model);
+      });
+    }
   }
 
   TextStyle getCurrentTypeTS(String currentType) {
@@ -341,10 +369,6 @@ class _MainScreenState extends State<MainScreen> {
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white),
                         child: InkWell(
-                          onTap: () {
-                            CheckInAlert()
-                                .checkInDialog(context, element.shopname);
-                          },
                           child: Padding(
                             padding: EdgeInsets.only(top: 10.0),
                             child: ListTile(
@@ -359,9 +383,11 @@ class _MainScreenState extends State<MainScreen> {
                                   Padding(
                                     padding: EdgeInsets.all(4.0),
                                     child: Text(
-                                      element.shopname,
-                                      style: Style.statusSuccessTextStyle,
-                                    ),
+                                        getCurrentTypeSting(
+                                            element.status.currentType),
+                                        style: getCurrentTypeTS(
+                                          element.status.currentType,
+                                        )),
                                   )
                                 ],
                               ),

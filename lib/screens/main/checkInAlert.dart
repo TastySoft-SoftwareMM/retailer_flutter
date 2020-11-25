@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/main/visit-card.dart';
+import 'package:retailer/screens/public/widget.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 import 'package:intl/intl.dart';
 
 class CheckInAlert {
-  checkInDialog(BuildContext context, String state) {
+  checkInDialog(BuildContext context, ShopByListM element, Position position,
+      ViewModelFunction model) {
     List<String> _checkInList = ['Check In', 'Store Closed'];
     String _selectedType;
     DateFormat dateFormat = DateFormat("dd/MM/yyyy-HH:mm aaa");
@@ -74,17 +79,40 @@ class CheckInAlert {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ImageIcon(
-                        AssetImage('assets/icon/pin.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: ImageIcon(
+                          AssetImage('assets/icon/pin.png'),
+                        ),
                       ),
                       Flexible(
                         child: Padding(
                           padding: const EdgeInsets.only(top: 4, left: 8),
                           child: Container(
-                            child: Text(
-                              '22.23424344 / 96.23424344',
-                              style: TextStyle(color: Style.Colors.mainColor),
-                            ),
+                            child: position == null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: SizedBox(
+                                      height: 25,
+                                      width: 25,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Style.Colors.mainColor),
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.only(top: 6),
+                                    child: Text(
+                                      '${position.latitude}/${position.longitude}',
+                                      style: TextStyle(
+                                          color: Style.Colors.mainColor),
+                                    ),
+                                  ),
                           ),
                         ),
                       ),
@@ -102,7 +130,7 @@ class CheckInAlert {
                       ),
                     ),
                     Flexible(
-                      child: state == 'pending'
+                      child: element.status.currentType != ''
                           ? Padding(
                               padding: const EdgeInsets.only(top: 28, left: 8),
                               child: Container(
@@ -216,11 +244,53 @@ class CheckInAlert {
                               color: Style.Colors.mainColor, width: 1.5),
                           borderRadius: BorderRadius.circular(5)),
                       child: FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => VisitCard()));
+                          onPressed: () async {
+                            print(_selectedType);
+                            if (element.status.currentType != "") {
+                              if (position != null) {
+                                loading(context);
+                                await model.routeCheckin(position, element);
+                                if (model.statusCode == 200) {
+                                  getToast(context, "CheckIn Successful");
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => VisitCard()));
+                                } else {
+                                  getToast(context,
+                                      "Server error !. Try again later");
+                                  Navigator.pop(context, true);
+                                  Navigator.pop(context, true);
+                                }
+                              } else if (position == null) {
+                                getToast(context,
+                                    'Please check location permission');
+                              }
+                            } else if (element.status.currentType == "") {
+                              if (position == null) {
+                                getToast(context,
+                                    "Please check location permission");
+                              }
+                              if (_selectedType == null) {
+                                getToast(context, "Please select type");
+                              } else if (position != null &&
+                                  _selectedType != null) {
+                                loading(context);
+                                await model.routeCheckin(position, element);
+                                if (model.statusCode == 200) {
+                                  getToast(context, "CheckIn Successful");
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => VisitCard()));
+                                } else {
+                                  getToast(context,
+                                      "Server error !. Try again later");
+                                  Navigator.pop(context, true);
+                                  Navigator.pop(context, true);
+                                }
+                              }
+                            }
                           },
                           child: Center(
                             child: Text(

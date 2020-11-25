@@ -274,7 +274,6 @@ class _LoginState extends State<Login> {
     loading(
       context,
     );
-    model = Provider.of<ViewModelFunction>(context, listen: false);
     String formatPhone = getPhoneFormat(userIdController.text);
     await model.login(formatPhone, this.passController.text);
     if (model.statusCode == 200) {

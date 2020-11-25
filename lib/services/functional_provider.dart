@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:retailer/models/all_shop_saleList.dart';
 import 'package:retailer/models/loginModel.dart';
 import 'package:retailer/models/shopByListModel.dart';
@@ -24,7 +25,7 @@ class ViewModelFunction with ChangeNotifier {
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       getLoginDetail = LoginModel.fromJson(result);
-    
+
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
@@ -40,7 +41,6 @@ class ViewModelFunction with ChangeNotifier {
     });
     final http.Response response =
         await httpRequest('main/reset/mit', param, getLoginDetail.orgId);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       result = json.decode(response.body);
 
@@ -50,6 +50,33 @@ class ViewModelFunction with ChangeNotifier {
       statusCode = response.statusCode;
     }
     notifyListeners();
+  }
+
+  routeCheckin(Position position, ShopByListM element) async {
+    param = jsonEncode({
+      "lat": position.latitude.toString(),
+      "lon": position.longitude.toString(),
+      "address": element.address,
+      "shopsyskey": element.shopsyskey,
+      "usersyskey": element.usercode,
+      "checkInType": "CHECKIN",
+      "register": true,
+      "task": {
+        "inventoryCheck": "COMPLETED",
+        "merchandizing": "COMPLETED",
+        "orderPlacement": "COMPLETED",
+        "print": "COMPLETED"
+      }
+    });
+    final http.Response response =
+        await httpRequest('/route/checkin', param, getLoginDetail.orgId);
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      print(result);
+      statusCode = response.statusCode;
+    } else {
+      statusCode = response.statusCode;
+    }
   }
 
   shopTransfer(String shopSysKey, String teamSysKey) async {
@@ -78,26 +105,22 @@ class ViewModelFunction with ChangeNotifier {
     param = jsonEncode({
       'code': '',
       'desc': '',
-      'vendorSyskey' : '',
-      'brandSysey' : '',
-      'categorySyskey' : '',
-      'packTypeSyskey' : '0',
-      'packSizeSyskey' : '0',
-      'flavorSyskey' : '0',
+      'vendorSyskey': '',
+      'brandSysey': '',
+      'categorySyskey': '',
+      'packTypeSyskey': '0',
+      'packSizeSyskey': '0',
+      'flavorSyskey': '0',
     });
-    final http.Response response = await httpRequest(
-        'stock/getstockall', param, getLoginDetail.orgId);
-    if (response.statusCode==200){
+    final http.Response response =
+        await httpRequest('stock/getstockall', param, getLoginDetail.orgId);
+    if (response.statusCode == 200) {
       final result = json.decode(response.body);
       status = result['status'];
       statusCode = response.statusCode;
-      var result1 = json.encode  (result);
-      print(statusCode);
-      print(result1);
-    }else{
+    } else {
       statusCode = response.statusCode;
     }
-
   }
 
   getMainList() async {
@@ -111,7 +134,7 @@ class ViewModelFunction with ChangeNotifier {
       return null;
     });
     this.shopsByTeam = allShopSaleList.shopsByTeam
-        .map((e) => ShopByListM.fromJson(e))
+        .map((el) => ShopByListM.fromJson(el))
         .toList();
     this.shopsByUser = allShopSaleList.shopsByUser
         .map((e) => ShopByListM.fromJson(e))
