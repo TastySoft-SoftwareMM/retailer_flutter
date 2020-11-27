@@ -120,3 +120,23 @@ class StatusVM {
     return _status.message;
   }
 }
+
+class TaskVm {
+  Task _task;
+  TaskVm({Task task}) : _task = task;
+  String get merchandizing {
+    return _task.merchandizing;
+  }
+
+  String get inventoryCheck {
+    return _task.inventoryCheck;
+  }
+
+  String get orderPlacement {
+    return _task.orderPlacement;
+  }
+
+  String get print {
+    return _task.print;
+  }
+}

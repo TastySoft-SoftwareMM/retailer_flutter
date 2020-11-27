@@ -205,6 +205,7 @@ class ViewModelFunction with ChangeNotifier {
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+      print(result["data"]["shopsByUser"][0]['status']['task']);
 
       AllShopSaleList allShopSaleList = AllShopSaleList.fromJson(result);
       return allShopSaleList;

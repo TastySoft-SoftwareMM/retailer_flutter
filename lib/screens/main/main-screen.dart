@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/models/shopByListModel.dart';
-import 'package:retailer/screens/main/checkInAlert.dart';
 import 'package:retailer/screens/main/main_Screen_Search.dart';
+import 'package:retailer/screens/user/syncData/toast.dart';
 import 'package:retailer/services/functional_provider.dart';
 import './main-drawer.dart';
 import '../../style/theme.dart' as Style;
@@ -21,53 +20,58 @@ class _MainScreenState extends State<MainScreen> {
 
   var width;
   var height;
-  // bool loading = true;
+  bool loading = true;
   @override
   @override
   Widget build(BuildContext context) {
-    model = Provider.of<ViewModelFunction>(context);
+    model = Provider.of<ViewModelFunction>(context,listen: false);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    // if (loading == true) {
-    //   getData();
-    // }
+    if (loading == true) {
+      getData();
+    }
 
-    // return loading == false
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        backgroundColor: Color(0xFFF5F5F5),
-        appBar: AppBar(
-          title: Text("Retailer"),
-          actions: [
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(
-                      context: context,
-                      delegate: DataSearch(
-                        "Search...",
-                      ));
-                })
-          ],
-        ),
-        drawer: MainDrawer(),
-        body: model == null
-            ? Container()
-            : Container(
-                height: height,
-                child: Column(
-                  children: [
-                    model.getLoginDetail.merchandizer == 'true'
-                        ? Container()
-                        : createUploadMerchandizingWidget(),
-                    Flexible(child: getShopByUser()),
-                    getShopByTeam(),
-                  ],
-                ),
+    return loading == false
+        ? WillPopScope(
+            onWillPop: () async => false,
+            child: Scaffold(
+              backgroundColor: Color(0xFFF5F5F5),
+              appBar: AppBar(
+                title: Text("Retailer"),
+                actions: [
+                  IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        showSearch(
+                            context: context,
+                            delegate: DataSearch(
+                              "Search...",
+                            ));
+                      })
+                ],
               ),
-      ),
-    );
+              drawer: MainDrawer(),
+              body: model == null
+                  ? Container()
+                  : Container(
+                      height: height,
+                      child: Column(
+                        children: [
+                          model.getLoginDetail.merchandizer == 'true'
+                              ? Container()
+                              : createUploadMerchandizingWidget(),
+                          Flexible(child: getShopByUser()),
+                          getShopByTeam(),
+                        ],
+                      ),
+                    ),
+            ),
+          )
+        : Scaffold(
+            body: Center(
+              child: Text('Loading...'),
+            ),
+          );
   }
 
   // create upload merchandizing widget
@@ -102,14 +106,16 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  // getData() async {
-  //   model = Provider.of<ViewModelFunction>(context, listen: false);
-  //   await model.login('+959788571913', '123');
-  //   await model.getMainList();
-  //   setState(() {
-  //     loading = false;
-  //   });
-  // }
+  getData() async {
+    model = Provider.of<ViewModelFunction>(context, listen: false);
+    await model.login('+959788571913', '123');
+    await model.getMainList();
+    print(model.shopsByTeam.length);
+    print(model.shopsByUser.length);
+    setState(() {
+      loading = false;
+    });
+  }
 
   Widget getShopByUser() {
     List<Widget> getByTeam = [];
@@ -155,7 +161,7 @@ class _MainScreenState extends State<MainScreen> {
                             color: Colors.white),
                         child: InkWell(
                           onTap: () async {
-                            await _getCurrentLocation(element);
+                            await checkInDialog(context, element, model);
                           },
                           child: Padding(
                             padding: EdgeInsets.only(top: 10.0),
@@ -214,27 +220,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  _getCurrentLocation(ShopByListM element) async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      await Geolocator.requestPermission()
-          .then((LocationPermission permission) {
-        if (permission == LocationPermission.denied) {
-          CheckInAlert().checkInDialog(context, element, null, model);
-        } else if (permission == LocationPermission.always) {
-          Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-              .then((Position value) {
-            CheckInAlert().checkInDialog(context, element, value, model);
-          });
-        }
-      });
-    } else if (permission == LocationPermission.always) {
-      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-          .then((Position value) {
-        CheckInAlert().checkInDialog(context, element, value, model);
-      });
-    }
-  }
+
 
   TextStyle getCurrentTypeTS(String currentType) {
     TextStyle textStyle;
@@ -368,40 +354,35 @@ class _MainScreenState extends State<MainScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white),
-                        child: InkWell(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 10.0),
-                            child: ListTile(
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text(element.shopname,
-                                        style: Style.headingTextStyle),
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: ListTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(element.shopname,
+                                      style: Style.headingTextStyle),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    element.shopname,
+                                    style: Style.statusSuccessTextStyle,
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(4.0),
-                                    child: Text(
-                                        getCurrentTypeSting(
-                                            element.status.currentType),
-                                        style: getCurrentTypeTS(
-                                          element.status.currentType,
-                                        )),
-                                  )
-                                ],
-                              ),
-                              subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      element.personph,
-                                      style: Style.secondTextStyle,
-                                    ),
-                                    Text(element.address,
-                                        style: Style.secondTextStyle)
-                                  ]),
+                                )
+                              ],
                             ),
+                            subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    element.personph,
+                                    style: Style.secondTextStyle,
+                                  ),
+                                  Text(element.address,
+                                      style: Style.secondTextStyle)
+                                ]),
                           ),
                         ),
                       ),
