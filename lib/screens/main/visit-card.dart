@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/main/main-drawer.dart';
 import 'package:retailer/screens/main/main-screen.dart';
@@ -18,6 +19,8 @@ class VisitCard extends StatefulWidget {
 }
 
 class _VisitCardState extends State<VisitCard> {
+
+  bool three= false;
   bool isSwitched = false;
   bool first = false;
   List<VisitCardModel> visitcards = [
@@ -34,6 +37,7 @@ class _VisitCardState extends State<VisitCard> {
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -57,17 +61,105 @@ class _VisitCardState extends State<VisitCard> {
             child: Column(
               children: [
                 CheckinShop(),
-                createCardWidget(),
-                createSkipOrderplacementWidget(),
+                Container(),
+                Padding(
+                  padding: const EdgeInsets.only(top:4.0),
+                  child: three ? Column(
+                    children:<Widget> [
+                      Row(
+                        children:<Widget> [
+                          createCardWidget(1,"assets/checkout.svg","1.Check Out"),
+                          createCardWidget(2,"assets/supplier_fill.svg","2.Inventory Check"),
+                        ],
+                      ),
+                      Row(children:<Widget> [
+                        isSwitched ? Container() : createCardWidget(4,"assets/order_fill.svg","3.Order Placement "),
+                      ],),
+                    ],
+                  ) : Column(
+                    children:<Widget> [
+                      Row(
+                        children:<Widget> [
+                          createCardWidget(1,"assets/checkout.svg","1.Check Out"),
+                          createCardWidget(2,"assets/supplier_fill.svg","2.Inventory Check"),
+                        ],
+                      ),
+                      Row(children:<Widget> [
+                        createCardWidget(3,"assets/product_order_fill.svg","3.Merchandizing"),
+                         isSwitched ? Container() : createCardWidget(4 ,"assets/order_fill.svg","4.Order Placement "),
+                      ],),
+
+                    ],
+                  ),
+                ),
+                createSkipOrderplacementWidget(), 
               ],
             ),
           ),
         ),
       ),
     );
+
   }
 
-  Widget createCardWidget() {
+  createCardWidget(int id, String image, String text ){
+    var width = MediaQuery.of(context).size.width;
+    return Card(
+      child: InkWell(
+        onTap: () => cardClick(id),
+        child: Container(
+          height: 180,
+          width: width *0.463,
+          child: Column(
+            children:<Widget> [
+              Row(
+                children:<Widget> [
+                  Padding(
+                    padding: const EdgeInsets.only(top:10.0, left:10),
+                    child: CircleAvatar(
+                      radius: 5,
+                      backgroundColor: Style.Colors.borderColor,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.green,
+                        radius: 4.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:40),
+                child: Container(
+                    height: 40,
+                    child: SvgPicture.asset(
+                      image,
+                      color: Style.Colors.mainColor,
+                    )),
+              ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top:40.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      color: Style.Colors.mainColor,
+                      height: 40,
+                      child: Center(
+                          child: Text(
+                            text,
+                            style: Style.whiteTextStyle,
+                          )),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget createCardWidget1() {
     return GridView.count(
         shrinkWrap: true,
         controller: new ScrollController(keepScrollOffset: false),
@@ -128,7 +220,8 @@ class _VisitCardState extends State<VisitCard> {
                     )
                   ],
                 ),
-              ));
+              ),
+          );
         }).toList());
   }
 
@@ -193,6 +286,37 @@ class _VisitCardState extends State<VisitCard> {
       ),
     );
   }
+  Widget createplacementWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Order Placement",
+                style: Style.headingTextStyle,
+              ),
+              Switch(
+                value: three,
+                onChanged: (value) {
+                  setState(() {
+                    three = value;
+                    print(three);
+                  });
+                },
+                activeTrackColor: Style.Colors.mainColor,
+                activeColor: Style.Colors.mainColor,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   checkOutFun(BuildContext context) {
     // set up the buttons
@@ -237,8 +361,8 @@ class VisitCardModel {
   VisitCardModel({this.id, this.text, this.img});
 }
 
-VisitCardModel checkout =
-    new VisitCardModel(id: 1, text: "1. Check Out", img: "assets/checkout.svg");
+VisitCardModel checkout = new VisitCardModel(
+    id: 1, text: "1. Check Out", img: "assets/checkout.svg");
 VisitCardModel inventorycheck = new VisitCardModel(
     id: 2, text: "2. Inventory Check", img: "assets/supplier_fill.svg");
 VisitCardModel merchandizing = new VisitCardModel(

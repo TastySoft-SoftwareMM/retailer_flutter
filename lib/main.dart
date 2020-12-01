@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retailer/screens/main/visit-card.dart';
 import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'style/theme.dart' as Style;
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.grey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Login(),
+      home: VisitCard(),
     );
   }
 }
