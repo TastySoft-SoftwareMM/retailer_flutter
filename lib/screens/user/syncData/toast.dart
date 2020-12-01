@@ -38,7 +38,10 @@ String getPhoneFormat(String message) {
 }
 
 checkInDialog(
-    BuildContext context, ShopByListM element, ViewModelFunction model) {
+  BuildContext context,
+  ShopByListM element,
+  ViewModelFunction model,
+) {
   Position position;
   List<String> _checkInList = ['Check In', 'Store Closed'];
   String _selectedType;
@@ -74,7 +77,7 @@ checkInDialog(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Container(
-                          child: Text('Myo Myanmar (မျိုးမြန်မာ)'),
+                          child: Text(element.shopname),
                         ),
                       ),
                     ),
@@ -193,7 +196,9 @@ checkInDialog(
                                     'Select Type'), // Not necessary for Option 1
                                 value: _checkInList[0],
                                 onChanged: (newValue) {
+                                  setState(() {
                                     _selectedType = newValue;
+                                  });
                                 },
                                 items: _checkInList.map((element) {
                                   return DropdownMenuItem<String>(
@@ -235,8 +240,7 @@ checkInDialog(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Container(
-                          child: Text(
-                              'လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n'),
+                          child: Text('${element.address}\r\n'),
                         ),
                       ),
                     ),
@@ -276,13 +280,14 @@ checkInDialog(
                         borderRadius: BorderRadius.circular(5)),
                     child: FlatButton(
                         onPressed: () async {
-                          print(_selectedType);
                           if (element.status.currentType != "") {
                             if (position != null) {
                               loading(context);
-                              await model.routeCheckin(position, element);
+                              await model.routeCheckin(
+                                  position, element, _selectedType);
                               if (model.statusCode == 200) {
-                                getToast(context, "CheckIn Successful");
+                                await model.getMainList();
+                                getToast(context, "Check In Successful");
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -307,13 +312,23 @@ checkInDialog(
                             } else if (position != null &&
                                 _selectedType != null) {
                               loading(context);
-                              await model.routeCheckin(position, element);
+
+                              await model.routeCheckin(
+                                  position, element, _selectedType);
                               if (model.statusCode == 200) {
-                                getToast(context, "CheckIn Successful");
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => VisitCard()));
+                                if (_selectedType == "Store Closed") {
+                                  await model.getMainList();
+
+                                  getToast(context, "Store Close Successful");
+                                  Navigator.pop(context, true);
+                                  Navigator.pop(context, true);
+                                } else {
+                                  getToast(context, "Check In Successful");
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => VisitCard()));
+                                }
                               } else {
                                 getToast(
                                     context, "Server error !. Try again later");

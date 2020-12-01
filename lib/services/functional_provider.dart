@@ -52,14 +52,28 @@ class ViewModelFunction with ChangeNotifier {
     notifyListeners();
   }
 
-  routeCheckin(Position position, ShopByListM element) async {
+  routeCheckin(
+      Position position, ShopByListM element, String checkInType) async {
+    String state;
+    if (checkInType == null) {
+      state = "CHECKIN";
+    }
+    if (checkInType == "Check In") {
+      state = "CHECKIN";
+    }
+    if (checkInType == "Store Closed") {
+      state = "STORECLOSED";
+    } else {
+      state = "CHECKIN";
+    }
+
     param = jsonEncode({
       "lat": position.latitude.toString(),
       "lon": position.longitude.toString(),
       "address": element.address,
       "shopsyskey": element.shopsyskey,
       "usersyskey": element.usercode,
-      "checkInType": "CHECKIN",
+      "checkInType": "$state",
       "register": true,
       "task": {
         "inventoryCheck": "COMPLETED",
@@ -91,7 +105,6 @@ class ViewModelFunction with ChangeNotifier {
     });
     final http.Response response = await httpRequest(
         'shopPerson/insertUJUN002/', param, getLoginDetail.orgId);
-    print(response.statusCode);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       status = result['status'];
@@ -173,7 +186,6 @@ class ViewModelFunction with ChangeNotifier {
 
     try {
       String url = mainUrl + urlname;
-      print(' this is your  => $url');
       return http
           .post(Uri.encodeFull(url), body: param, headers: {
             "Accept": "application/json",
@@ -205,7 +217,7 @@ class ViewModelFunction with ChangeNotifier {
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
-      print(result["data"]["shopsByUser"][0]['status']['task']);
+      // print(result["data"]["shopsByUser"][0]['status']['task']);
 
       AllShopSaleList allShopSaleList = AllShopSaleList.fromJson(result);
       return allShopSaleList;

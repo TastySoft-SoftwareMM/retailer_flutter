@@ -20,58 +20,55 @@ class _MainScreenState extends State<MainScreen> {
 
   var width;
   var height;
-  bool loading = true;
   @override
   @override
   Widget build(BuildContext context) {
-    model = Provider.of<ViewModelFunction>(context,listen: false);
+    model = Provider.of<ViewModelFunction>(context, listen: false);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    if (loading == true) {
-      getData();
-    }
 
-    return loading == false
-        ? WillPopScope(
-            onWillPop: () async => false,
-            child: Scaffold(
-              backgroundColor: Color(0xFFF5F5F5),
-              appBar: AppBar(
-                title: Text("Retailer"),
-                actions: [
-                  IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        showSearch(
-                            context: context,
-                            delegate: DataSearch(
-                              "Search...",
-                            ));
-                      })
-                ],
-              ),
-              drawer: MainDrawer(),
-              body: model == null
-                  ? Container()
-                  : Container(
-                      height: height,
-                      child: Column(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Color(0xFFF5F5F5),
+        appBar: AppBar(
+          title: Text("Retailer"),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: DataSearch(
+                        "Search...",
+                      ));
+                }),
+          ],
+        ),
+        drawer: MainDrawer(),
+        body: model == null
+            ? Container()
+            : Container(
+                height: height,
+                child: Column(
+                  children: [
+                    model.getLoginDetail.merchandizer == 'true'
+                        ? Container()
+                        : createUploadMerchandizingWidget(),
+                    Container(
+                      height: height - 140,
+                      child: ListView(
                         children: [
-                          model.getLoginDetail.merchandizer == 'true'
-                              ? Container()
-                              : createUploadMerchandizingWidget(),
-                          Flexible(child: getShopByUser()),
+                          getShopByUser(),
                           getShopByTeam(),
                         ],
                       ),
-                    ),
-            ),
-          )
-        : Scaffold(
-            body: Center(
-              child: Text('Loading...'),
-            ),
-          );
+                    )
+                  ],
+                ),
+              ),
+      ),
+    );
   }
 
   // create upload merchandizing widget
@@ -106,16 +103,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  getData() async {
-    model = Provider.of<ViewModelFunction>(context, listen: false);
-    await model.login('+959788571913', '123');
-    await model.getMainList();
-    print(model.shopsByTeam.length);
-    print(model.shopsByUser.length);
-    setState(() {
-      loading = false;
-    });
-  }
+  
 
   Widget getShopByUser() {
     List<Widget> getByTeam = [];
@@ -161,7 +149,11 @@ class _MainScreenState extends State<MainScreen> {
                             color: Colors.white),
                         child: InkWell(
                           onTap: () async {
-                            await checkInDialog(context, element, model);
+                            await checkInDialog(
+                              context,
+                              element,
+                              model,
+                            );
                           },
                           child: Padding(
                             padding: EdgeInsets.only(top: 10.0),
@@ -219,8 +211,6 @@ class _MainScreenState extends State<MainScreen> {
       itemCount: model.shopsByUser.length >= 1 ? 1 : 0,
     );
   }
-
-
 
   TextStyle getCurrentTypeTS(String currentType) {
     TextStyle textStyle;
