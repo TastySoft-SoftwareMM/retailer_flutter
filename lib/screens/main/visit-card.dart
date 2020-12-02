@@ -18,7 +18,9 @@ class VisitCard extends StatefulWidget {
 }
 
 class _VisitCardState extends State<VisitCard> {
-  bool three = false;
+
+  String value= 'G';
+  bool three= false;
   bool isSwitched = false;
   bool first = false;
   List<VisitCardModel> visitcards = [
@@ -30,10 +32,12 @@ class _VisitCardState extends State<VisitCard> {
   @override
   void initState() {
     super.initState();
+    print("Init State");
   }
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -44,8 +48,8 @@ class _VisitCardState extends State<VisitCard> {
             IconButton(
               icon: Icon(Icons.shopping_cart),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CartItemScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                CartItemScreen()));
               },
             ),
           ],
@@ -59,56 +63,34 @@ class _VisitCardState extends State<VisitCard> {
                 CheckinShop(),
                 Container(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: three
-                      ? Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                createCardWidget(
-                                    1, "assets/checkout.svg", "1.Check Out"),
-                                createCardWidget(2, "assets/supplier_fill.svg",
-                                    "2.Inventory Check"),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                isSwitched
-                                    ? Container()
-                                    : createCardWidget(
-                                        4,
-                                        "assets/order_fill.svg",
-                                        "3.Order Placement "),
-                              ],
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                createCardWidget(
-                                    1, "assets/checkout.svg", "1.Check Out"),
-                                createCardWidget(2, "assets/supplier_fill.svg",
-                                    "2.Inventory Check"),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                createCardWidget(
-                                    3,
-                                    "assets/product_order_fill.svg",
-                                    "3.Merchandizing"),
-                                isSwitched
-                                    ? Container()
-                                    : createCardWidget(
-                                        4,
-                                        "assets/order_fill.svg",
-                                        "4.Order Placement "),
-                              ],
-                            ),
-                          ],
-                        ),
+                  padding: const EdgeInsets.only(top:4.0),
+                  child: three ? Column(
+                    children:<Widget> [
+                      Row(
+                        children:<Widget> [
+                          createCardWidget(checkout.id,checkout.img,"1.Check Out",checkout.task),
+                          createCardWidget(inventorycheck.id,inventorycheck.img,"2.Inventory Check",inventorycheck.task),
+                        ],
+                      ),
+                      Row(children:<Widget> [
+                        isSwitched ? Container() : createCardWidget(orderplacement.id,orderplacement.img,"3.Inventory Check",orderplacement.task),
+                      ],),
+                    ],
+                  ) : Column(
+                    children:<Widget> [
+                      Row(
+                        children:<Widget> [
+                          createCardWidget(checkout.id,checkout.img,"1.Check Out",checkout.task),
+                          createCardWidget(inventorycheck.id,inventorycheck.img,"2.Inventory Check",inventorycheck.task),
+                        ],
+                      ),
+                      Row(children:<Widget> [
+                        createCardWidget(merchandizing.id,merchandizing.img,"3.Merchandizing",merchandizing.task),
+                         isSwitched ? Container() : createCardWidget(orderplacement.id,orderplacement.img,"4.Check Out",orderplacement.task),
+                      ],),
+
+                    ],
+                  ),
                 ),
                 createSkipOrderplacementWidget(),
               ],
@@ -117,35 +99,33 @@ class _VisitCardState extends State<VisitCard> {
         ),
       ),
     );
+
   }
 
-  createCardWidget(int id, String image, String text) {
+  createCardWidget(int id, String image, String text ,String task){
     var width = MediaQuery.of(context).size.width;
     return Card(
       child: InkWell(
         onTap: () => cardClick(id),
         child: Container(
           height: 180,
-          width: width * 0.463,
+          width: width *0.473,
           child: Column(
-            children: <Widget>[
+            children:<Widget> [
               Row(
-                children: <Widget>[
+                children:<Widget> [
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0, left: 10),
+                    padding: const EdgeInsets.only(top:10.0, left:10),
                     child: CircleAvatar(
                       radius: 5,
                       backgroundColor: Style.Colors.borderColor,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.green,
-                        radius: 4.5,
-                      ),
+                      child: color(task),
                     ),
                   ),
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top:40),
                 child: Container(
                     height: 40,
                     child: SvgPicture.asset(
@@ -153,21 +133,22 @@ class _VisitCardState extends State<VisitCard> {
                       color: Style.Colors.mainColor,
                     )),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 40.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    color: Style.Colors.mainColor,
-                    height: 40,
-                    child: Center(
-                        child: Text(
-                      text,
-                      style: Style.whiteTextStyle,
-                    )),
+
+                Padding(
+                  padding: const EdgeInsets.only(top:40.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      color: Style.Colors.mainColor,
+                      height: 40,
+                      child: Center(
+                          child: Text(
+                            text,
+                            style: Style.whiteTextStyle,
+                          )),
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -175,73 +156,75 @@ class _VisitCardState extends State<VisitCard> {
     );
   }
 
-  Widget createCardWidget1() {
-    return GridView.count(
-        shrinkWrap: true,
-        controller: new ScrollController(keepScrollOffset: false),
-        scrollDirection: Axis.vertical,
-        crossAxisCount: 2,
-        crossAxisSpacing: 4,
-        childAspectRatio: 1.7 / 1.5,
-        children: visitcards.map((card) {
-          return Card(
-            elevation: 3.0,
-            shadowColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(2.0),
-            ),
-            margin: EdgeInsets.all(5),
-            child: InkWell(
-              onTap: () => cardClick(card.id),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Positioned(
-                    top: 10,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 5.0, left: 10.0),
-                      child: CircleAvatar(
-                        radius: 5,
-                        backgroundColor: Style.Colors.borderColor,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.green,
-                          radius: 4.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Center(
-                        child: Container(
-                            height: 40,
-                            child: SvgPicture.asset(
-                              card.img,
-                              color: Style.Colors.mainColor,
-                            ))),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Container(
-                        color: Style.Colors.mainColor,
-                        height: 40,
-                        child: Center(
-                            child: Text(
-                          card.text,
-                          style: Style.whiteTextStyle,
-                        )),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        }).toList());
-  }
+  // Widget createCardWidget1() {
+  //   return GridView.count(
+  //       shrinkWrap: true,
+  //       controller: new ScrollController(keepScrollOffset: false),
+  //       scrollDirection: Axis.vertical,
+  //       crossAxisCount: 2,
+  //       crossAxisSpacing: 4,
+  //       childAspectRatio: 1.7 / 1.5,
+  //       children: visitcards.map((card) {
+  //         return Card(
+  //             elevation: 3.0,
+  //             shadowColor: Colors.white,
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(2.0),
+  //             ),
+  //             margin: EdgeInsets.all(5),
+  //             child: InkWell(
+  //               onTap: () => cardClick(card.id),
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Positioned(
+  //                     top: 10,
+  //                     child: Padding(
+  //                       padding: EdgeInsets.only(top: 5.0, left: 10.0),
+  //                       child: CircleAvatar(
+  //                         radius: 5,
+  //                         backgroundColor: Colors.yellow,
+  //                         child: CircleAvatar(
+  //                           backgroundColor: Colors.yellow,
+  //                           radius: 4.5,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   Expanded(
+  //                     child: Center(
+  //                         child: Container(
+  //                             height: 40,
+  //                             child: SvgPicture.asset(
+  //                               card.img,
+  //                               color: Style.Colors.mainColor,
+  //                             ))),
+  //                   ),
+  //                   Align(
+  //                     alignment: Alignment.bottomCenter,
+  //                     child: SizedBox(
+  //                       width: double.infinity,
+  //                       child: Container(
+  //                         color: Style.Colors.mainColor,
+  //                         height: 40,
+  //                         child: Center(
+  //                             child: Text(
+  //                           card.text,
+  //                           style: Style.whiteTextStyle,
+  //                         )),
+  //                       ),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //         );
+  //       }).toList());
+  // }
 
   cardClick(id) {
+    print(id);
+
     switch (id) {
       case 1:
         checkOutFun(context);
@@ -253,13 +236,11 @@ class _VisitCardState extends State<VisitCard> {
                 builder: (context) => InventoryCheckScreen()));
         break;
       case 3:
-        Navigator.push(
-            context,
-            new CupertinoPageRoute(
-                builder: (context) => MerchandizingScreen()));
+        Navigator.push(context,
+            new CupertinoPageRoute(builder: (context) => MerchandizingScreen()));
         break;
       case 4:
-        loading(
+         loading(
           context,
         );
         Navigator.push(
@@ -269,6 +250,28 @@ class _VisitCardState extends State<VisitCard> {
         break;
     }
   }
+
+  color(task){
+    if(task == 'Completed'){
+      return (CircleAvatar(
+        backgroundColor: Colors.green,
+        radius: 4.5,
+      ));
+    }
+    if(task == 'Pending'){
+        return (CircleAvatar(
+          backgroundColor: Colors.yellow,
+          radius: 4.5,
+        ));
+    }
+    if(task == 'Incomplete'){
+      return (CircleAvatar(
+        backgroundColor: Colors.white,
+        radius: 4.5,
+      ));
+    }
+  }
+
 
   Widget createSkipOrderplacementWidget() {
     return Padding(
@@ -290,6 +293,7 @@ class _VisitCardState extends State<VisitCard> {
                   setState(() {
                     isSwitched = value;
                     first = value;
+                    print(isSwitched);
                   });
                 },
                 activeTrackColor: Style.Colors.mainColor,
@@ -301,7 +305,6 @@ class _VisitCardState extends State<VisitCard> {
       ),
     );
   }
-
   Widget createplacementWidget() {
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -321,6 +324,7 @@ class _VisitCardState extends State<VisitCard> {
                 onChanged: (value) {
                   setState(() {
                     three = value;
+                    print(three);
                   });
                 },
                 activeTrackColor: Style.Colors.mainColor,
@@ -331,6 +335,10 @@ class _VisitCardState extends State<VisitCard> {
         ),
       ),
     );
+  }
+
+  changeColor(task){
+
   }
 
   checkOutFun(BuildContext context) {
@@ -372,15 +380,16 @@ class VisitCardModel {
   int id;
   String text;
   String img;
+  String task;
 
-  VisitCardModel({this.id, this.text, this.img});
+  VisitCardModel({this.id, this.text, this.img,this.task});
 }
 
-VisitCardModel checkout =
-    new VisitCardModel(id: 1, text: "1. Check Out", img: "assets/checkout.svg");
+VisitCardModel checkout = new VisitCardModel(
+    id: 1, text: "1. Check Out", img: "assets/checkout.svg", task:"Completed" );
 VisitCardModel inventorycheck = new VisitCardModel(
-    id: 2, text: "2. Inventory Check", img: "assets/supplier_fill.svg");
+    id: 2, text: "2. Inventory Check", img: "assets/supplier_fill.svg", task:"Pending");
 VisitCardModel merchandizing = new VisitCardModel(
-    id: 3, text: "3. Merchandizing", img: "assets/product_order_fill.svg");
+    id: 3, text: "3. Merchandizing", img: "assets/product_order_fill.svg", task:"Completed");
 VisitCardModel orderplacement = new VisitCardModel(
-    id: 4, text: "4. Order Placement", img: "assets/order_fill.svg");
+    id: 4, text: "4. Order Placement", img: "assets/order_fill.svg", task:"Incomplete");
