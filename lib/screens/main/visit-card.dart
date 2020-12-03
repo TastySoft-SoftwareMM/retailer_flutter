@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/main/main-drawer.dart';
 import 'package:retailer/screens/main/main-screen.dart';
@@ -9,18 +10,24 @@ import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizing.dart';
 import 'package:retailer/screens/mandatorytasks/orderplacement.dart';
 import 'package:retailer/screens/public/widget.dart';
+import '../../models/shopByListModel.dart';
+import '../../services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 import 'package:flutter_svg/flutter_svg.dart';
 
 class VisitCard extends StatefulWidget {
+  final ShopByListM _shopDetail;
+  VisitCard(this._shopDetail);
   @override
-  _VisitCardState createState() => _VisitCardState();
+  _VisitCardState createState() => _VisitCardState(this._shopDetail);
 }
 
 class _VisitCardState extends State<VisitCard> {
 
-  String value= 'G';
-  bool three= false;
+  final ShopByListM _shopDetail;
+  _VisitCardState(this._shopDetail);
+
+  bool three;
   bool isSwitched = false;
   bool first = false;
   List<VisitCardModel> visitcards = [
@@ -29,14 +36,14 @@ class _VisitCardState extends State<VisitCard> {
     merchandizing,
     orderplacement
   ];
-  @override
-  void initState() {
-    super.initState();
-    print("Init State");
-  }
 
+  ViewModelFunction model;
   @override
   Widget build(BuildContext context) {
+    model = Provider.of<ViewModelFunction>(context, listen: false);
+
+    print(model.getLoginDetail.merchandizer);
+
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -49,7 +56,7 @@ class _VisitCardState extends State<VisitCard> {
               icon: Icon(Icons.shopping_cart),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                CartItemScreen()));
+                    CartItemScreen()));
               },
             ),
           ],
@@ -64,33 +71,33 @@ class _VisitCardState extends State<VisitCard> {
                 Container(),
                 Padding(
                   padding: const EdgeInsets.only(top:4.0),
-                  child: three ? Column(
+                  child: model.getLoginDetail.merchandizer == 'Yes' ? Column(
                     children:<Widget> [
                       Row(
                         children:<Widget> [
                           createCardWidget(checkout.id,checkout.img,"1.Check Out",checkout.task),
-                          createCardWidget(inventorycheck.id,inventorycheck.img,"2.Inventory Check",inventorycheck.task),
+                          createCardWidget(inventorycheck.id,inventorycheck.img,"2.Inventory Check",_shopDetail.status.task.inventoryCheck),
                         ],
                       ),
                       Row(children:<Widget> [
-                        isSwitched ? Container() : createCardWidget(orderplacement.id,orderplacement.img,"3.Inventory Check",orderplacement.task),
-                      ],),
-                    ],
-                  ) : Column(
-                    children:<Widget> [
-                      Row(
-                        children:<Widget> [
-                          createCardWidget(checkout.id,checkout.img,"1.Check Out",checkout.task),
-                          createCardWidget(inventorycheck.id,inventorycheck.img,"2.Inventory Check",inventorycheck.task),
-                        ],
-                      ),
-                      Row(children:<Widget> [
-                        createCardWidget(merchandizing.id,merchandizing.img,"3.Merchandizing",merchandizing.task),
-                         isSwitched ? Container() : createCardWidget(orderplacement.id,orderplacement.img,"4.Check Out",orderplacement.task),
+                        createCardWidget(merchandizing.id,merchandizing.img,"3.Merchandizing",_shopDetail.status.task.merchandizing),
+                        isSwitched ? Container() : createCardWidget(orderplacement.id,orderplacement.img,"4.OrderPlacement",_shopDetail.status.task.orderPlacement),
                       ],),
 
                     ],
-                  ),
+                  ) :  Column(
+                    children:<Widget> [
+                      Row(
+                        children:<Widget> [
+                          createCardWidget(checkout.id,checkout.img,"1.Check Out",checkout.task),
+                          createCardWidget(inventorycheck.id,inventorycheck.img,"2.Inventory Check",_shopDetail.status.task.inventoryCheck),
+                        ],
+                      ),
+                      Row(children:<Widget> [
+                        isSwitched ? Container() : createCardWidget(orderplacement.id,orderplacement.img,"3.OrderPlacement Check",_shopDetail.status.task.orderPlacement),
+                      ],),
+                    ],
+                  ) ,
                 ),
                 createSkipOrderplacementWidget(),
               ],
@@ -109,7 +116,7 @@ class _VisitCardState extends State<VisitCard> {
         onTap: () => cardClick(id),
         child: Container(
           height: 180,
-          width: width *0.473,
+          width: width * 0.465,
           child: Column(
             children:<Widget> [
               Row(
@@ -134,21 +141,21 @@ class _VisitCardState extends State<VisitCard> {
                     )),
               ),
 
-                Padding(
-                  padding: const EdgeInsets.only(top:40.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                      color: Style.Colors.mainColor,
-                      height: 40,
-                      child: Center(
-                          child: Text(
-                            text,
-                            style: Style.whiteTextStyle,
-                          )),
-                    ),
+              Padding(
+                padding: const EdgeInsets.only(top:40.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    color: Style.Colors.mainColor,
+                    height: 40,
+                    child: Center(
+                        child: Text(
+                          text,
+                          style: Style.whiteTextStyle,
+                        )),
                   ),
                 ),
+              ),
             ],
           ),
         ),
@@ -240,7 +247,7 @@ class _VisitCardState extends State<VisitCard> {
             new CupertinoPageRoute(builder: (context) => MerchandizingScreen()));
         break;
       case 4:
-         loading(
+        loading(
           context,
         );
         Navigator.push(
@@ -252,19 +259,19 @@ class _VisitCardState extends State<VisitCard> {
   }
 
   color(task){
-    if(task == 'Completed'){
+    if(task == 'COMPLETE'){
       return (CircleAvatar(
         backgroundColor: Colors.green,
         radius: 4.5,
       ));
     }
-    if(task == 'Pending'){
-        return (CircleAvatar(
-          backgroundColor: Colors.yellow,
-          radius: 4.5,
-        ));
+    if(task == 'PENDING'){
+      return (CircleAvatar(
+        backgroundColor: Colors.yellow,
+        radius: 4.5,
+      ));
     }
-    if(task == 'Incomplete'){
+    if(task == 'INCOMPLETE'){
       return (CircleAvatar(
         backgroundColor: Colors.white,
         radius: 4.5,
@@ -305,6 +312,7 @@ class _VisitCardState extends State<VisitCard> {
       ),
     );
   }
+
   Widget createplacementWidget() {
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -336,9 +344,7 @@ class _VisitCardState extends State<VisitCard> {
       ),
     );
   }
-
   changeColor(task){
-
   }
 
   checkOutFun(BuildContext context) {
@@ -386,10 +392,10 @@ class VisitCardModel {
 }
 
 VisitCardModel checkout = new VisitCardModel(
-    id: 1, text: "1. Check Out", img: "assets/checkout.svg", task:"Completed" );
+    id: 1, text: "1. Check Out", img: "assets/checkout.svg", task:"COMPLETE" );
 VisitCardModel inventorycheck = new VisitCardModel(
-    id: 2, text: "2. Inventory Check", img: "assets/supplier_fill.svg", task:"Pending");
+    id: 2, text: "2. Inventory Check", img: "assets/supplier_fill.svg");
 VisitCardModel merchandizing = new VisitCardModel(
-    id: 3, text: "3. Merchandizing", img: "assets/product_order_fill.svg", task:"Completed");
+    id: 3, text: "3. Merchandizing", img: "assets/product_order_fill.svg");
 VisitCardModel orderplacement = new VisitCardModel(
-    id: 4, text: "4. Order Placement", img: "assets/order_fill.svg", task:"Incomplete");
+    id: 4, text: "4. Order Placement", img: "assets/order_fill.svg");

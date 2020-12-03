@@ -291,7 +291,7 @@ checkInDialog(
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VisitCard()));
+                                        builder: (context) => VisitCard(element)));
                               } else {
                                 getToast(
                                     context, "Server error !. Try again later");
@@ -327,7 +327,7 @@ checkInDialog(
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => VisitCard()));
+                                          builder: (context) => VisitCard(element)));
                                 }
                               } else {
                                 getToast(
