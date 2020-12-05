@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/main/main_Screen_Search.dart';
@@ -20,90 +21,112 @@ class _MainScreenState extends State<MainScreen> {
 
   var width;
   var height;
+  bool loading = true;
   @override
   @override
   Widget build(BuildContext context) {
-    model = Provider.of<ViewModelFunction>(context, listen: false);
+    model = Provider.of<ViewModelFunction>(
+      context,
+    );
+
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    if (loading == true) {
+      getData();
+    }
 
     return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        backgroundColor: Color(0xFFF5F5F5),
-        appBar: AppBar(
-          title: Text("Retailer"),
-          actions: [
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(
-                      context: context,
-                      delegate: DataSearch(
-                        "Search...",
-                      ));
-                }),
-          ],
-        ),
-        drawer: MainDrawer(),
-        body: model == null
-            ? Container()
-            : Container(
-                height: height,
-                child: Column(
-                  children: [
-                    model.getLoginDetail.merchandizer == 'true'
-                        ? Container()
-                        : createUploadMerchandizingWidget(),
-                    Container(
-                      height: height - 140,
-                      child: ListView(
-                        children: [
-                          getShopByUser(),
-                          getShopByTeam(),
-                        ],
-                      ),
-                    )
+        onWillPop: () async => false,
+        child: loading
+            ? Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          Style.Colors.mainColor)),
+                ),
+              )
+            : Scaffold(
+                backgroundColor: Color(0xFFF5F5F5),
+                appBar: AppBar(
+                  title: Text("Retailer"),
+                  actions: [
+                    IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          showSearch(
+                              context: context,
+                              delegate: DataSearch(
+                                "Search...",
+                              ));
+                        }),
                   ],
                 ),
-              ),
-      ),
-    );
+                drawer: MainDrawer(),
+                body: model == null
+                    ? Container()
+                    : Container(
+                        height: height,
+                        child: Column(
+                          children: [
+                            model.getLoginDetail.merchandizer == 'true'
+                                ? Container()
+                                : createUploadMerchandizingWidget(),
+                            Container(
+                              height: height - 155,
+                              child: ListView(
+                                children: [
+                                  getShopByUser(),
+                                  getShopByTeam(),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+              ));
   }
 
   // create upload merchandizing widget
   Widget createUploadMerchandizingWidget() {
     return Container(
+      padding: EdgeInsets.all(5),
       height: 60,
-      child: Padding(
-        padding: EdgeInsets.all(5.0),
-        child: SizedBox(
-          width: double.infinity,
-          height: 45.0,
-          child: RaisedButton(
-            elevation: 0,
-            onPressed: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Spacer(),
-                Icon(Icons.cloud_upload),
-                SizedBox(width: 20.0),
-                Text("Upload Merchandizing"),
-                Spacer(),
-                Text("331/200")
-              ],
-            ),
-            color: Style.Colors.mainColor,
-            textColor: Style.Colors.textColor,
+      child: SizedBox(
+        width: double.infinity,
+        height: 45.0,
+        child: RaisedButton(
+          elevation: 0,
+          onPressed: () async {
+            var isEnable = await Geolocator.checkPermission();
+            print(isEnable);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Spacer(),
+              Icon(Icons.cloud_upload),
+              SizedBox(width: 20.0),
+              Text("Upload Merchandizing"),
+              Spacer(),
+              Text("331/200")
+            ],
           ),
+          color: Style.Colors.mainColor,
+          textColor: Style.Colors.textColor,
         ),
       ),
     );
   }
 
-  
+  getData() async {
+    await model.getMainList();
+
+    setState(() {
+      loading = false;
+    });
+  }
 
   Widget getShopByUser() {
     List<Widget> getByTeam = [];
@@ -344,35 +367,40 @@ class _MainScreenState extends State<MainScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white),
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(element.shopname,
-                                      style: Style.headingTextStyle),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Text(
-                                    element.shopname,
-                                    style: Style.statusSuccessTextStyle,
+                        child: InkWell(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 10.0),
+                            child: ListTile(
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(element.shopname,
+                                        style: Style.headingTextStyle),
                                   ),
-                                )
-                              ],
+                                  Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Text(
+                                        getCurrentTypeSting(
+                                            element.status.currentType),
+                                        style: getCurrentTypeTS(
+                                          element.status.currentType,
+                                        )),
+                                  )
+                                ],
+                              ),
+                              subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      element.personph,
+                                      style: Style.secondTextStyle,
+                                    ),
+                                    Text(element.address,
+                                        style: Style.secondTextStyle)
+                                  ]),
                             ),
-                            subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    element.personph,
-                                    style: Style.secondTextStyle,
-                                  ),
-                                  Text(element.address,
-                                      style: Style.secondTextStyle)
-                                ]),
                           ),
                         ),
                       ),

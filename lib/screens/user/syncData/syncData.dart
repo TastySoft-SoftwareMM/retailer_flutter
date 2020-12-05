@@ -129,7 +129,8 @@ class _SyncDataState extends State<SyncData> {
     );
   }
 
-  Future<void> syncDataFunction() async {
+  syncDataFunction() async {
+
     setState(() {
       loading = true;
     });

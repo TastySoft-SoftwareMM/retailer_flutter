@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:retailer/models/checkIn_status_task.dart';
 import 'package:retailer/models/shopByListModel.dart';
-import 'package:retailer/screens/main/visit-card.dart';
+import 'package:retailer/screens/main/owner_visit_card.dart';
+import 'package:retailer/screens/main/sale_person_visit_card.dart';
+
 import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'package:retailer/style/theme.dart' as Style;
@@ -35,6 +38,26 @@ String getPhoneFormat(String message) {
     formatedPhone = '+959' + message;
   }
   return formatedPhone;
+}
+
+Widget statusColor(task) {
+  Widget statusWidget;
+  if (task == 'COMPLETED') {
+    statusWidget = CircleAvatar(
+      backgroundColor: Colors.green,
+      radius: 4.5,
+    );
+  }
+  if (task == 'PENDING') {
+    statusWidget = CircleAvatar(
+      backgroundColor: Colors.yellow,
+      radius: 4.5,
+    );
+  }
+  if (task == 'INCOMPLETE' || task == "" || task == null) {
+    statusWidget = Container();
+  }
+  return statusWidget;
 }
 
 checkInDialog(
@@ -119,10 +142,10 @@ checkInDialog(
                     ),
                     Flexible(
                       child: FutureBuilder(
-                          future: getCurrentLocation(),
-                          builder: (context, snapshot) {
+                          future: getCurrentLocation(context),
+                          builder: (context, AsyncSnapshot snapshot) {
+                            position = snapshot.data;
                             if (snapshot.data == null) {
-                              position = snapshot.data;
                               return Padding(
                                 padding: const EdgeInsets.only(
                                   left: 18,
@@ -139,7 +162,6 @@ checkInDialog(
                                 ),
                               );
                             } else {
-                              position = snapshot.data;
                               return Padding(
                                 padding:
                                     const EdgeInsets.only(top: 14, left: 8),
@@ -286,12 +308,33 @@ checkInDialog(
                               await model.routeCheckin(
                                   position, element, _selectedType);
                               if (model.statusCode == 200) {
-                                await model.getMainList();
-                                getToast(context, "Check In Successful");
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => VisitCard(element)));
+                                if (_selectedType == "Store Closed") {
+                                  getToast(context, "Store Close Successful");
+                                  Navigator.pop(context, true);
+                                  Navigator.pop(context, true);
+                                } else {
+                                  getToast(context, "Check In Successful");
+                                  await model.addcheckInStatus(CheckInStatus(
+                                      element.status.task.inventoryCheck,
+                                      element.status.task.merchandizing,
+                                      element.status.task.orderPlacement,
+                                      element.status.task.print));
+
+                                  if (model.getLoginDetail.userType ==
+                                      "storeowner") {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                StoreOwnerVisitCard()));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SalePersonVisitCard()));
+                                  }
+                                }
                               } else {
                                 getToast(
                                     context, "Server error !. Try again later");
@@ -317,17 +360,30 @@ checkInDialog(
                                   position, element, _selectedType);
                               if (model.statusCode == 200) {
                                 if (_selectedType == "Store Closed") {
-                                  await model.getMainList();
-
                                   getToast(context, "Store Close Successful");
                                   Navigator.pop(context, true);
                                   Navigator.pop(context, true);
                                 } else {
                                   getToast(context, "Check In Successful");
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => VisitCard(element)));
+                                  await model.addcheckInStatus(CheckInStatus(
+                                      element.status.task.inventoryCheck,
+                                      element.status.task.merchandizing,
+                                      element.status.task.orderPlacement,
+                                      element.status.task.print));
+                                  if (model.getLoginDetail.userType ==
+                                      "storeowner") {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                StoreOwnerVisitCard()));
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SalePersonVisitCard()));
+                                  }
                                 }
                               } else {
                                 getToast(
@@ -359,23 +415,35 @@ checkInDialog(
   );
 }
 
-Future<Position> getCurrentLocation() async {
+Future<Position> getCurrentLocation(BuildContext context) async {
   Position position;
   LocationPermission permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
-    await Geolocator.requestPermission().then((LocationPermission permission) {
-      if (permission == LocationPermission.denied) {
+    await Geolocator.requestPermission()
+        .then((LocationPermission permission) async {
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        getToast(context, "Please allow location permission");
+        Navigator.pop(context, true);
       } else if (permission == LocationPermission.always) {
-        Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-            .then((value) {
-          position = value;
+        await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best,
+        ).then((value) => position = value).timeout(Duration(seconds: 15),
+            onTimeout: () {
+          getToast(context, "failed to get location.Please try again !");
+          Navigator.pop(context, true);
+          return position;
         });
       }
     });
   } else {
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position value) {
-      position = value;
+    await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    ).then((value) => position = value).timeout(Duration(seconds: 15),
+        onTimeout: () {
+      getToast(context, "failed to get location.Please try again !");
+      Navigator.pop(context, true);
+      return position;
     });
   }
 

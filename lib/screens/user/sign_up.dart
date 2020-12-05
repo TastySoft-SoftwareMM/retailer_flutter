@@ -262,7 +262,6 @@ class _SignUpPageState extends State<SignUpPage> {
       context,
     );
 
-    newLoginViewModel = Provider.of<ViewModelFunction>(context, listen: false);
     String formatPhone = getPhoneFormat(phNumberController.text);
     await newLoginViewModel.signUp(
         nameController.text, formatPhone, passwordController.text);
