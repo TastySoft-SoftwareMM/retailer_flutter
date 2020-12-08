@@ -7,9 +7,9 @@ import 'style/theme.dart' as Style;
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(
-        create: (_) => ViewModelFunction(),
-      )
+      ChangeNotifierProvider<ViewModelFunction>(
+        create: (context) => ViewModelFunction(),
+      ),
     ],
     child: MyApp(),
   ));

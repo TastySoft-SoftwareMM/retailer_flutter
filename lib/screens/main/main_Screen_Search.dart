@@ -1,109 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:retailer/models/shopByListModel.dart';
+import 'package:retailer/screens/public/widget.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
-import '../../custom/custom_expansion_title.dart' as custom;
-import 'package:http/http.dart' as http;
 
-class DataSearch extends SearchDelegate {
-  List result;
-  List suggestion;
-
-  List orgList = [
-    {
-      "name": "My list of stores for visit : 12/30",
-      "shopList": [
-        {
-          "name": "Shwe Myint Mo (CATZ) (ရွှေမြင့်မိုရ်)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "complete",
-        },
-        {
-          "name": "Aung Yadanar (အောင်ရတနာ)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        },
-        {
-          "name": "San Pya (စံပြ)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        }
-      ]
-    },
-    {
-      "name": "Other list of stores for visit",
-      "shopList": [
-        {
-          "name": "Kanbar Thit (tea shop) (ကမ္ဘာသစ်)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "complete",
-        },
-        {
-          "name": "Nay Won Ni (tea shop) (နေဝန်းနီ)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        },
-        {
-          "name": "Nay Won (bar & restaurant) (နေဝန်း)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        },
-        {
-          "name": "Mr Peter (hot & cold) (မစ္စတာပီတာ)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        }
-      ]
-    },
-    {
-      "name": "Other list for test",
-      "shopList": [
-        {
-          "name": "Daw Shan (‌ဒေါ်ရှန်)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "complete",
-        },
-        {
-          "name": "Mobile City  (မိုဘိုင်းစီးတီး)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        },
-        {
-          "name": "Nay Won (bar & restaurant) (နေဝန်း)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        },
-        {
-          "name": "Shwe Phyu (ရွှေဖြူ)",
-          "phone": "09123456789",
-          "address":
-              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-          "state": "pending",
-        }
-      ]
-    },
-  ];
+class MainScreenSearch extends SearchDelegate {
+  List<ShopByListM> shopList;
+  List<ShopByListM> otherList;
+  ViewModelFunction model;
   @override
   ThemeData appBarTheme(BuildContext context) {
+    model = Provider.of<ViewModelFunction>(
+      context,
+    );
     final ThemeData theme = Theme.of(context);
     return theme.copyWith(
       textTheme: TextTheme(
@@ -115,7 +26,7 @@ class DataSearch extends SearchDelegate {
   }
 
   final title;
-  DataSearch(
+  MainScreenSearch(
     this.title,
   ) : super(
             searchFieldLabel: title,
@@ -153,163 +64,62 @@ class DataSearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    Widget widget;
-    result = orgList
-        .where((element) =>
-            element["shopList"]
-                .where((eleVal) => eleVal["name"]
-                    .toString()
-                    .toLowerCase()
-                    .contains(query.toLowerCase()))
-                .toList()
-                .length !=
-            0)
-        .toList();
-
-    if (result.isEmpty) {
-      widget = Center(
-        child: Text('no result found'),
-      );
-    } else if (result.isNotEmpty) {
-      widget = getExpansionList(result);
-    }
-    return widget;
+    return getResultWidget();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    Widget sugWidget;
-    suggestion = orgList
-        .where((element) =>
-            element["shopList"]
-                .where((eleVal) => eleVal["name"]
-                    .toString()
-                    .toLowerCase()
-                    .contains(query.toLowerCase()))
-                .toList()
-                .length !=
-            0)
-        .toList();
-    if (suggestion.isEmpty) {
-      sugWidget = Center(
-        child: Text('no result found'),
-      );
-    } else if (suggestion.isNotEmpty) {
-      sugWidget = getExpansionList(suggestion);
-    }
-    // if (suggestion.isEmpty) {
-    //   sugWidget = Center(
-    //     child: CircularProgressIndicator(
-    //       strokeWidth: 3,
-    //       valueColor: new AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-    //     ),
-    //   );
-    // } else {
+    return getSugWidget();
+  }
 
-    //   if (suggestion.isEmpty) {
-    //     sugWidget = Center(
-    //       child: Text('no result found'),
-    //     );
-    //   } else if (suggestion.isNotEmpty) {
-    //     sugWidget = getExpansionList(suggestion);
-    //   }
-    // }
+  Widget getSugWidget() {
+    Widget sugWidget;
+
+    if (model.shopsByUser != null || model.shopsByTeam != null) {
+      sugWidget = ListView(
+        children: [
+          getShopList(model.shopsByUser),
+          getOtherList(model.shopsByTeam),
+        ],
+      );
+    } else {
+      sugWidget = Center(
+        child: Text(
+          "No shop found !",
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
+        ),
+      );
+    }
     return sugWidget;
   }
 
-  Widget getExpansionList(List filteredList) {
-    List<Widget> getByCharacter = [];
-    return ListView.builder(
-      itemBuilder: (context, index) => Card(
-        color: Colors.transparent,
-        elevation: 3,
-        child: custom.ExpansionTitle(
-          backgroundColor: Style.Colors.dropBackgroundColor,
-          initiallyExpanded: false,
-          headerBackgroundColor: Style.Colors.mainColor,
-          iconColor: Style.Colors.textColor,
-          title: Container(
-            child: Row(
-              children: [
-                Text(
-                  filteredList[index]['name'].toString(),
-                  style: TextStyle(color: Style.Colors.textColor),
-                ),
-                Spacer(),
-                Text(
-                  '0 / 3',
-                  style: TextStyle(color: Style.Colors.textColor),
-                ),
-              ],
-            ),
-          ),
-          onExpansionChanged: (value) {},
-          children: [
-            new FutureBuilder(
-              builder: (BuildContext context,
-                  AsyncSnapshot<http.Response> response) {
-                getByCharacter.clear();
-                List shopList = filteredList[index]['shopList'];
-                var list = shopList
-                    .where((p) =>
-                        p['name'].toLowerCase().contains(query.toLowerCase()))
-                    .toList();
-                list.forEach((element) {
-                  getByCharacter.add(
-                    Card(
-                      color: Colors.white,
-                      child: InkWell(
-                        onTap: () {
-                          // CheckInAlert()
-                          //     .checkInDialog(context, element['state'],element);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(element['name'],
-                                      style: Style.headingTextStyle),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(4.0),
-                                  child: Text(
-                                    element['state'],
-                                    style: Style.statusSuccessTextStyle,
-                                  ),
-                                )
-                              ],
-                            ),
-                            subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    element['phone'],
-                                    style: Style.secondTextStyle,
-                                  ),
-                                  Text(element['address'],
-                                      style: Style.secondTextStyle)
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                });
+  Widget getResultWidget() {
+    Widget resultWidget;
 
-                return new Column(children: getByCharacter);
-              },
-            ),
-          ],
+    shopList = model.shopsByUser
+        .where((p) => p.shopname.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    otherList = model.shopsByTeam
+        .where((element) =>
+            element.shopname.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    if (shopList.length > 0 || otherList.length > 0) {
+      resultWidget = ListView(
+        children: [
+          getShopList(shopList),
+          getOtherList(otherList),
+        ],
+      );
+    } else {
+      resultWidget = Center(
+        child: Text(
+          "No shop found !",
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
         ),
-      ),
-      itemCount: filteredList.length,
-    );
-  }
-
-  getData() async {
-    await Future.delayed(Duration(seconds: 3));
+      );
+    }
+    return resultWidget;
   }
 }

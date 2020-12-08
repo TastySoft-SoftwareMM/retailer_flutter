@@ -41,7 +41,7 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
           IconButton(icon: Icon(Icons.search), onPressed: (){
             showSearch(
             context: context,
-            delegate: DataSearch(
+            delegate: MainScreenSearch(
               "Search...",
             ));
           })

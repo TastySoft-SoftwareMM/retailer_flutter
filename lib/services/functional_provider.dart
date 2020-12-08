@@ -20,7 +20,7 @@ class ViewModelFunction with ChangeNotifier {
   String status;
   String param;
   String sessionId;
-  dynamic result;
+
   CheckInStatus get checkInStatus => _checkInStatus;
 
   set checkInStatus(CheckInStatus setposition) {
@@ -33,18 +33,20 @@ class ViewModelFunction with ChangeNotifier {
     notifyListeners();
   }
 
-  login(String userId, String pass) async {
+  Future login(String userId, String pass) async {
+    print("work");
     param = jsonEncode({"userId": '$userId', "password": '$pass'});
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
+    print(response);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       getLoginDetail = LoginModel.fromJson(result);
-      print(result);
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
     }
+
     notifyListeners();
   }
 
@@ -64,11 +66,10 @@ class ViewModelFunction with ChangeNotifier {
     final http.Response response =
         await httpRequest('/route/settask', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
-      result = json.decode(response.body);
+      var result = json.decode(response.body);
       if (result['status'] == 'SUCCESS') {
         await getMainList();
       }
-      print(result);
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
@@ -85,7 +86,7 @@ class ViewModelFunction with ChangeNotifier {
     final http.Response response =
         await httpRequest('main/reset/mit', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
-      result = json.decode(response.body);
+      var result = json.decode(response.body);
 
       statusCode = response.statusCode;
       status = result['status'];
@@ -95,7 +96,7 @@ class ViewModelFunction with ChangeNotifier {
     notifyListeners();
   }
 
-  routeCheckin(
+  Future routeCheckin(
       Position position, ShopByListM element, String checkInType) async {
     String state;
     if (checkInType == null) {
@@ -181,7 +182,6 @@ class ViewModelFunction with ChangeNotifier {
   }
 
   Future getMainList() async {
-    print('object');
     this.allShopSaleList = await getMainScreenList(
             spsysKey: getLoginDetail.syskey,
             teamsysKey: getLoginDetail.teamSyskey,
@@ -227,10 +227,9 @@ class ViewModelFunction with ChangeNotifier {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     var mainUrl = preferences.getString('mainUrl') ??
         "http://52.255.142.115:8084/madbrepository/";
+
     try {
       String url = mainUrl + urlname;
-      print(url + "<= url");
-
       return http
           .post(Uri.encodeFull(url), body: param, headers: {
             "Accept": "application/json",
@@ -271,7 +270,6 @@ class ViewModelFunction with ChangeNotifier {
       return allShopSaleList;
     } else {
       statusCode = response.statusCode;
-      print(response.statusCode);
       notifyListeners();
 
       throw Exception(response);

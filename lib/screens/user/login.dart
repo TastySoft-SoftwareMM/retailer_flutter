@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   TextEditingController userIdController = TextEditingController();
   TextEditingController passController = TextEditingController();
   ViewModelFunction model;
+
   String userIdErr;
   String passErr;
 
@@ -226,7 +227,20 @@ class _LoginState extends State<Login> {
                       onPressed: () async {
                         _formKey.currentState.validate();
                         if (userIdErr == null && passErr == null) {
-                          await check();
+                          getConectivity()
+                              .then((ConnectivityResult value) async {
+                            if (value == ConnectivityResult.none) {
+                              getToast(
+                                  context, "Check your internet Conection");
+                            } else {
+                              await check().timeout(Duration(seconds: 10),
+                                  onTimeout: () {
+                                getToast(
+                                    context, "Internet connection error !.");
+                                Navigator.pop(context, true);
+                              });
+                            }
+                          });
                         }
                       },
                     ),
@@ -303,7 +317,7 @@ class _LoginState extends State<Login> {
       getToast(context, 'Server error !. Try again later');
       Navigator.pop(context, true);
     } else {
-      getToast(context, "Invalid User ID (or) Password");
+      getToast(context, "Server error !. Try again later");
       Navigator.pop(context, true);
     }
   }

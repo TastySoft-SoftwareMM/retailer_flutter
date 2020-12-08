@@ -9,7 +9,6 @@ import 'package:retailer/screens/main/main-screen.dart';
 import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/mandatorytasks/orderplacement.dart';
 import 'package:retailer/screens/public/widget.dart';
-import 'package:retailer/screens/user/syncData/toast.dart';
 import '../../services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 import 'package:flutter_svg/flutter_svg.dart';
@@ -151,35 +150,56 @@ class _StoreOwnerVisitCardState extends State<StoreOwnerVisitCard> {
         loading(
           context,
         );
-        await model.setTaskOfShop("PENDING", model.checkInStatus.merchandizing,
-            model.checkInStatus.orderPlacement);
-        await model.addcheckInStatus(CheckInStatus(
-            "PENDING",
-            model.checkInStatus.merchandizing,
-            model.checkInStatus.orderPlacement,
-            model.checkInStatus.printStatus));
-        Navigator.pop(context, true);
-        Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (context) => InventoryCheckScreen()));
+        if (model.checkInStatus.inventoryCheck != "COMPLETED") {
+          await model.setTaskOfShop(
+              "PENDING",
+              model.checkInStatus.merchandizing,
+              model.checkInStatus.orderPlacement);
+          await model.addcheckInStatus(CheckInStatus(
+              "PENDING",
+              model.checkInStatus.merchandizing,
+              model.checkInStatus.orderPlacement,
+              model.checkInStatus.printStatus));
+          Navigator.pop(context, true);
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => InventoryCheckScreen()));
+        } else {
+          Navigator.pop(context, true);
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => InventoryCheckScreen()));
+        }
+
         break;
+
       case 3:
         loading(
           context,
         );
-        await model.setTaskOfShop(model.checkInStatus.inventoryCheck,
-            model.checkInStatus.merchandizing, "PENDING");
-        await model.addcheckInStatus(CheckInStatus(
-            model.checkInStatus.inventoryCheck,
-            model.checkInStatus.merchandizing,
-            "PENDING",
-            model.checkInStatus.printStatus));
-        Navigator.pop(context, true);
-        Navigator.push(
-            context,
-            new CupertinoPageRoute(
-                builder: (context) => OrderPlacementScreen()));
+        if (model.checkInStatus.merchandizing != "COMPLETED") {
+          await model.setTaskOfShop(model.checkInStatus.inventoryCheck,
+              model.checkInStatus.merchandizing, "PENDING");
+          await model.addcheckInStatus(CheckInStatus(
+              model.checkInStatus.inventoryCheck,
+              model.checkInStatus.merchandizing,
+              "PENDING",
+              model.checkInStatus.printStatus));
+          Navigator.pop(context, true);
+          Navigator.push(
+              context,
+              new CupertinoPageRoute(
+                  builder: (context) => OrderPlacementScreen()));
+        } else {
+          Navigator.pop(context, true);
+          Navigator.push(
+              context,
+              new CupertinoPageRoute(
+                  builder: (context) => OrderPlacementScreen()));
+        }
+
         break;
     }
   }

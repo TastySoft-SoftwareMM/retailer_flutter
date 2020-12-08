@@ -1,6 +1,8 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/main/main-screen.dart';
+import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'package:retailer/style/theme.dart' as Style;
 
@@ -13,7 +15,7 @@ class _SyncDataState extends State<SyncData> {
   ViewModelFunction model;
   String _selectedType = 'Download';
   bool loading = false;
-  double value = 0.0;
+  double _value = 0.0;
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);
@@ -51,16 +53,16 @@ class _SyncDataState extends State<SyncData> {
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Style.Colors.mainColor),
                                   backgroundColor: Colors.grey[300],
-                                  value: value,
+                                  value: _value,
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Align(
                                   alignment: Alignment.lerp(Alignment.topLeft,
-                                      Alignment.topRight, value * 0.5),
+                                      Alignment.topRight, _value * 0.5),
                                   child: Text(
-                                    (value * 100).toStringAsFixed(0) + '%',
+                                    (_value * 100).toStringAsFixed(0) + '%',
                                     style: Style.whiteTextStyle,
                                   ),
                                 ),
@@ -109,7 +111,21 @@ class _SyncDataState extends State<SyncData> {
                   color: Style.Colors.mainColor,
                   onPressed: () async {
                     if (loading == false) {
-                      await syncDataFunction();
+                      getConectivity().then((ConnectivityResult value) async {
+                        if (value == ConnectivityResult.none) {
+                          getToast(context, "Check your internet Conection");
+                        } else {
+                          await syncDataFunction()
+                              .timeout(Duration(seconds: 15), onTimeout: () {
+                            getToast(context, "Internet connection error !.");
+                            setState(() {
+                              loading = false;
+                              this._value = 0.0;
+                              Navigator.pop(context, true);
+                            });
+                          });
+                        }
+                      });
                     } else {
                       return null;
                     }
@@ -129,26 +145,26 @@ class _SyncDataState extends State<SyncData> {
     );
   }
 
-  syncDataFunction() async {
-
+  Future syncDataFunction() async {
     setState(() {
       loading = true;
     });
+
     await model.getMainList();
     await model.getStockList();
     await Future.doWhile(() async {
       await Future.delayed(Duration(milliseconds: 1));
       setState(() {
-        value += 0.01;
+        _value += 0.01;
       });
-      if (value >= 1) {
+      if (_value >= 1) {
         return false;
       }
       return true;
     }).timeout(Duration(seconds: 5));
     setState(() {
       loading = false;
-      value = 0.0;
+      _value = 0.0;
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));
     });
