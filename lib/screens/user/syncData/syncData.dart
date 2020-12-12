@@ -14,7 +14,7 @@ class SyncData extends StatefulWidget {
 class _SyncDataState extends State<SyncData> {
   ViewModelFunction model;
   String _selectedType = 'Download';
-  bool loading = false;
+  bool _isloading = false;
   double _value = 0.0;
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _SyncDataState extends State<SyncData> {
                   ),
                 ),
               ),
-              loading
+              _isloading
                   ? Padding(
                       padding:
                           EdgeInsets.only(right: 8, top: 8, left: 8, bottom: 8),
@@ -103,37 +103,40 @@ class _SyncDataState extends State<SyncData> {
                       ],
                     )),
               ),
-              Container(
-                margin: EdgeInsets.all(8),
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                child: FlatButton(
-                  color: Style.Colors.mainColor,
-                  onPressed: () async {
-                    if (loading == false) {
-                      getConectivity().then((ConnectivityResult value) async {
-                        if (value == ConnectivityResult.none) {
-                          getToast(context, "Check your internet Conection");
-                        } else {
-                          await syncDataFunction()
-                              .timeout(Duration(seconds: 15), onTimeout: () {
-                            getToast(context, "Internet connection error !.");
-                            setState(() {
-                              loading = false;
-                              this._value = 0.0;
-                              Navigator.pop(context, true);
+              IgnorePointer(
+                ignoring: _isloading,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(5)),
+                  child: RaisedButton(
+                    color: _isloading  ?Colors.grey[300]: Style.Colors.mainColor,
+                    onPressed: () async {
+                      if (_isloading == false) {
+                        getConectivity().then((ConnectivityResult value) async {
+                          if (value == ConnectivityResult.none) {
+                            getToast(context, "Check your internet Conection");
+                          } else {
+                            await syncDataFunction()
+                                .timeout(Duration(seconds: 15), onTimeout: () {
+                              getToast(context, "Internet connection error !.");
+                              setState(() {
+                                _isloading = false;
+                                this._value = 0.0;
+                                Navigator.pop(context, true);
+                              });
                             });
-                          });
-                        }
-                      });
-                    } else {
-                      return null;
-                    }
-                  },
-                  child: Center(
-                    child: Text(
-                      'Start',
-                      style: Style.whiteTextStyle,
+                          }
+                        });
+                      } else {
+                        return null;
+                      }
+                    },
+                    child: Center(
+                      child: Text(
+                        'Start',
+                        style: Style.whiteTextStyle,
+                      ),
                     ),
                   ),
                 ),
@@ -147,7 +150,7 @@ class _SyncDataState extends State<SyncData> {
 
   Future syncDataFunction() async {
     setState(() {
-      loading = true;
+      _isloading = true;
     });
 
     await model.getMainList();
@@ -163,7 +166,7 @@ class _SyncDataState extends State<SyncData> {
       return true;
     }).timeout(Duration(seconds: 5));
     setState(() {
-      loading = false;
+      _isloading = false;
       _value = 0.0;
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => MainScreen()));

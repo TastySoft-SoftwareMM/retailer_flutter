@@ -64,76 +64,83 @@ class _MainScreenState extends State<MainScreen> {
                   ],
                 ),
                 drawer: MainDrawer(),
-                body: model.allShopSaleList != null
-                    ? Container(
-                        height: height,
-                        child: Column(
-                          children: [
-                            getUMWidget(),
-                            Flexible(
-                              child: Container(
-                                child: ListView(
-                                  children: [
-                                    getShopList(model.shopsByUser),
-                                    getOtherList(model.shopsByTeam),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    : Container(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.3),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              ImageIcon(
-                                AssetImage("assets/icon/shop.png"),
-                                size: 50,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "No shop found !",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                height: 45,
-                                width: 90,
-                                child: Card(
-                                  color: Colors.grey[300],
-                                  child: FlatButton(
-                                      onPressed: () {
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SyncData()));
-                                      },
-                                      child: Text(
-                                        "Retry",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey[600]),
-                                      )),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                body: getBody(),
               ));
+  }
+
+  Widget getBody() {
+    Widget widget;
+    if (model.allShopSaleList.shopsByTeam.length > 0 ||
+        model.allShopSaleList.shopsByUser.length > 0) {
+      widget = Container(
+        height: height,
+        child: Column(
+          children: [
+            getUMWidget(),
+            Flexible(
+              child: Container(
+                child: ListView(
+                  children: [
+                    getShopList(model.shopsByUser),
+                    getOtherList(model.shopsByTeam),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      widget = Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
+        child: Center(
+          child: Column(
+            children: [
+              ImageIcon(
+                AssetImage("assets/icon/shop.png"),
+                size: 50,
+                color: Colors.grey,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "No shop found !",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 45,
+                width: 90,
+                child: Card(
+                  color: Colors.grey[300],
+                  child: FlatButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyncData()));
+                      },
+                      child: Text(
+                        "Retry",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey[600]),
+                      )),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return widget;
   }
 
   Widget getUMWidget() {
@@ -177,8 +184,6 @@ class _MainScreenState extends State<MainScreen> {
     return widget;
   }
 
-  // create upload merchandizing widget
-
   getData() async {
     getConectivity().then((ConnectivityResult value) async {
       if (value == ConnectivityResult.none) {
@@ -187,6 +192,7 @@ class _MainScreenState extends State<MainScreen> {
           loading = false;
         });
       } else {
+        // await model.login("09788571913", "123");
         await model.getMainList().timeout(Duration(seconds: 10), onTimeout: () {
           getToast(context, "Internet connection error");
           setState(() {

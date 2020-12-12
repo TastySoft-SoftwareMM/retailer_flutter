@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
 class CheckinShop extends StatefulWidget {
@@ -7,55 +9,51 @@ class CheckinShop extends StatefulWidget {
 }
 
 class _CheckinShopState extends State<CheckinShop> {
+  ViewModelFunction model;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 165,
-      child: SingleChildScrollView(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
+    model = Provider.of<ViewModelFunction>(context);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  Container(width: 70, child: Text("Shop")),
+                  Container(width: 20, child: Text("-")),
+                  Text(model.activeShop.shopname,
+                      style: Style.secondBoldTextStyle),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                children: [
+                  Container(width: 70, child: Text("Phone")),
+                  Container(width: 20, child: Text("-")),
+                  Text(
+                    model.activeShop.personph,
+                    style: Style.secondBoldTextStyle,
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    children: [
-                      Container(width: 70, child: Text("Shop")),
-                      Container(width: 20, child: Text("-")),
-                      Text("May Zon (မေဇွန်)", style: Style.secondBoldTextStyle),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    children: [
-                      Container(width: 70, child: Text("Phone")),
-                      Container(width: 20, child: Text("-")),
-                      Text(
-                        "0007678767",
-                        style: Style.secondBoldTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    children: [
-                      Container(width: 70, child: Text("Address")),
-                      Container(width: 20, child: Text("-")),
-                      Flexible(
-                          child: Text(
-                              "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
-                              style: Style.secondBoldTextStyle)),
-                    ],
-                  ),
-                ),
+                Container(width: 70, child: Text("Address")),
+                Container(width: 20, child: Text("-")),
+                Flexible(
+                    child: Text("${model.activeShop.address}\r\n",
+                        style: Style.secondBoldTextStyle)),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

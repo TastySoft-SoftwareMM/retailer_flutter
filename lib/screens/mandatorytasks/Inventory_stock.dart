@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../style/theme.dart' as Style;
+import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
+    as customwithslidable;
 
 class InventoryStockAddPage extends StatefulWidget {
   @override
@@ -7,79 +9,52 @@ class InventoryStockAddPage extends StatefulWidget {
 }
 
 class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
-  var items = [];
-  List mainList;
+  final List data = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
+  List<String> mainList = [
+    'Sp_Daily_Butter Bread',
+    'SP_Milk Cream Roll ',
+    'SP_Daily Cheese Spread',
+    'SP_Bean Bread',
+    'Example Bread',
+    'Super Cream Bread',
+    'Small Cream Bread',
+    'No Cream Bread',
+    'Stawbarry Cream',
+    'Simple bread',
+  ];
+  List<String> list = ['Bread', 'Pastries', 'Cake'];
 
-  var width;
-  bool check = false;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
-  TextEditingController searchController = TextEditingController();
+
+  var secWidth;
+  var width;
 
   @override
   Widget build(BuildContext context) {
-    if (mainList == null) {
-      mainList = new List();
-      updateList();
-    }
     if (qtyController.text.isEmpty) {
       qtyController.text = '0';
     }
-    if (expQtyController.text.isEmpty) {
-      expQtyController.text = '0';
-    }
+    secWidth = MediaQuery.of(context).size.width * 0.68;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stocks'),
-        centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Container(
-                height: 50,
-                width: width - 5,
-                child: Card(
-                  color: Colors.white,
-                  child: TextField(
-                    controller: searchController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
-                      hintText: 'Search...',
-                      hintStyle: TextStyle(
-                          color: Colors.grey[700], letterSpacing: 0.5),
-                      contentPadding: EdgeInsets.only(top: 10),
-                    ),
-                    onChanged: (query) {
-                      setState(() {
-                        searchResult(query);
-                        print('$query is work');
-                      });
-                    },
-                  ),
-                )),
-          ),
-        ),
-        // actions: [IconButton(icon: Icon(Icons.arrow_back), onPressed: () {})],
+        title: Text("Stocks"),
+        actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
       ),
-      body: getStockList(),
+      body: getMainExpansion(),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8, bottom: 5),
         child: Container(
           height: 45,
           child: FlatButton(
-            color: Style.Colors.mainColor,
+            color: Colors.red,
             onPressed: () {
-              print('Save was tap');
-              Navigator.pop(context, true);
+              print('Add was tap');
             },
             child: Center(
               child: Text(
-                'Save',
+                'Add',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -89,18 +64,57 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
     );
   }
 
+  Widget getMainExpansion() {
+    return Container(
+      padding: EdgeInsets.only(top: 8, left: 5, right: 5),
+      child: ListView.builder(
+        itemBuilder: (context, index) => customwithslidable.ExpansionTitle(
+          backgroundColor: Colors.deepOrange[50],
+          initiallyExpanded: false,
+          headerBackgroundColor: Colors.red[100],
+          iconColor: Colors.black,
+          title: Text(data[index]),
+          children: [
+            getSubTile(),
+          ],
+        ),
+        itemCount: data.length,
+      ),
+    );
+  }
+
+  Widget getSubTile() {
+    return Container(
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) => ExpansionTile(
+          title: Text(list[index]),
+          children: [
+            getStockList(),
+          ],
+        ),
+        itemCount: list.length,
+      ),
+    );
+  }
+
   Widget getStockList() {
     var secWidth = MediaQuery.of(context).size.width * 0.7;
     var width = MediaQuery.of(context).size.width;
     return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.only(left: 4),
+        padding: const EdgeInsets.only(left: 0),
         child: Container(
+          padding: const EdgeInsets.only(left: 4),
+          color: Colors.white,
           height: 110,
           child: Row(
             children: [
               Container(
-                width: width * 0.25,
+                width: width * 0.23,
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
@@ -120,45 +134,43 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
                     children: [
                       Spacer(),
                       Spacer(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 4,
-                              right: 4,
+                      Container(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 4, right: 4, top: 7),
+                              child: Container(
+                                  width: secWidth * 0.8,
+                                  child: Text(
+                                    mainList[index],
+                                    maxLines: 3,
+                                    overflow: TextOverflow.clip,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      height: 1,
+                                    ),
+                                  )),
                             ),
-                            child: Container(
-                                width: secWidth * 0.8,
-                                child: Text(
-                                  items[index],
-                                  maxLines: 3,
-                                  overflow: TextOverflow.clip,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    height: 1,
-                                  ),
-                                )),
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: SizedBox(
-                              height: 15,
-                              width: 20,
-                              child: Checkbox(
-                                activeColor: Style.Colors.mainColor,
-                                onChanged: (data) {
-                                  setState(() {
-                                    check = data;
-                                  });
+                            Spacer(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 10, top: 10),
+                              child: InkWell(
+                                onTap: () {
+                                  print('Check was tap');
                                 },
-                                value: check,
+                                child: ImageIcon(
+                                  AssetImage('assets/icon/empty_check_box.png'),
+                                  size: 23,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Spacer(),
                       Row(
@@ -187,8 +199,8 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
                                   height: 40,
                                   width: secWidth * 0.35,
                                   child: Card(
-                                    elevation: 0,
-                                    color: Colors.grey[50],
+                                    color: Colors.grey[200],
+                                    elevation: 2,
                                     child: Row(
                                       children: [
                                         InkWell(
@@ -282,8 +294,8 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
                                   height: 40,
                                   width: secWidth * 0.35,
                                   child: Card(
-                                    elevation: 0,
-                                    color: Colors.grey[50],
+                                    color: Colors.grey[200],
+                                    elevation: 2,
                                     child: Row(
                                       children: [
                                         InkWell(
@@ -317,7 +329,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w500),
-                                              controller: expQtyController,
+                                              controller: qtyController,
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
                                                 contentPadding:
@@ -363,51 +375,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
           ),
         ),
       ),
-      itemCount: items.length,
+      itemCount: mainList.length,
     );
-  }
-
-  updateList() {
-    setState(() {
-      mainList = [
-        'Sp_Blueberry Cream Roll',
-        'Blueberry Cream ',
-        'Long Bread',
-        'Short Bread',
-        'Example Bread',
-        'Super Cream Bread',
-        'small Cream Bread',
-        'No  Cream Bread',
-        'Stawbarry Cream',
-        'simple bread',
-      ];
-      items.addAll(mainList);
-    });
-  }
-
-  void searchResult(String query) {
-    List dummySearchList = List();
-    dummySearchList.addAll(mainList);
-    print(dummySearchList);
-    if (query.isNotEmpty) {
-      List dummyListData = List();
-      dummySearchList.forEach((item) {
-        if (item.toString().toLowerCase().contains(query.toLowerCase())) {
-          dummyListData.add(item);
-        }
-      });
-      setState(() {
-        items.clear();
-        items.addAll(dummyListData);
-        print('this is item=> $items');
-      });
-      return;
-    } else {
-      setState(() {
-        items.clear();
-        items.addAll(mainList);
-        print('$items  not empty' + items.length.toString());
-      });
-    }
   }
 }

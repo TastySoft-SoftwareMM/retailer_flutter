@@ -14,6 +14,7 @@ import '../../style/theme.dart' as Style;
 import 'package:flutter_svg/flutter_svg.dart';
 
 class StoreOwnerVisitCard extends StatefulWidget {
+  
   @override
   _StoreOwnerVisitCardState createState() => _StoreOwnerVisitCardState();
 }

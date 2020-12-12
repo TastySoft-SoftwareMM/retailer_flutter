@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:retailer/custom/custom_expansion_title.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 import 'package:http/http.dart' as http;
 
@@ -13,8 +15,10 @@ class OrderEditScreen extends StatefulWidget {
 class _OrderEditScreenState extends State<OrderEditScreen> {
   TextEditingController qtyController = TextEditingController();
   var width;
+  ViewModelFunction modelFunction;
   @override
   Widget build(BuildContext context) {
+    modelFunction = Provider.of<ViewModelFunction>(context);
     if (qtyController.text.isEmpty) {
       qtyController.text = '2';
     }
@@ -43,7 +47,7 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
                   width: width - 86,
                   child: Center(
                     child: Text(
-                      "May Zon (မေဇွန်)",
+                      modelFunction.activeShop.shopname,
                       style: Style.headingPrimaryTextStyle,
                       textAlign: TextAlign.center,
                     ),
@@ -55,7 +59,7 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
               width: width - 46,
               padding: EdgeInsets.only(left: 10, right: 8),
               child: Text(
-                "လမ်း80.34.35ကြား, ကဉ္စနမဟီရပ်ကွက်, ချမ်းအေးသာဇံ, ချမ်းအေးသာစံ, မန္တလေးခရိုင်, မန္တလေးတိုင်းဒေသကြီး\r\n",
+                "${modelFunction.activeShop.address}\r\n",
                 textAlign: TextAlign.center,
               ),
             ),

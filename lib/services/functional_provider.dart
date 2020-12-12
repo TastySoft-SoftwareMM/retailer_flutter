@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:retailer/models/all_shop_saleList.dart';
 import 'package:retailer/models/checkIn_status_task.dart';
 import 'package:retailer/models/loginModel.dart';
+import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/public/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +13,8 @@ import 'package:http/http.dart' as http;
 class ViewModelFunction with ChangeNotifier {
   CheckInStatus _checkInStatus;
   LoginModel getLoginDetail;
+  MerchandizingM merchandizingM;
+  List<ListModel> listModel;
   AllShopSaleList allShopSaleList;
   List<ShopByListM> shopsByTeam;
   List<ShopByListM> shopsByUser;
@@ -20,16 +23,28 @@ class ViewModelFunction with ChangeNotifier {
   String status;
   String param;
   String sessionId;
+  ShopByListM _activeShop;
 
   CheckInStatus get checkInStatus => _checkInStatus;
+  ShopByListM get activeShop => _activeShop;
 
   set checkInStatus(CheckInStatus setposition) {
     _checkInStatus = setposition;
     notifyListeners();
   }
 
+  set activeShop(ShopByListM setActiveShop) {
+    _activeShop = setActiveShop;
+    notifyListeners();
+  }
+
   addcheckInStatus(CheckInStatus addCheckInStatus) {
     _checkInStatus = addCheckInStatus;
+    notifyListeners();
+  }
+
+  addActiveShop(ShopByListM addActiveShop) {
+    _activeShop = addActiveShop;
     notifyListeners();
   }
 
@@ -42,6 +57,24 @@ class ViewModelFunction with ChangeNotifier {
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       getLoginDetail = LoginModel.fromJson(result);
+      statusCode = response.statusCode;
+    } else {
+      statusCode = response.statusCode;
+    }
+
+    notifyListeners();
+  }
+
+  Future getShopKey(String shopSysKey, String userType) async {
+    param = jsonEncode({"shopSysKey": '$shopSysKey', "userType": '$userType'});
+    final http.Response response =
+        await httpRequest('campaign/getshopKey/', param, getLoginDetail.orgId);
+    if (response.statusCode == 200) {
+      final result = json.decode(response.body);
+      merchandizingM = MerchandizingM.fromJson(result);
+      this.listModel =
+          merchandizingM.list.map((el) => ListModel.fromJson(el)).toList();
+
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;

@@ -145,8 +145,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                 color: Style.Colors.mainColor,
                               )
                             : Icon(Icons.radio_button_off),
-                        title:
-                            Text(model.shopsByUser[index].shopname),
+                        title: Text(model.shopsByUser[index].shopname),
                         onTap: () {
                           setState(() {
                             selected = index + 1;
@@ -195,6 +194,8 @@ class _MainDrawerState extends State<MainDrawer> {
                           if (selected != 0) {
                             Navigator.pop(context, true);
                             // showLoading();
+                            await model
+                                .addActiveShop(model.shopsByUser[selected - 1]);
 
                             Navigator.push(
                                 context,

@@ -1,11 +1,15 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/main/main_Screen_Search.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizingEdit.dart';
+import 'package:retailer/screens/public/widget.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
 import '../../custom/custom_expansion_title.dart' as custom;
-import 'package:http/http.dart' as http;
 
 class MerchandizingScreen extends StatefulWidget {
   @override
@@ -13,111 +17,141 @@ class MerchandizingScreen extends StatefulWidget {
 }
 
 class _MerchandizingScreenState extends State<MerchandizingScreen> {
-  List<String> expansionList = [
-    'SP Bakery',
-    'Khit Thit Bakery',
-  ];
-
-  var _items = [
-    'နံပါတ်၁',
-    'နံပါတ်၂',
-    'နံပါတ်၃',
-    'နံပါတ်၄',
-    'နံပါတ်၅',
-    'နံပါတ်၆',
-    'နံပါတ်၇',
-    'နံပါတ်၈',
-    'နံပါတ်၉',
-    'နံပါတ်၀',
-  ];
+  ViewModelFunction model;
+  bool loading = true;
   @override
   Widget build(BuildContext context) {
+    model = Provider.of<ViewModelFunction>(context, listen: false);
+    if (loading == true) {
+      getSysKey();
+    }
     return Scaffold(
-      
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text("Merchandizing"),
         actions: [
-          IconButton(icon: Icon(Icons.search), onPressed: (){
-            showSearch(
-            context: context,
-            delegate: MainScreenSearch(
-              "Search...",
-            ));
-          })
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: MainScreenSearch(
+                      "Search...",
+                    ));
+              })
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(5.0),
-        child: Column(
-          children: [CheckinShop(), Flexible(child: getExpansionList())],
-        ),
-      ),
+      body: loading
+          ? Center(
+              child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                strokeWidth: 2,
+              ),
+            )
+          : Padding(
+              padding: EdgeInsets.all(5.0),
+              child: model.listModel == null
+                  ? Container(
+                      child: Center(
+                        child: Text(
+                          "No Data Found !",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey),
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        CheckinShop(),
+                        Flexible(child: getExpansionList())
+                      ],
+                    ),
+            ),
     );
   }
 
   Widget getExpansionList() {
-    List<Widget> getByCharacter = [];
     return ListView.builder(
       itemBuilder: (context, index) => Card(
         color: Colors.transparent,
         elevation: 3,
         child: custom.ExpansionTitle(
-          backgroundColor: Colors.white,
+          backgroundColor: Style.Colors.dropBackgroundColor,
           initiallyExpanded: false,
           headerBackgroundColor: Style.Colors.mainColor,
           iconColor: Style.Colors.textColor,
           title: Text(
-            expansionList[index].toString(),
+            model.listModel[index].brandOwnerName,
             style: TextStyle(color: Style.Colors.textColor),
           ),
-          onExpansionChanged: (value) {
-            // print(value);
-          },
           children: [
-            new FutureBuilder(
-              builder: (BuildContext context,
-                  AsyncSnapshot<http.Response> response) {
-                getByCharacter.clear();
-                _items.forEach((element) {
-                  getByCharacter.add(
-                    Card(
-                      
-                      color: Colors.green[800],
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 3),
-                        child: Container(
-                          color: Colors.white,
-                          child: ListTile(
-                            
-                            // leading: Divider(color: Colors.blue,),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MerchandizingEdit()));
-                            },
-                            title: Text(element),
-                            trailing: IconButton(
-                              onPressed: () {
-                                print('List was tap');
-                              },
-                              icon: Icon(Icons.list),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                });
-
-                return new Column(children: getByCharacter);
-              },
-            ),
+            getChildrenList(model.listModel[index].taskList),
           ],
         ),
       ),
-      itemCount: expansionList.length,
+      itemCount: model.merchandizingM.list.length,
+    );
+  }
+
+  getSysKey() async {
+    getConectivity().then((ConnectivityResult value) async {
+      if (value == ConnectivityResult.none) {
+        getToast(context, "Check your internet Conection");
+        setState(() {
+          loading = false;
+        });
+      } else {
+        await model
+            .getShopKey(
+                model.activeShop.shopsyskey, model.getLoginDetail.userType)
+            .timeout(Duration(seconds: 10), onTimeout: () {
+          getToast(context, "Internet connection error");
+          setState(() {
+            loading = false;
+          });
+        });
+
+        setState(() {
+          loading = false;
+        });
+      }
+    });
+  }
+
+  Widget getChildrenList(List list) {
+    List<TaskList> _taskList = list.map((e) => TaskList.fromJson(e)).toList();
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      itemCount: _taskList.length,
+      itemBuilder: (context, index) => Card(
+        color: Colors.green[800],
+        child: Padding(
+          padding: EdgeInsets.only(left: 3),
+          child: Container(
+            color: Colors.white,
+            child: ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MerchandizingEdit(_taskList[index])));
+              },
+              title: Text(_taskList[index].taskCode),
+              trailing: IconButton(
+                onPressed: () {
+                  print('List was tap');
+                },
+                icon: Icon(Icons.list),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

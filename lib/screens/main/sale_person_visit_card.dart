@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,6 +7,7 @@ import 'package:retailer/models/checkIn_status_task.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/main/main-drawer.dart';
 import 'package:retailer/screens/main/main-screen.dart';
+import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/mandatorytasks/inventorycheck.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizing.dart';
 import 'package:retailer/screens/mandatorytasks/orderplacement.dart';
@@ -43,13 +45,8 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
             IconButton(
               icon: Icon(Icons.shopping_cart),
               onPressed: () {
-                print(model.checkInStatus.inventoryCheck);
-                print(model.checkInStatus.merchandizing);
-                print(model.checkInStatus.orderPlacement);
-                print(model.checkInStatus.printStatus);
-
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => CartItemScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CartItemScreen()));
               },
             ),
           ],
@@ -139,7 +136,16 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return InkWell(
-      onTap: () => cardClick(id),
+      onTap: () => getConectivity().then((ConnectivityResult value) async {
+        if (value == ConnectivityResult.none) {
+          getToast(context, "Check your internet Conection");
+        } else {
+          await cardClick(id).timeout(Duration(seconds: 15), onTimeout: () {
+            getToast(context, "Internet connection error");
+            Navigator.pop(context, true);
+          });
+        }
+      }),
       child: Container(
         height: height * 0.28,
         width: width * 0.5 - 5,
@@ -180,7 +186,7 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
     );
   }
 
-  cardClick(id) async {
+  Future cardClick(id) async {
     switch (id) {
       case 1:
         checkOutFun(context);
@@ -214,9 +220,7 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
 
         break;
       case 3:
-        loading(
-          context,
-        );
+        loading(context);
         if (model.checkInStatus.merchandizing != "COMPLETED") {
           await model.setTaskOfShop(model.checkInStatus.inventoryCheck,
               "PENDING", model.checkInStatus.orderPlacement);
@@ -225,10 +229,11 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
               "PENDING",
               model.checkInStatus.orderPlacement,
               model.checkInStatus.printStatus));
+
           Navigator.pop(context, true);
           Navigator.push(
               context,
-              new CupertinoPageRoute(
+              new MaterialPageRoute(
                   builder: (context) => MerchandizingScreen()));
         } else {
           Navigator.pop(context, true);
@@ -243,7 +248,7 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
         loading(
           context,
         );
-        if (model.checkInStatus.merchandizing != "COMPLETED") {
+        if (model.checkInStatus.orderPlacement != "COMPLETED") {
           await model.setTaskOfShop(model.checkInStatus.inventoryCheck,
               model.checkInStatus.merchandizing, "PENDING");
           await model.addcheckInStatus(CheckInStatus(
@@ -254,13 +259,13 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
           Navigator.pop(context, true);
           Navigator.push(
               context,
-              new CupertinoPageRoute(
+              new MaterialPageRoute(
                   builder: (context) => OrderPlacementScreen()));
         } else {
           Navigator.pop(context, true);
           Navigator.push(
               context,
-              new CupertinoPageRoute(
+              new MaterialPageRoute(
                   builder: (context) => OrderPlacementScreen()));
         }
 

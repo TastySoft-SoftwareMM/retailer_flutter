@@ -367,6 +367,7 @@ checkInDialog(
                                       element.status.task.merchandizing,
                                       element.status.task.orderPlacement,
                                       element.status.task.print));
+                                  await model.addActiveShop(element);
 
                                   if (model.getLoginDetail.userType ==
                                       "storeowner") {
@@ -435,6 +436,8 @@ checkInDialog(
                                               element
                                                   .status.task.orderPlacement,
                                               element.status.task.print));
+                                      await model.addActiveShop(element);
+
                                       if (model.getLoginDetail.userType ==
                                           "storeowner") {
                                         Navigator.push(
@@ -672,6 +675,35 @@ String getCurrentTypeSting(String currentType) {
       break;
   }
   return value;
+}
+
+Widget getRemark() {
+  return Padding(
+    padding: const EdgeInsets.only(left: 8, right: 4, top: 8),
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(color: Colors.grey[300])),
+      height: 80,
+      child: TextField(
+        maxLines: 8,
+        decoration: InputDecoration(
+            alignLabelWithHint: true,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelText: "Remark :",
+            hintText: "Tap on a clip to paste it in the text box",
+            hintStyle: TextStyle(fontWeight: FontWeight.w300),
+            labelStyle: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w300,
+                height: 1.2,
+                color: Colors.black),
+            fillColor: Colors.white,
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.all(15)),
+      ),
+    ),
+  );
 }
 
 Widget getOtherList(List<ShopByListM> otherList) {
