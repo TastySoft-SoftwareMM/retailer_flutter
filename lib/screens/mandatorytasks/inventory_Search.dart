@@ -1,10 +1,49 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../style/theme.dart' as Style;
+import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
+    as customwithslidable;
 
 class InventorySearch extends SearchDelegate {
+  List<String> litems = [
+    "bake",
+    "unbake",
+    "overbake",
+    "lowbake",
+    "bake",
+    "unbake",
+    "overbake",
+    "lowbake",
+    "bake",
+    "unbake",
+    "overbake",
+    "lowbake"
+  ];
+   final List data = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
+  List<String> Titlelist = [
+    'Sp_Daily_Butter Bread',
+    'SP_Milk Cream Roll ',
+    'SP_Daily Cheese Spread',
+    'SP_Bean Bread',
+    'Example Bread',
+    'Super Cream Bread',
+    'Small Cream Bread',
+    'No Cream Bread',
+    'Stawbarry Cream',
+    'Simple bread',
+  ];
+  List<String> list = ['Bread', 'Pastries', 'Cake'];
+  var items = [];
+  var value="bake";
+  bool check = false;
+  TextEditingController qtyController = TextEditingController();
+  TextEditingController expQtyController = TextEditingController();
+
+  
   @override
   ThemeData appBarTheme(BuildContext context) {
+    if (qtyController.text.isEmpty) {
+      qtyController.text = '0';
+    }
     final ThemeData theme = Theme.of(context);
     return theme.copyWith(
       textTheme: TextTheme(
@@ -64,10 +103,22 @@ class InventorySearch extends SearchDelegate {
     print('this is result $result');
     if (result.isEmpty) {
       widget = Center(
-        child: Text('no result found'),
+        child: Column(
+          children: [
+            dropDown(context),
+            Text('no result found'),
+          ],
+        ),
       );
     } else if (result.isNotEmpty) {
-      widget = getStockList(context, result);
+      var stockList = Container(
+          child: Column(
+        children: [
+          dropDown(context),
+          Expanded(child: getMainExpansion()),
+        ],
+      ));
+      widget = stockList;
     }
     return widget;
   }
@@ -76,33 +127,209 @@ class InventorySearch extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     Widget widget;
     if (query.isEmpty) {
-      widget = getStockList(context, mainList);
+      widget = Container(
+          child: Column(
+        children: [
+          dropDown(context),
+          Expanded(child:getMainExpansion()),
+        ],
+      ));
     } else {
       suggestion = mainList
           .where((p) => p.toLowerCase().contains(query.toLowerCase()))
           .toList();
-          widget = getStockList(context, suggestion);
+      widget = Container(
+          child: Column(
+        children: [
+          dropDown(context),
+          Expanded(child:getMainExpansion()),
+        ],
+      ));
     }
     return widget;
   }
 
-  Widget getStockList(BuildContext context, List<String> list) {
+  Widget dropDown(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return Row(
+      children: [
+        Container(
+          width: width * .34,
+          child: TextButton(
+              onPressed: () {
+                getlistView(context);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Spacer(),
+                  Icon(Icons.arrow_drop_down)
+                ],
+              )),
+        ),
+        Container(
+          width: width * .33,
+          child: TextButton(
+              onPressed: () {
+                getlistView(context);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Spacer(),
+                  Icon(Icons.arrow_drop_down)
+                ],
+              )),
+        ),
+        Container(
+          width: width * .33,
+          child: TextButton(
+              onPressed: () {
+                getlistView(context);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Spacer(),
+                  Icon(Icons.arrow_drop_down),
+                ],
+              )),
+        ),
+      ],
+    );
+  }
+
+  Widget getlistView(BuildContext context) {
+    var alertDialog = AlertDialog(
+      title: Text("Select Category"),
+      content: Row(
+        children: [
+          thelist(),
+        ],
+      ),
+    );
+
+    showDialog(
+      barrierDismissible: false,
+        context: context,
+        builder: (
+          BuildContext context,
+        ) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: alertDialog,
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget thelist() {
+  
+    return Container(
+      height: 210.0,
+      width: 250.0,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: litems.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey))),
+            child: ListTile(
+              title: Text(litems[index]),
+              trailing: value == litems[index]
+                  ? Icon(
+                      Icons.radio_button_on,
+                      color: Colors.red,
+                    )
+                  : Icon(
+                      Icons.radio_button_off,
+                      color: Colors.grey,
+                    ),
+              onTap: () {
+                value = litems[index];
+                Navigator.pop(context, true);
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget getMainExpansion() {
+    return Container(
+      padding: EdgeInsets.only(top: 8, left: 5, right: 5),
+      child: ListView.builder(
+        itemBuilder: (context, index) => customwithslidable.ExpansionTitle(
+          backgroundColor: Colors.deepOrange[50],
+          initiallyExpanded: false,
+          headerBackgroundColor: Colors.red[100],
+          iconColor: Colors.black,
+          title: Text(data[index]),
+          children: [
+            getSubTile(),
+          ],
+        ),
+        itemCount: data.length,
+      ),
+    );
+  }
+
+  Widget getSubTile() {
+    return Container(
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) => ExpansionTile(
+          title: Text(list[index]),
+          children: [
+            this.getStockList(context),
+          ],
+        ),
+        itemCount: list.length,
+      ),
+    );
+  }
+
+  Widget getStockList(BuildContext context) {
     var secWidth = MediaQuery.of(context).size.width * 0.7;
     var width = MediaQuery.of(context).size.width;
     return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.only(left: 4),
+        padding: const EdgeInsets.only(left: 0),
         child: Container(
+          padding: const EdgeInsets.only(left: 4),
+          color: Colors.white,
           height: 110,
           child: Row(
             children: [
               Container(
-                width: width * 0.25,
+                width: width * 0.23,
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Image.asset(
-                      'assets/icon/sp_bread1.jpg',
+                      'assets/icon/sp_bread3.jpg',
                       height: 100,
                       fit: BoxFit.fitHeight,
                     ),
@@ -124,11 +351,11 @@ class InventorySearch extends SearchDelegate {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                  left: 4, right: 4, top: 4),
+                                  left: 4, right: 4, top: 7),
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                    list[index],
+                                      Titlelist[index],
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
@@ -143,12 +370,12 @@ class InventorySearch extends SearchDelegate {
                                   const EdgeInsets.only(right: 10, top: 10),
                               child: InkWell(
                                 onTap: () {
-                                  print('delete was tap');
+                                  print('Check was tap');
                                 },
                                 child: ImageIcon(
-                                  AssetImage('assets/icon/delete.png'),
+                                  AssetImage('assets/icon/empty_check_box.png'),
                                   size: 23,
-                                  color: Style.Colors.mainColor,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ),
@@ -182,8 +409,8 @@ class InventorySearch extends SearchDelegate {
                                   height: 40,
                                   width: secWidth * 0.35,
                                   child: Card(
-                                    color: Colors.grey[50],
-                                    elevation: 0,
+                                    color: Colors.grey[200],
+                                    elevation: 2,
                                     child: Row(
                                       children: [
                                         InkWell(
@@ -217,7 +444,7 @@ class InventorySearch extends SearchDelegate {
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w500),
-                                              // controller: qtyController,
+                                              controller: qtyController,
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
                                                 contentPadding:
@@ -277,8 +504,8 @@ class InventorySearch extends SearchDelegate {
                                   height: 40,
                                   width: secWidth * 0.35,
                                   child: Card(
-                                    color: Colors.grey[50],
-                                    elevation: 0,
+                                    color: Colors.grey[200],
+                                    elevation: 2,
                                     child: Row(
                                       children: [
                                         InkWell(
@@ -312,7 +539,7 @@ class InventorySearch extends SearchDelegate {
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w500),
-                                              // controller: qtyController,
+                                              controller: qtyController,
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
                                                 contentPadding:
@@ -358,7 +585,7 @@ class InventorySearch extends SearchDelegate {
           ),
         ),
       ),
-      itemCount: list.length,
+      itemCount: Titlelist.length,
     );
   }
-}
+}                  
