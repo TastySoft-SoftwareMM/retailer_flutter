@@ -3,9 +3,15 @@ import 'package:compressimage/compressimage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:retailer/database/merchar_imageHelper.dart';
+import 'package:retailer/models/image_sqflite_M.dart';
 import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/screens/public/widget.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../style/theme.dart' as Style;
+import 'package:retailer/utility/utility.dart';
+import 'package:retailer/services/functional_provider.dart';
+import 'package:provider/provider.dart';
 
 class MerchandizingEdit extends StatefulWidget {
   final TaskList _taskList;
@@ -15,10 +21,21 @@ class MerchandizingEdit extends StatefulWidget {
 }
 
 class _MerchandizingEditState extends State<MerchandizingEdit> {
-  List<File> fileImageArray = [];
+  ImageDbHelper imageDbHelper = ImageDbHelper();
+  List<Photo> photoList;
   var pickedByCamera;
+  ViewModelFunction model;
+
   @override
   Widget build(BuildContext context) {
+    model = Provider.of<ViewModelFunction>(
+      context,
+      listen: false,
+    );
+    if (photoList == null) {
+      photoList = List<Photo>();
+      getPhotoList();
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -58,9 +75,9 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,
-                children: List.generate(fileImageArray.length + 1, (index) {
+                children: List.generate(photoList.length + 1, (index) {
                   return Container(
-                    child: index + 1 > fileImageArray.length
+                    child: index + 1 > photoList.length
                         ? InkWell(
                             onTap: () {
                               _settingModalBottomSheet(context);
@@ -87,19 +104,17 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ViewImage(
-                                                  fileImageArray[index],
-                                                )));
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => ViewImage(
+                                    //               photoList[index],
+                                    //             )));
                                   },
                                   child: Container(
                                     child: ClipRRect(
-                                      child: Image.file(
-                                        fileImageArray[index],
-                                        fit: BoxFit.cover,
-                                      ),
+                                      child: Utility.imageFromBase64String(
+                                          photoList[index].photo),
                                     ),
                                   ),
                                 ),
@@ -107,12 +122,18 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                     right: 2,
                                     top: 2,
                                     child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          fileImageArray.remove(
-                                            fileImageArray[index],
-                                          );
-                                        });
+                                      onTap: () async {
+                                        if (photoList[index].id != null) {
+                                          await imageDbHelper
+                                              .deletePhoto(photoList[index].id);
+                                          setState(() {
+                                            photoList.remove(photoList[index]);
+                                          });
+                                        } else {
+                                          setState(() {
+                                            photoList.remove(photoList[index]);
+                                          });
+                                        }
                                       },
                                       child: CircleAvatar(
                                         radius: 12,
@@ -144,7 +165,11 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
           height: 45,
           child: FlatButton(
             onPressed: () {
-              print('object');
+              if (photoList.length > 0) {
+                savePhoto();
+              } else {
+                getToast(context, "Please Select Image");
+              }
             },
             child: Text(
               'Save',
@@ -154,6 +179,22 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         ),
       ),
     );
+  }
+
+  savePhoto() {
+    loading(context);
+    photoList.forEach((element) async {
+      if (element.id == null) {
+        await imageDbHelper
+            .insertPhoto(Photo(element.photo, model.activeShop.shopsyskey));
+      } else {
+        await imageDbHelper.updatePhoto(Photo.withId(
+            element.id, element.photo, model.activeShop.shopsyskey));
+      }
+    });
+    getToast(context, "Save Successful");
+    Navigator.pop(context, true);
+    Navigator.pop(context, true);
   }
 
   void _settingModalBottomSheet(context) {
@@ -184,16 +225,29 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         });
   }
 
+  getPhotoList() async {
+    final Future<Database> db = imageDbHelper.initializedDatabase();
+    await db.then((value) {
+      var photoListFuture =
+          imageDbHelper.getPhotoList(model.activeShop.shopsyskey);
+      photoListFuture.then((plist) {
+        setState(() {
+          this.photoList = plist;
+          print(plist);
+        });
+      });
+    });
+  }
+
   Future getMultipleImage() async {
-    var result = await FilePicker.getMultiFile(
-      type: FileType.image,
-    );
+    var result = await FilePicker.getMultiFile(type: FileType.image);
     if (result != null) {
       result.forEach((element) async {
         await CompressImage.compress(
-            imageSrc: element.path, desiredQuality: 80);
+            imageSrc: element.path, desiredQuality: 20);
         setState(() {
-          fileImageArray.add(element);
+          photoList.add(Photo(Utility.base64String(element.readAsBytesSync()),
+              model.activeShop.shopsyskey));
         });
       });
     }
@@ -204,9 +258,10 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     if (pickedFile != null) {
       File picked = File(pickedFile.path);
-      await CompressImage.compress(imageSrc: picked.path, desiredQuality: 80);
+      await CompressImage.compress(imageSrc: picked.path, desiredQuality: 20);
       setState(() {
-        fileImageArray.add(picked);
+        photoList.add(Photo(Utility.base64String(picked.readAsBytesSync()),
+            model.activeShop.shopsyskey));
       });
     }
   }

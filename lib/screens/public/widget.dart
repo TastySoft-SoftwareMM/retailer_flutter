@@ -70,37 +70,34 @@ String getPhoneFormat(String message) {
   return formatedPhone;
 }
 
-final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 void loading(BuildContext context) {
   try {
-    Dialogs.showLoadingDialog(context, _keyLoader);
+    Dialogs.showLoadingDialog(
+      context,
+    );
   } catch (error) {
     return null;
   }
 }
 
 class Dialogs {
-  static Future<void> showLoadingDialog(
-      BuildContext context, GlobalKey key) async {
+  static Future<void> showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return new WillPopScope(
-              onWillPop: () async => false,
-              child: SimpleDialog(
-                  elevation: 0,
-                  key: key,
-                  backgroundColor: Colors.transparent,
-                  children: <Widget>[
-                    Center(
-                        child: CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      strokeWidth: 2,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-                    ))
-                  ]));
+          return SimpleDialog(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              children: <Widget>[
+                Center(
+                    child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  strokeWidth: 2,
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                ))
+              ]);
         });
   }
 }

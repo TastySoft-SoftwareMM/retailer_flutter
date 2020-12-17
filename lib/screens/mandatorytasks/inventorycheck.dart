@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/mandatorytasks/Inventory_stock.dart';
-import 'package:retailer/screens/mandatorytasks/inventory_Search.dart';
 import '../../style/theme.dart' as Style;
 
 class InventoryCheckScreen extends StatefulWidget {
@@ -38,12 +37,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
           IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
-                showSearch(
-                    context: context,
-                    delegate: InventorySearch(
-                      "Search...",
-                      mainList,
-                    ));
+                // showSearch(context: context, delegate: InventoryCheckSearch());
               })
         ],
       ),

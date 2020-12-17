@@ -53,13 +53,16 @@ class ViewModelFunction with ChangeNotifier {
     param = jsonEncode({"userId": '$userId', "password": '$pass'});
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
-    print(response);
-    if (response.statusCode == 200) {
-      final result = json.decode(response.body);
-      getLoginDetail = LoginModel.fromJson(result);
-      statusCode = response.statusCode;
+    if (response != null) {
+      if (response.statusCode == 200) {
+        final result = json.decode(response.body);
+        getLoginDetail = LoginModel.fromJson(result);
+        statusCode = response.statusCode;
+      } else {
+        statusCode = response.statusCode;
+      }
     } else {
-      statusCode = response.statusCode;
+      statusCode = 404;
     }
 
     notifyListeners();

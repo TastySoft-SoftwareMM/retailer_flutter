@@ -19,15 +19,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Retailer',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(color: Style.Colors.mainColor),
-        primarySwatch: Colors.red,
-        accentColor: Colors.grey,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Login(),
-    );
+        title: 'Retailer',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(color: Style.Colors.mainColor),
+          primarySwatch: Colors.red,
+          accentColor: Colors.grey,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: Login());
   }
 }

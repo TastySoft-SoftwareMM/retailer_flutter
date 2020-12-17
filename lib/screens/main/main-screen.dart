@@ -8,7 +8,6 @@ import 'package:retailer/screens/user/syncData/syncData.dart';
 import 'package:retailer/services/functional_provider.dart';
 import './main-drawer.dart';
 import '../../style/theme.dart' as Style;
-import 'main-drawer.dart';
 
 class MainScreen extends StatefulWidget {
   @override

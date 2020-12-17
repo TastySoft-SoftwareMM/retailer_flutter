@@ -110,7 +110,7 @@ class _SyncDataState extends State<SyncData> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(5)),
                   child: RaisedButton(
-                    color: _isloading  ?Colors.grey[300]: Style.Colors.mainColor,
+                    color: _isloading  ?Colors.red[300]: Style.Colors.mainColor,
                     onPressed: () async {
                       if (_isloading == false) {
                         getConectivity().then((ConnectivityResult value) async {

@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/screens/mandatorytasks/inventory_stock_search.dart';
-import '../../style/theme.dart' as Style;
 import 'package:retailer/custom/custom_expansion_title.dart';
+import '../../style/theme.dart' as Style;
 
-class InventoryStockAddPage extends StatefulWidget {
-  @override
-  _InventoryStockAddPageState createState() => _InventoryStockAddPageState();
-}
-
-class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
+class InventoryStockSearch extends SearchDelegate {
+  List<String> litems = [
+    "bake",
+    "unbake",
+    "overbake",
+    "lowbake",
+    "bake",
+    "unbake",
+    "overbake",
+    "lowbake",
+    "bake",
+    "unbake",
+    "overbake",
+    "lowbake"
+  ];
   final List data = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
-  List<String> mainList = [
+  List<String> titlelist = [
     'Sp_Daily_Butter Bread',
     'SP_Milk Cream Roll ',
     'SP_Daily Cheese Spread',
@@ -23,51 +31,242 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
     'Simple bread',
   ];
   List<String> list = ['Bread', 'Pastries', 'Cake'];
-
+  var items = [];
+  var value = "bake";
+  bool check = false;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
 
-  var secWidth;
-  var width;
-
   @override
-  Widget build(BuildContext context) {
+  ThemeData appBarTheme(BuildContext context) {
     if (qtyController.text.isEmpty) {
       qtyController.text = '0';
     }
-    secWidth = MediaQuery.of(context).size.width * 0.68;
-    width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Stocks"),
-        actions: [IconButton(icon: Icon(Icons.search), onPressed: () {
-           showSearch(
-                    context: context,
-                    delegate: InventoryStockSearch(
-                      'search',
-                      mainList,
-                    
-                    ));
-        })],
+    final ThemeData theme = Theme.of(context);
+    return theme.copyWith(
+      textTheme: TextTheme(
+        headline6: TextStyle(color: Colors.white, fontSize: 15),
       ),
-      body: getMainExpansion(),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8, bottom: 5),
-        child: Container(
-          height: 45,
-          child: FlatButton(
-            color: Colors.red,
-            onPressed: () {
-              print('Add was tap');
-            },
-            child: Center(
-              child: Text(
-                'Add',
-                style: TextStyle(color: Colors.white),
+      primaryColor: Style.Colors.mainColor,
+      primaryIconTheme: IconThemeData(color: Colors.white),
+    );
+  }
+
+  final title;
+  final List<String> mainList;
+  InventoryStockSearch(this.title, this.mainList)
+      : super(
+            searchFieldLabel: title,
+            searchFieldStyle: TextStyle(
+                decorationColor: Colors.white,
+                color: Colors.white,
+                fontSize: 15,
+                letterSpacing: 1));
+  List<String> suggestion;
+  List<String> result;
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      query.isEmpty
+          ? Container()
+          : IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Colors.white,
               ),
+              onPressed: () {
+                query = '';
+              },
             ),
-          ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        Navigator.pop(context, true);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    Widget widget;
+
+    result = mainList
+        .where((p) => p.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    print('this is result $result');
+    if (result.isEmpty) {
+      widget = Center(
+        child: Column(
+          children: [
+            dropDown(context),
+            Text('no result found'),
+          ],
         ),
+      );
+    } else if (result.isNotEmpty) {
+      var stockList = Container(
+          child: Column(
+        children: [
+          dropDown(context),
+          Expanded(child: getMainExpansion()),
+        ],
+      ));
+      widget = stockList;
+    }
+    return widget;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    Widget widget;
+    if (query.isEmpty) {
+      widget = Container(
+          child: Column(
+        children: [
+          dropDown(context),
+          Expanded(child: getMainExpansion()),
+        ],
+      ));
+    } else {
+      suggestion = mainList
+          .where((p) => p.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      widget = Container(
+          child: Column(
+        children: [
+          dropDown(context),
+          Expanded(child: getMainExpansion()),
+        ],
+      ));
+    }
+    return widget;
+  }
+
+  Widget dropDown(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return Row(
+      children: [
+        Container(
+          width: width * .34,
+          child: TextButton(
+              onPressed: () {
+                getlistView(context);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Spacer(),
+                  Icon(Icons.arrow_drop_down)
+                ],
+              )),
+        ),
+        Container(
+          width: width * .33,
+          child: TextButton(
+              onPressed: () {
+                getlistView(context);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Spacer(),
+                  Icon(Icons.arrow_drop_down)
+                ],
+              )),
+        ),
+        Container(
+          width: width * .33,
+          child: TextButton(
+              onPressed: () {
+                getlistView(context);
+              },
+              child: Row(
+                children: [
+                  Text(
+                    value,
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Spacer(),
+                  Icon(Icons.arrow_drop_down),
+                ],
+              )),
+        ),
+      ],
+    );
+  }
+
+   getlistView(BuildContext context) {
+    var alertDialog = AlertDialog(
+      title: Text("Select Category"),
+      content: Row(
+        children: [
+          thelist(),
+        ],
+      ),
+    );
+
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (
+          BuildContext context,
+        ) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 80.0),
+                    child: alertDialog,
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget thelist() {
+    return Container(
+      height: 210.0,
+      width: 250.0,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: litems.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey))),
+            child: ListTile(
+              title: Text(litems[index]),
+              trailing: value == litems[index]
+                  ? Icon(
+                      Icons.radio_button_on,
+                      color: Colors.red,
+                    )
+                  : Icon(
+                      Icons.radio_button_off,
+                      color: Colors.grey,
+                    ),
+              onTap: () {
+                value = litems[index];
+                Navigator.pop(context, true);
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -78,13 +277,10 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
       child: ListView.builder(
         itemBuilder: (context, index) => ExpansionTitle(
           backgroundColor: Colors.deepOrange[50],
-          initiallyExpanded: true,
+          initiallyExpanded: false,
           headerBackgroundColor: Colors.red[100],
           iconColor: Colors.black,
-          title: Text(
-            data[index],
-            style: Style.headingTextStyle,
-          ),
+          title: Text(data[index]),
           children: [
             getSubTile(),
           ],
@@ -100,12 +296,9 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => ExpansionTile(
-          title: Text(
-            list[index],
-            style: Style.headingTextStyle,
-          ),
+          title: Text(list[index]),
           children: [
-            getStockList(),
+            this.getStockList(context),
           ],
         ),
         itemCount: list.length,
@@ -113,7 +306,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
     );
   }
 
-  Widget getStockList() {
+  Widget getStockList(BuildContext context) {
     var secWidth = MediaQuery.of(context).size.width * 0.7;
     var width = MediaQuery.of(context).size.width;
     return ListView.builder(
@@ -159,7 +352,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                    mainList[index],
+                                    titlelist[index],
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
@@ -389,7 +582,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
           ),
         ),
       ),
-      itemCount: mainList.length,
+      itemCount: titlelist.length,
     );
   }
 }
