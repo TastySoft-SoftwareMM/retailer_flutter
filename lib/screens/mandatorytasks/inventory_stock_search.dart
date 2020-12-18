@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:retailer/custom/custom_expansion_title.dart';
 import '../../style/theme.dart' as Style;
+import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
+    as customwithslidable;
 
-class InventoryStockSearch extends SearchDelegate {
+class InventorystockSearch extends SearchDelegate {
   List<String> litems = [
     "bake",
     "unbake",
     "overbake",
-    "lowbake",
-    "bake",
-    "unbake",
-    "overbake",
-    "lowbake",
-    "bake",
-    "unbake",
-    "overbake",
-    "lowbake"
   ];
-  final List data = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
-  List<String> titlelist = [
+   final List list1 = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
+  List<String> Titlelist = [
     'Sp_Daily_Butter Bread',
     'SP_Milk Cream Roll ',
     'SP_Daily Cheese Spread',
@@ -32,11 +24,15 @@ class InventoryStockSearch extends SearchDelegate {
   ];
   List<String> list = ['Bread', 'Pastries', 'Cake'];
   var items = [];
-  var value = "bake";
-  bool check = false;
+  var value1="All";
+  var value2='Bread';
+  var value3='bake';
+  var colorcheck;
+  bool check ;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
 
+  
   @override
   ThemeData appBarTheme(BuildContext context) {
     if (qtyController.text.isEmpty) {
@@ -54,7 +50,7 @@ class InventoryStockSearch extends SearchDelegate {
 
   final title;
   final List<String> mainList;
-  InventoryStockSearch(this.title, this.mainList)
+  InventorystockSearch(this.title, this.mainList)
       : super(
             searchFieldLabel: title,
             searchFieldStyle: TextStyle(
@@ -129,7 +125,7 @@ class InventoryStockSearch extends SearchDelegate {
           child: Column(
         children: [
           dropDown(context),
-          Expanded(child: getMainExpansion()),
+          Expanded(child:getMainExpansion()),
         ],
       ));
     } else {
@@ -140,7 +136,7 @@ class InventoryStockSearch extends SearchDelegate {
           child: Column(
         children: [
           dropDown(context),
-          Expanded(child: getMainExpansion()),
+          Expanded(child:getMainExpansion()),
         ],
       ));
     }
@@ -152,15 +148,15 @@ class InventoryStockSearch extends SearchDelegate {
     return Row(
       children: [
         Container(
-          width: width * .34,
+          width: width * .36,
           child: TextButton(
               onPressed: () {
-                getlistView(context);
+                getlistView(context,list1);
               },
               child: Row(
                 children: [
                   Text(
-                    value,
+                    value1,
                     style: TextStyle(color: Colors.black),
                   ),
                   Spacer(),
@@ -169,15 +165,15 @@ class InventoryStockSearch extends SearchDelegate {
               )),
         ),
         Container(
-          width: width * .33,
+          width: width * .32,
           child: TextButton(
               onPressed: () {
-                getlistView(context);
+                getlistView(context,list);
               },
               child: Row(
                 children: [
                   Text(
-                    value,
+                    value2,
                     style: TextStyle(color: Colors.black),
                   ),
                   Spacer(),
@@ -186,15 +182,15 @@ class InventoryStockSearch extends SearchDelegate {
               )),
         ),
         Container(
-          width: width * .33,
+          width: width * .32,
           child: TextButton(
               onPressed: () {
-                getlistView(context);
+                getlistView(context,litems);
               },
               child: Row(
                 children: [
                   Text(
-                    value,
+                    value3,
                     style: TextStyle(color: Colors.black),
                   ),
                   Spacer(),
@@ -206,18 +202,18 @@ class InventoryStockSearch extends SearchDelegate {
     );
   }
 
-   getlistView(BuildContext context) {
+  Widget getlistView(BuildContext context,getlist) {
     var alertDialog = AlertDialog(
       title: Text("Select Category"),
       content: Row(
         children: [
-          thelist(),
+          thelist(getlist),
         ],
       ),
     );
 
     showDialog(
-        barrierDismissible: false,
+      barrierDismissible: false,
         context: context,
         builder: (
           BuildContext context,
@@ -238,20 +234,21 @@ class InventoryStockSearch extends SearchDelegate {
         });
   }
 
-  Widget thelist() {
+  Widget thelist(getlist) {
+  
     return Container(
       height: 210.0,
       width: 250.0,
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: litems.length,
+        itemCount: getlist.length,
         itemBuilder: (BuildContext context, int index) {
           return Container(
             decoration: BoxDecoration(
                 border: Border(bottom: BorderSide(color: Colors.grey))),
             child: ListTile(
-              title: Text(litems[index]),
-              trailing: value == litems[index]
+              title: Text(getlist[index]),
+              trailing: colorcheck == getlist[index]
                   ? Icon(
                       Icons.radio_button_on,
                       color: Colors.red,
@@ -261,7 +258,24 @@ class InventoryStockSearch extends SearchDelegate {
                       color: Colors.grey,
                     ),
               onTap: () {
-                value = litems[index];
+                if (getlist== list1 ) {
+                  value1= list1[index];
+                } else if(getlist == list) {
+                  value2 = list[index];
+                }else if(getlist== litems){
+                  value3 = litems[index];
+                }
+
+                if(getlist== list1){
+                  colorcheck=value1;
+                }else if(getlist== list){
+                  colorcheck=value2;
+                }else if(getlist== litems){
+                  colorcheck=value3;
+                }
+                
+                
+                check =false;
                 Navigator.pop(context, true);
               },
             ),
@@ -275,17 +289,17 @@ class InventoryStockSearch extends SearchDelegate {
     return Container(
       padding: EdgeInsets.only(top: 8, left: 5, right: 5),
       child: ListView.builder(
-        itemBuilder: (context, index) => ExpansionTitle(
+        itemBuilder: (context, index) => customwithslidable.ExpansionTitle(
           backgroundColor: Colors.deepOrange[50],
           initiallyExpanded: false,
           headerBackgroundColor: Colors.red[100],
           iconColor: Colors.black,
-          title: Text(data[index]),
+          title: Text(list1[index],style: TextStyle(color: Colors.black)),
           children: [
             getSubTile(),
           ],
         ),
-        itemCount: data.length,
+        itemCount: list1.length,
       ),
     );
   }
@@ -296,7 +310,7 @@ class InventoryStockSearch extends SearchDelegate {
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => ExpansionTile(
-          title: Text(list[index]),
+          title: Text(list[index],style: TextStyle(color: Colors.black)),
           children: [
             this.getStockList(context),
           ],
@@ -352,7 +366,7 @@ class InventoryStockSearch extends SearchDelegate {
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                    titlelist[index],
+                                      Titlelist[index],
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
@@ -582,7 +596,11 @@ class InventoryStockSearch extends SearchDelegate {
           ),
         ),
       ),
-      itemCount: titlelist.length,
+      itemCount: Titlelist.length,
     );
   }
+
+
+  
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   

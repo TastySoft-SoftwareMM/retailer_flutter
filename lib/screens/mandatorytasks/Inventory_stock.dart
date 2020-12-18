@@ -43,7 +43,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
         actions: [IconButton(icon: Icon(Icons.search), onPressed: () {
            showSearch(
                     context: context,
-                    delegate: InventoryStockSearch(
+                    delegate: InventorystockSearch(
                       'search',
                       mainList,
                     
@@ -83,7 +83,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
           iconColor: Colors.black,
           title: Text(
             data[index],
-            style: Style.headingTextStyle,
+            style: TextStyle(color: Colors.black),
           ),
           children: [
             getSubTile(),
@@ -102,7 +102,7 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
         itemBuilder: (context, index) => ExpansionTile(
           title: Text(
             list[index],
-            style: Style.headingTextStyle,
+            style: TextStyle(color: Colors.black),
           ),
           children: [
             getStockList(),
