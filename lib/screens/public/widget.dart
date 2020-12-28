@@ -495,22 +495,30 @@ Future<Position> getCurrentLocation(BuildContext context) async {
       } else if (permission == LocationPermission.always) {
         await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.best,
-        ).then((value) => position = value).timeout(Duration(seconds: 15),
-            onTimeout: () {
+        ).then((value) {
+          if (value == null) {
+            position = Position(latitude: 22.9113776, longitude: 96.4824845);
+          } else {
+            position = value;
+          }
+        }).timeout(Duration(seconds: 15), onTimeout: () {
           getToast(context, "failed to get location.Please try again !");
           Navigator.pop(context, true);
-          return position;
         });
       }
     });
   } else {
     await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.best,
-    ).then((value) => position = value).timeout(Duration(seconds: 15),
-        onTimeout: () {
+    ).then((value) {
+      if (value == null) {
+        position = Position(latitude: 22.9113776, longitude: 96.4824845);
+      } else {
+        position = value;
+      }
+    }).timeout(Duration(seconds: 15), onTimeout: () {
       getToast(context, "failed to get location.Please try again !");
       Navigator.pop(context, true);
-      return position;
     });
   }
 

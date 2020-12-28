@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:retailer/custom/custom_expansion_title.dart';
 import '../../style/theme.dart' as Style;
-import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
-    as customwithslidable;
 
 class InventorystockSearch extends SearchDelegate {
   List<String> litems = [
@@ -9,8 +8,8 @@ class InventorystockSearch extends SearchDelegate {
     "unbake",
     "overbake",
   ];
-   final List list1 = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
-  List<String> Titlelist = [
+  final List list1 = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
+  List<String> titlelist = [
     'Sp_Daily_Butter Bread',
     'SP_Milk Cream Roll ',
     'SP_Daily Cheese Spread',
@@ -24,15 +23,14 @@ class InventorystockSearch extends SearchDelegate {
   ];
   List<String> list = ['Bread', 'Pastries', 'Cake'];
   var items = [];
-  var value1="All";
-  var value2='Bread';
-  var value3='bake';
+  var value1 = "All";
+  var value2 = 'Bread';
+  var value3 = 'bake';
   var colorcheck;
-  bool check ;
+  bool check;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
 
-  
   @override
   ThemeData appBarTheme(BuildContext context) {
     if (qtyController.text.isEmpty) {
@@ -125,7 +123,7 @@ class InventorystockSearch extends SearchDelegate {
           child: Column(
         children: [
           dropDown(context),
-          Expanded(child:getMainExpansion()),
+          Expanded(child: getMainExpansion()),
         ],
       ));
     } else {
@@ -136,7 +134,7 @@ class InventorystockSearch extends SearchDelegate {
           child: Column(
         children: [
           dropDown(context),
-          Expanded(child:getMainExpansion()),
+          Expanded(child: getMainExpansion()),
         ],
       ));
     }
@@ -151,7 +149,7 @@ class InventorystockSearch extends SearchDelegate {
           width: width * .36,
           child: TextButton(
               onPressed: () {
-                getlistView(context,list1);
+                getlistView(context, list1);
               },
               child: Row(
                 children: [
@@ -168,7 +166,7 @@ class InventorystockSearch extends SearchDelegate {
           width: width * .32,
           child: TextButton(
               onPressed: () {
-                getlistView(context,list);
+                getlistView(context, list);
               },
               child: Row(
                 children: [
@@ -185,7 +183,7 @@ class InventorystockSearch extends SearchDelegate {
           width: width * .32,
           child: TextButton(
               onPressed: () {
-                getlistView(context,litems);
+                getlistView(context, litems);
               },
               child: Row(
                 children: [
@@ -202,7 +200,7 @@ class InventorystockSearch extends SearchDelegate {
     );
   }
 
-  Widget getlistView(BuildContext context,getlist) {
+  Widget getlistView(BuildContext context, getlist) {
     var alertDialog = AlertDialog(
       title: Text("Select Category"),
       content: Row(
@@ -213,7 +211,7 @@ class InventorystockSearch extends SearchDelegate {
     );
 
     showDialog(
-      barrierDismissible: false,
+        barrierDismissible: false,
         context: context,
         builder: (
           BuildContext context,
@@ -232,10 +230,10 @@ class InventorystockSearch extends SearchDelegate {
             ],
           );
         });
+    return alertDialog;
   }
 
   Widget thelist(getlist) {
-  
     return Container(
       height: 210.0,
       width: 250.0,
@@ -258,24 +256,23 @@ class InventorystockSearch extends SearchDelegate {
                       color: Colors.grey,
                     ),
               onTap: () {
-                if (getlist== list1 ) {
-                  value1= list1[index];
-                } else if(getlist == list) {
+                if (getlist == list1) {
+                  value1 = list1[index];
+                } else if (getlist == list) {
                   value2 = list[index];
-                }else if(getlist== litems){
+                } else if (getlist == litems) {
                   value3 = litems[index];
                 }
 
-                if(getlist== list1){
-                  colorcheck=value1;
-                }else if(getlist== list){
-                  colorcheck=value2;
-                }else if(getlist== litems){
-                  colorcheck=value3;
+                if (getlist == list1) {
+                  colorcheck = value1;
+                } else if (getlist == list) {
+                  colorcheck = value2;
+                } else if (getlist == litems) {
+                  colorcheck = value3;
                 }
-                
-                
-                check =false;
+
+                check = false;
                 Navigator.pop(context, true);
               },
             ),
@@ -289,12 +286,12 @@ class InventorystockSearch extends SearchDelegate {
     return Container(
       padding: EdgeInsets.only(top: 8, left: 5, right: 5),
       child: ListView.builder(
-        itemBuilder: (context, index) => customwithslidable.ExpansionTitle(
+        itemBuilder: (context, index) => ExpansionTitle(
           backgroundColor: Colors.deepOrange[50],
           initiallyExpanded: false,
           headerBackgroundColor: Colors.red[100],
           iconColor: Colors.black,
-          title: Text(list1[index],style: TextStyle(color: Colors.black)),
+          title: Text(list1[index], style: TextStyle(color: Colors.black)),
           children: [
             getSubTile(),
           ],
@@ -310,7 +307,7 @@ class InventorystockSearch extends SearchDelegate {
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) => ExpansionTile(
-          title: Text(list[index],style: TextStyle(color: Colors.black)),
+          title: Text(list[index], style: TextStyle(color: Colors.black)),
           children: [
             this.getStockList(context),
           ],
@@ -366,7 +363,7 @@ class InventorystockSearch extends SearchDelegate {
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                      Titlelist[index],
+                                    titlelist[index],
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
@@ -596,11 +593,7 @@ class InventorystockSearch extends SearchDelegate {
           ),
         ),
       ),
-      itemCount: Titlelist.length,
+      itemCount: titlelist.length,
     );
   }
-
-
-  
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   

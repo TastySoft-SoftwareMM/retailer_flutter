@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:retailer/custom/custom_expansion_tile_slidable.dart';
 import '../../style/theme.dart' as Style;
-import 'package:retailer/custom/custom_expansion_tile_slidable.dart'
-    as customwithslidable;
 
 class InventorySearch extends SearchDelegate {
   List<String> litems = [
@@ -18,8 +17,8 @@ class InventorySearch extends SearchDelegate {
     "overbake",
     "lowbake"
   ];
-   final List data = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
-  List<String> Titlelist = [
+  final List data = ["Baked goods", "Lotte", "Soft drinks and others", "DD"];
+  List<String> titlelist = [
     'Sp_Daily_Butter Bread',
     'SP_Milk Cream Roll ',
     'SP_Daily Cheese Spread',
@@ -33,12 +32,11 @@ class InventorySearch extends SearchDelegate {
   ];
   List<String> list = ['Bread', 'Pastries', 'Cake'];
   var items = [];
-  var value="bake";
+  var value = "bake";
   bool check = false;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
 
-  
   @override
   ThemeData appBarTheme(BuildContext context) {
     if (qtyController.text.isEmpty) {
@@ -131,7 +129,7 @@ class InventorySearch extends SearchDelegate {
           child: Column(
         children: [
           dropDown(context),
-          Expanded(child:getMainExpansion()),
+          Expanded(child: getMainExpansion()),
         ],
       ));
     } else {
@@ -142,7 +140,7 @@ class InventorySearch extends SearchDelegate {
           child: Column(
         children: [
           dropDown(context),
-          Expanded(child:getMainExpansion()),
+          Expanded(child: getMainExpansion()),
         ],
       ));
     }
@@ -219,7 +217,7 @@ class InventorySearch extends SearchDelegate {
     );
 
     showDialog(
-      barrierDismissible: false,
+        barrierDismissible: false,
         context: context,
         builder: (
           BuildContext context,
@@ -238,10 +236,10 @@ class InventorySearch extends SearchDelegate {
             ],
           );
         });
+    return alertDialog;
   }
 
   Widget thelist() {
-  
     return Container(
       height: 210.0,
       width: 250.0,
@@ -278,7 +276,7 @@ class InventorySearch extends SearchDelegate {
     return Container(
       padding: EdgeInsets.only(top: 8, left: 5, right: 5),
       child: ListView.builder(
-        itemBuilder: (context, index) => customwithslidable.ExpansionTitle(
+        itemBuilder: (context, index) => ExpansionTitle(
           backgroundColor: Colors.deepOrange[50],
           initiallyExpanded: false,
           headerBackgroundColor: Colors.red[100],
@@ -355,7 +353,7 @@ class InventorySearch extends SearchDelegate {
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                      Titlelist[index],
+                                    titlelist[index],
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
@@ -585,7 +583,7 @@ class InventorySearch extends SearchDelegate {
           ),
         ),
       ),
-      itemCount: Titlelist.length,
+      itemCount: titlelist.length,
     );
   }
-}                  
+}
