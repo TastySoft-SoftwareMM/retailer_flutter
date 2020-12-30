@@ -2,14 +2,21 @@ class Photo {
   int _id;
   String _photo;
   String _shopSysKey;
-  Photo(this._photo, this._shopSysKey);
+  String _activeTaskCode;
 
-  Photo.withId(this._id, this._photo, this._shopSysKey);
+  Photo(this._photo, this._shopSysKey, this._activeTaskCode);
+
+  Photo.withId(this._id, this._photo, this._shopSysKey, this._activeTaskCode);
   int get id => _id;
   String get photo => _photo;
   String get shopSysKey => _shopSysKey;
+  String get testCode => _activeTaskCode;
   set getPhoto(String newPhoto) {
     this._photo = newPhoto;
+  }
+
+  set getTestCode(String newTestCode) {
+    this._activeTaskCode = newTestCode;
   }
 
   set getshopSysKey(String newshopSysKey) {
@@ -23,6 +30,7 @@ class Photo {
     }
     map['photo'] = _photo;
     map['shopSysKey'] = _shopSysKey;
+    map['activeTaskCode'] = _activeTaskCode;
     return map;
   }
 
@@ -30,5 +38,6 @@ class Photo {
     this._id = map['id'];
     this._photo = map['photo'];
     this._shopSysKey = map['shopSysKey'];
+    this._activeTaskCode = map['activeTaskCode'];
   }
 }

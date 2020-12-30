@@ -128,98 +128,103 @@ class _MainDrawerState extends State<MainDrawer> {
               TextStyle(fontSize: 18, fontWeight: FontWeight.w500, height: 1),
         ),
         titlePadding: EdgeInsets.only(top: 20, left: 8),
-        content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-          return Column(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListView.builder(
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) => ListTile(
-                        leading: selected == index + 1
-                            ? Icon(
-                                Icons.radio_button_checked,
-                                color: Style.Colors.mainColor,
-                              )
-                            : Icon(Icons.radio_button_off),
-                        title: Text(model.shopsByUser[index].shopname),
-                        onTap: () {
-                          setState(() {
-                            selected = index + 1;
-                          });
-                        },
-                      ),
-                      itemCount: model.shopsByUser.length ?? 0,
-                    )
-                  ],
+        content: Container(
+          height: MediaQuery.of(context).size.height*0.5,
+          width: MediaQuery.of(context).size.width,
+          child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height*0.5-60,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => ListTile(
+                      leading: selected == index + 1
+                          ? Icon(
+                              Icons.radio_button_checked,
+                              color: Style.Colors.mainColor,
+                            )
+                          : Icon(Icons.radio_button_off),
+                      title: Text(model.shopsByUser[index].shopname),
+                      onTap: () {
+                        setState(() {
+                          selected = index + 1;
+                        });
+                      },
+                    ),
+                    itemCount: model.shopsByUser.length ?? 0,
+                  ),
                 ),
-              ),
-              Spacer(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Spacer(),
-                  Container(
-                    height: 40,
-                    width: 110,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Style.Colors.mainColor, width: 1.5),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
-                        child: Center(
-                          child: Text('Cancel',
-                              style: TextStyle(
-                                  color: Style.Colors.mainColor,
-                                  fontWeight: FontWeight.w500)),
-                        )),
-                  ),
-                  Spacer(),
-                  Container(
-                    height: 40,
-                    width: 110,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Style.Colors.mainColor, width: 1.5),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: FlatButton(
-                        onPressed: () async {
-                          if (selected != 0) {
-                            Navigator.pop(context, true);
-                            // showLoading();
-                            await model
-                                .addActiveShop(model.shopsByUser[selected - 1]);
+                Spacer(),
+                Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Spacer(),
+                      Container(
+                        height: 40,
+                        width: 110,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Style.Colors.mainColor, width: 1.5),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: Center(
+                              child: Text('Cancel',
+                                  style: TextStyle(
+                                      color: Style.Colors.mainColor,
+                                      fontWeight: FontWeight.w500)),
+                            )),
+                      ),
+                      Spacer(),
+                      Container(
+                        height: 40,
+                        width: 110,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Style.Colors.mainColor, width: 1.5),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: FlatButton(
+                            onPressed: () async {
+                              if (selected != 0) {
+                                Navigator.pop(context, true);
+                                // showLoading();
+                                await model.addActiveShop(
+                                    model.shopsByUser[selected - 1]);
 
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OrderListScreen()));
-                          } else {
-                            getToast(context, 'Select Shop');
-                          }
-                        },
-                        child: Center(
-                          child: Text(
-                            'Select',
-                            style: TextStyle(
-                                color: Style.Colors.mainColor,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        )),
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            OrderListScreen()));
+                              } else {
+                                getToast(context, 'Select Shop');
+                              }
+                            },
+                            child: Center(
+                              child: Text(
+                                'Select',
+                                style: TextStyle(
+                                    color: Style.Colors.mainColor,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            )),
+                      ),
+                      Spacer(),
+                    ],
                   ),
-                  Spacer(),
-                ],
-              ),
-            ],
-          );
-        }),
+                ),
+              ],
+            );
+          }),
+        ),
         contentPadding:
             EdgeInsets.only(left: 15, top: 10, right: 10, bottom: 15),
       ),

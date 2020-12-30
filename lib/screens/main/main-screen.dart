@@ -69,8 +69,8 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget getBody() {
     Widget widget;
-    if (model.allShopSaleList.shopsByTeam.length > 0 ||
-        model.allShopSaleList.shopsByUser.length > 0) {
+    if (model.allShopSaleList.shopsByTeam != null &&
+        model.allShopSaleList.shopsByUser != null) {
       widget = Container(
         height: height,
         child: Column(
@@ -191,13 +191,15 @@ class _MainScreenState extends State<MainScreen> {
           loading = false;
         });
       } else {
-        // await model.login("09788571913", "123");
-        await model.getMainList().timeout(Duration(seconds: 10), onTimeout: () {
-          getToast(context, "Internet connection error");
-          setState(() {
-            loading = false;
+        if (model.getLoginDetail != null) {
+          await model.getMainList().timeout(Duration(seconds: 10),
+              onTimeout: () {
+            getToast(context, "Internet connection error");
+            setState(() {
+              loading = false;
+            });
           });
-        });
+        }
 
         setState(() {
           loading = false;

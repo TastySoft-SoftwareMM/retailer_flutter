@@ -62,7 +62,7 @@ class ViewModelFunction with ChangeNotifier {
         statusCode = response.statusCode;
       }
     } else {
-      statusCode = 404;
+      statusCode = 0;
     }
 
     notifyListeners();
@@ -262,7 +262,7 @@ class ViewModelFunction with ChangeNotifier {
   Future<http.Response> httpRequest(urlname, param, String ordId) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     var mainUrl = preferences.getString('mainUrl') ??
-        "http://52.255.142.115:8084/madbrepository/";
+        "http://52.253.88.71:8084/madbrepository/";
 
     try {
       String url = mainUrl + urlname;

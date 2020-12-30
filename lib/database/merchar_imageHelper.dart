@@ -12,6 +12,8 @@ class ImageDbHelper {
   static const String _id = 'id';
   static const String photo = 'photo';
   static const String shopSysKey = 'shopSysKey';
+  static const String activeTaskCode = 'activeTaskCode';
+
   ImageDbHelper._createInstane();
   factory ImageDbHelper() {
     if (_imageDbHelper == null) {
@@ -41,17 +43,17 @@ class ImageDbHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE $table($_id INTEGER PRIMARY KEY AUTOINCREMENT,$photo TEXT,'
-        '$shopSysKey TEXT)');
+        'CREATE TABLE $table($_id INTEGER PRIMARY KEY AUTOINCREMENT,$photo TEXT,$shopSysKey TEXT,$activeTaskCode TEXT)');
   }
 
-  Future<List<Map<String, dynamic>>> getPhotMapList(String activeSysKey) async {
+  Future<List<Map<String, dynamic>>> getPhotMapList(
+      String activeSysKey, String getActiveTaskCode) async {
     Database db = await this.database;
 //  var result = await db.rawQuery('SELECTE * FROM $noteTable order by $colPriority ASC');
     var result = await db.query(table,
         orderBy: '$_id DESC',
-        where: '$shopSysKey = ?',
-        whereArgs: [activeSysKey]);
+        where: '$shopSysKey = ? AND $activeTaskCode = ?',
+        whereArgs: [activeSysKey, getActiveTaskCode]);
     return result;
   }
 
@@ -84,8 +86,9 @@ class ImageDbHelper {
     return result;
   }
 
-  Future<List<Photo>> getPhotoList(String activeSysKey) async {
-    var noteMapList = await getPhotMapList(activeSysKey);
+  Future<List<Photo>> getPhotoList(
+      String activeSysKey, String activeTaskCode) async {
+    var noteMapList = await getPhotMapList(activeSysKey, activeTaskCode);
     int count = noteMapList.length;
     List<Photo> noteList = List<Photo>();
     for (int i = 0; i < count; i++) {

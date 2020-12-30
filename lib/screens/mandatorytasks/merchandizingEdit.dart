@@ -185,11 +185,11 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     loading(context);
     photoList.forEach((element) async {
       if (element.id == null) {
-        await imageDbHelper
-            .insertPhoto(Photo(element.photo, model.activeShop.shopsyskey));
+        await imageDbHelper.insertPhoto(Photo(element.photo,
+            model.activeShop.shopsyskey, widget._taskList.taskCode));
       } else {
-        await imageDbHelper.updatePhoto(Photo.withId(
-            element.id, element.photo, model.activeShop.shopsyskey));
+        await imageDbHelper.updatePhoto(Photo.withId(element.id, element.photo,
+            model.activeShop.shopsyskey, widget._taskList.taskCode));
       }
     });
     getToast(context, "Save Successful");
@@ -228,8 +228,8 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
   getPhotoList() async {
     final Future<Database> db = imageDbHelper.initializedDatabase();
     await db.then((value) {
-      var photoListFuture =
-          imageDbHelper.getPhotoList(model.activeShop.shopsyskey);
+      var photoListFuture = imageDbHelper.getPhotoList(
+          model.activeShop.shopsyskey, widget._taskList.taskCode);
       photoListFuture.then((plist) {
         setState(() {
           this.photoList = plist;
@@ -240,14 +240,15 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
   }
 
   Future getMultipleImage() async {
-    var result = await FilePicker.getMultiFile(type: FileType.image);
+    var result = await FilePicker.getMultiFile(
+      type: FileType.image,
+      allowCompression: true,
+    );
     if (result != null) {
       result.forEach((element) async {
-        await CompressImage.compress(
-            imageSrc: element.path, desiredQuality: 20);
         setState(() {
           photoList.add(Photo(Utility.base64String(element.readAsBytesSync()),
-              model.activeShop.shopsyskey));
+              model.activeShop.shopsyskey, widget._taskList.taskCode));
         });
       });
     }
@@ -261,7 +262,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
       await CompressImage.compress(imageSrc: picked.path, desiredQuality: 20);
       setState(() {
         photoList.add(Photo(Utility.base64String(picked.readAsBytesSync()),
-            model.activeShop.shopsyskey));
+            model.activeShop.shopsyskey, widget._taskList.taskCode));
       });
     }
   }

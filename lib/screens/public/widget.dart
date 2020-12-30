@@ -493,33 +493,35 @@ Future<Position> getCurrentLocation(BuildContext context) async {
         getToast(context, "Please allow location permission");
         Navigator.pop(context, true);
       } else if (permission == LocationPermission.always) {
-        await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best,
-        ).then((value) {
-          if (value == null) {
-            position = Position(latitude: 22.9113776, longitude: 96.4824845);
-          } else {
+        try {
+          await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+          ).then((value) {
             position = value;
-          }
-        }).timeout(Duration(seconds: 15), onTimeout: () {
-          getToast(context, "failed to get location.Please try again !");
-          Navigator.pop(context, true);
-        });
+          }).timeout(Duration(seconds: 15), onTimeout: () {
+            getToast(context, "failed to get location.Please try again !");
+            Navigator.pop(context, true);
+          });
+        } catch (e) {
+          position = Position(longitude: 22.3453939, latitude: 96.34993439);
+
+          print("err = $e");
+        }
       }
     });
   } else {
-    await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.best,
-    ).then((value) {
-      if (value == null) {
-        position = Position(latitude: 22.9113776, longitude: 96.4824845);
-      } else {
+    try {
+      await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+      ).then((value) {
         position = value;
-      }
-    }).timeout(Duration(seconds: 15), onTimeout: () {
-      getToast(context, "failed to get location.Please try again !");
-      Navigator.pop(context, true);
-    });
+      }).timeout(Duration(seconds: 15), onTimeout: () {
+        getToast(context, "failed to get location.Please try again !");
+        Navigator.pop(context, true);
+      });
+    } catch (e) {
+      position = Position(longitude: 22.3453939, latitude: 96.34993439);
+    }
   }
 
   return position;

@@ -316,6 +316,9 @@ class _LoginState extends State<Login> {
         model.statusCode == 502) {
       getToast(context, 'Server error !. Try again later');
       Navigator.pop(context, true);
+    } else if (model.statusCode == 0) {
+      getToast(context, 'Internet connection error !.');
+      Navigator.pop(context, true);
     } else {
       getToast(context, "Server error !. Try again later");
       Navigator.pop(context, true);
