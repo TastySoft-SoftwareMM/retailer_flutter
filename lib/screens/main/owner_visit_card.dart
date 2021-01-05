@@ -14,7 +14,6 @@ import '../../style/theme.dart' as Style;
 import 'package:flutter_svg/flutter_svg.dart';
 
 class StoreOwnerVisitCard extends StatefulWidget {
-  
   @override
   _StoreOwnerVisitCardState createState() => _StoreOwnerVisitCardState();
 }
@@ -23,6 +22,7 @@ class _StoreOwnerVisitCardState extends State<StoreOwnerVisitCard> {
   bool three;
   bool isSwitched = false;
   ViewModelFunction model;
+
   @override
   void initState() {
     super.initState();

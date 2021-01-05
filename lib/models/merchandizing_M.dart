@@ -35,6 +35,7 @@ class ListModel {
   final String shopSysKey;
 
   final String campaignSysKey;
+
   // final String userType;
   final String campaignsyskey;
   final String userSysKey;
@@ -150,6 +151,7 @@ class TaskList {
       this.usersyskey,
       this.syncStatus,
       this.syncBatch});
+
   factory TaskList.fromJson(Map<String, dynamic> json) {
     return TaskList(
         syskey: json["syskey"],

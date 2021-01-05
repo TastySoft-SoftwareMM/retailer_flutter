@@ -15,6 +15,7 @@ class ImageDbHelper {
   static const String activeTaskCode = 'activeTaskCode';
 
   ImageDbHelper._createInstane();
+
   factory ImageDbHelper() {
     if (_imageDbHelper == null) {
       _imageDbHelper = ImageDbHelper._createInstane();
@@ -78,10 +79,15 @@ class ImageDbHelper {
     return result;
   }
 
+  Future<int> deleteAllPhoto() async {
+    Database db = await this.database;
+    var result = await db.rawDelete('DELETE FROM $table');
+    return result;
+  }
+
   Future<int> getCount() async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x =
-        await db.rawQuery('SELECT COUNT (*) from $table');
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $table');
     int result = Sqflite.firstIntValue(x);
     return result;
   }

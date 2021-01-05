@@ -25,6 +25,7 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
   bool three;
   bool isSwitched = false;
   ViewModelFunction model;
+
   @override
   void initState() {
     super.initState();

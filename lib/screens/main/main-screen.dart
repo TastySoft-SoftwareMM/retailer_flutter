@@ -20,6 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   var width;
   var height;
   bool loading = true;
+
   @override
   @override
   Widget build(BuildContext context) {

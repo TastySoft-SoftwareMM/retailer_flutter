@@ -26,6 +26,7 @@ class ShopByListM {
   final String wardid;
   final String tranid;
   final Status status;
+
   ShopByListM({
     this.isSaleOrderLessRouteShop,
     this.address,
@@ -117,6 +118,7 @@ class Task {
   final String merchandizing;
   final String orderPlacement;
   final String print;
+
   Task({
     this.inventoryCheck,
     this.merchandizing,

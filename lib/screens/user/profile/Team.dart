@@ -13,6 +13,7 @@ class TeamWidget extends StatefulWidget {
 
 class _TeamWidgetState extends State<TeamWidget> {
   ViewModelFunction model;
+
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);

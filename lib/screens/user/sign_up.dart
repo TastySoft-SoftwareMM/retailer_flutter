@@ -23,6 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
   ViewModelFunction newLoginViewModel;
 
   TextEditingController comfirmpasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     newLoginViewModel = Provider.of<ViewModelFunction>(context);

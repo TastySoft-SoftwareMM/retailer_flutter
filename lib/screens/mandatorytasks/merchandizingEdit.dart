@@ -3,6 +3,7 @@ import 'package:compressimage/compressimage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:retailer/database/merchar_imageHelper.dart';
 import 'package:retailer/models/image_sqflite_M.dart';
 import 'package:retailer/models/merchandizing_M.dart';
@@ -15,6 +16,7 @@ import 'package:provider/provider.dart';
 
 class MerchandizingEdit extends StatefulWidget {
   final TaskList _taskList;
+
   MerchandizingEdit(this._taskList);
   @override
   _MerchandizingEditState createState() => _MerchandizingEditState();
@@ -77,23 +79,23 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                 mainAxisSpacing: 4,
                 children: List.generate(photoList.length + 1, (index) {
                   return Container(
-                    child: index + 1 > photoList.length
-                        ? InkWell(
-                            onTap: () {
-                              _settingModalBottomSheet(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.grey[300],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '+',
-                                  style: TextStyle(
-                                      fontSize: 74,
-                                      fontWeight: FontWeight.w200,
-                                      color: Colors.white),
+                    child: index + 1 > photoList.length ?
+                    InkWell(
+                      onTap: () {
+                        _settingModalBottomSheet(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.grey[300],
+                        ),
+                        child: Center(
+                          child: Text(
+                            '+',
+                            style: TextStyle(
+                                fontSize: 74,
+                                fontWeight: FontWeight.w200,
+                                color: Colors.white),
                                 ),
                               ),
                             ),
@@ -124,16 +126,21 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                     child: InkWell(
                                       onTap: () async {
                                         if (photoList[index].id != null) {
-                                          await imageDbHelper
-                                              .deletePhoto(photoList[index].id);
-                                          setState(() {
-                                            photoList.remove(photoList[index]);
-                                          });
-                                        } else {
+                                          await imageDbHelper.deletePhoto(photoList[index].id);
                                           setState(() {
                                             photoList.remove(photoList[index]);
                                           });
                                         }
+                                        // if (getDate != null) {
+                                        //   imageDbHelper.deleteAllPhoto();
+                                        //   setState(() {
+                                        //     photoList.remove(photoList[index]);
+                                        //   });
+                                        // } else {
+                                        //   setState(() {
+                                        //     photoList.remove(photoList[index]);
+                                        //   });
+                                        // }
                                       },
                                       child: CircleAvatar(
                                         radius: 12,
@@ -145,9 +152,9 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                         ),
                                       ),
                                     )),
-                              ],
-                            ),
-                          ),
+                        ],
+                      ),
+                    ),
                   );
                 }),
               ),
@@ -270,7 +277,9 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
 
 class ViewImage extends StatelessWidget {
   final File _file;
+
   ViewImage(this._file);
+
   @override
   Widget build(BuildContext context) {
     return Container(

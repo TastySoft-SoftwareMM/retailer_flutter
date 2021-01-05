@@ -4,6 +4,7 @@ class ShopByListVM {
   ShopByListM _shopByListM;
 
   ShopByListVM({ShopByListM shopByListM}) : _shopByListM = shopByListM;
+
   String get isSaleOrderLessRouteShop {
     return _shopByListM.isSaleOrderLessRouteShop;
   }
@@ -111,7 +112,9 @@ class ShopByListVM {
 
 class StatusVM {
   Status _status;
+
   StatusVM({Status status}) : _status = status;
+
   String get status {
     return _status.currentType;
   }
@@ -123,7 +126,9 @@ class StatusVM {
 
 class TaskVm {
   Task _task;
+
   TaskVm({Task task}) : _task = task;
+
   String get merchandizing {
     return _task.merchandizing;
   }

@@ -13,6 +13,7 @@ class CartItemScreen extends StatefulWidget {
 class _CartItemScreenState extends State<CartItemScreen> {
   TextEditingController qtyController = TextEditingController();
   var width;
+
   @override
   Widget build(BuildContext context) {
     if (qtyController.text.isEmpty) {
@@ -206,8 +207,8 @@ class _CartItemScreenState extends State<CartItemScreen> {
       child: Card(
         color: Colors.transparent,
         elevation: 3,
-              child: ExpansionTitle(
-                backgroundColor: Colors.white,
+        child: ExpansionTitle(
+          backgroundColor: Colors.white,
           initiallyExpanded: false,
           headerBackgroundColor: Style.Colors.mainColor,
           iconColor: Style.Colors.textColor,
@@ -434,8 +435,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
                                               bottom: 8,
                                               left: 4),
                                           child: ImageIcon(
-                                            AssetImage(
-                                                'assets/icon/minus.png'),
+                                            AssetImage('assets/icon/minus.png'),
                                             color: Style.Colors.mainColor,
                                             size: 16,
                                           ),
@@ -443,8 +443,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
                                       ),
                                     ),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 5),
+                                      padding: const EdgeInsets.only(bottom: 5),
                                       child: Container(
                                         width: secWidth * 0.15,
                                         child: TextField(

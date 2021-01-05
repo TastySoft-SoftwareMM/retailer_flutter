@@ -27,6 +27,7 @@ class DataSearch extends SearchDelegate {
                 letterSpacing: 1));
   List<dynamic> suggestion;
   List<dynamic> result;
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [

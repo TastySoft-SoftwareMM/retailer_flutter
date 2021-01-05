@@ -19,6 +19,7 @@ class MerchandizingScreen extends StatefulWidget {
 class _MerchandizingScreenState extends State<MerchandizingScreen> {
   ViewModelFunction model;
   bool loading = true;
+
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context, listen: false);

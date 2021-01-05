@@ -7,14 +7,15 @@ class LoginModel {
   final String teamSyskey;
   final String merchandizer;
 
-  LoginModel(
-      {this.userType,
-      this.userName,
-      this.userId,
-      this.syskey,
-      this.orgId,
-      this.teamSyskey,
-      this.merchandizer});
+  LoginModel({
+    this.userType,
+    this.userName,
+    this.userId,
+    this.syskey,
+    this.orgId,
+    this.teamSyskey,
+    this.merchandizer,
+  });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
     return LoginModel(

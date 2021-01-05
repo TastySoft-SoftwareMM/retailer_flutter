@@ -23,11 +23,11 @@
 //           elevation: 0,
 //           backgroundColor: Colors.transparent,
 //           child: new Center(
-          //   child: new CircularProgressIndicator(
-          //       // backgroundColor: Colors.black12,
-          //       valueColor:
-          //           AlwaysStoppedAnimation<Color>(Style.Colors.mainColor)),
-          // ),
+//   child: new CircularProgressIndicator(
+//       // backgroundColor: Colors.black12,
+//       valueColor:
+//           AlwaysStoppedAnimation<Color>(Style.Colors.mainColor)),
+// ),
 //         );
 //       },
 //     );

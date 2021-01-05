@@ -24,6 +24,7 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
   var width;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;

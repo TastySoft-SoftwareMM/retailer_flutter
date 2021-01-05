@@ -14,6 +14,7 @@ import 'package:retailer/style/theme.dart' as Style;
 var date = DateTime.now();
 DateFormat dateFormat = DateFormat("yyyyMMdd");
 String getDate = dateFormat.format(date);
+
 getToast(BuildContext context, String message) {
   return showToast(message,
       context: context,
@@ -214,8 +215,8 @@ checkInDialog(
                                   ];
                                 },
                                 isExpanded: true,
-                                hint: Text(
-                                    'Select Type'), // Not necessary for Option 1
+                                hint: Text('Select Type'),
+                                // Not necessary for Option 1
                                 value: _checkInList[0],
                                 onChanged: (newValue) {
                                   setState(() {

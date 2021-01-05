@@ -54,6 +54,7 @@ class InventorySearch extends SearchDelegate {
 
   final title;
   final List<String> mainList;
+
   InventorySearch(this.title, this.mainList)
       : super(
             searchFieldLabel: title,
@@ -64,6 +65,7 @@ class InventorySearch extends SearchDelegate {
                 letterSpacing: 1));
   List<String> suggestion;
   List<String> result;
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [

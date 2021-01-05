@@ -3,6 +3,7 @@ import 'package:retailer/models/shopByListModel.dart';
 
 class ShopDetailScreen extends StatefulWidget {
   final ShopByListM shopByListM;
+
   ShopDetailScreen(this.shopByListM);
 
   @override
@@ -12,9 +13,12 @@ class ShopDetailScreen extends StatefulWidget {
 
 class _ShopDetailScreenState extends State<ShopDetailScreen> {
   final ShopByListM shopByListM;
+
   _ShopDetailScreenState(this.shopByListM);
+
   double height;
   double width;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -48,7 +52,10 @@ class _ShopDetailScreenState extends State<ShopDetailScreen> {
         children: [
           Container(
             width: width * 0.25,
-            child: Text(title,style: TextStyle(fontSize: 16),),
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 16),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 3),
@@ -61,7 +68,12 @@ class _ShopDetailScreenState extends State<ShopDetailScreen> {
           Spacer(),
           Padding(
             padding: const EdgeInsets.only(top: 5),
-            child: Container(width: width * 0.6, child: Text(value,style: TextStyle(fontSize: 16),)),
+            child: Container(
+                width: width * 0.6,
+                child: Text(
+                  value,
+                  style: TextStyle(fontSize: 16),
+                )),
           ),
         ],
       ),

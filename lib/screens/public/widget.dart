@@ -4,13 +4,16 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:retailer/database/merchar_imageHelper.dart';
 import 'package:retailer/models/checkIn_status_task.dart';
+import 'package:retailer/models/image_sqflite_M.dart';
 import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/main/owner_visit_card.dart';
 import 'package:retailer/screens/main/sale_person_visit_card.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'package:retailer/style/theme.dart' as Style;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom/custom_expansion_title.dart' as custom;
 
@@ -90,17 +93,16 @@ class Dialogs {
               elevation: 0,
               backgroundColor: Colors.transparent,
               children: <Widget>[
-                Center(
-                    child: CircularProgressIndicator(
+              Center(
+                child: CircularProgressIndicator(
                   backgroundColor: Colors.white,
                   strokeWidth: 2,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-                ))
-              ]);
-        });
+                  valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+            ))
+          ]);
+      });
+    }
   }
-}
 
 checkInDialog(
   BuildContext context,
@@ -218,10 +220,10 @@ checkInDialog(
                               );
                             }
                           }),
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -247,9 +249,7 @@ checkInDialog(
                               child: DropdownButtonFormField(
                                 decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.white))),
-
+                                        borderSide: BorderSide(color: Colors.white))),
                                 selectedItemBuilder: (value) {
                                   return [
                                     _selectedType == null
@@ -259,8 +259,8 @@ checkInDialog(
                                   ];
                                 },
                                 isExpanded: true,
-                                hint: Text(
-                                    'Select Type'), // Not necessary for Option 1
+                                hint: Text('Select Type'),
+                                // Not necessary for Option 1
                                 value: _checkInList[0],
                                 onChanged: (newValue) {
                                   setState(() {

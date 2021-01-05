@@ -26,6 +26,7 @@ class ViewModelFunction with ChangeNotifier {
   ShopByListM _activeShop;
 
   CheckInStatus get checkInStatus => _checkInStatus;
+
   ShopByListM get activeShop => _activeShop;
 
   set checkInStatus(CheckInStatus setposition) {
@@ -50,7 +51,8 @@ class ViewModelFunction with ChangeNotifier {
 
   Future login(String userId, String pass) async {
     print("work");
-    param = jsonEncode({"userId": '$userId', "password": '$pass'});
+    param = jsonEncode(
+        {"userId": '$userId', "password": '$pass',});
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
     if (response != null) {
@@ -64,7 +66,6 @@ class ViewModelFunction with ChangeNotifier {
     } else {
       statusCode = 0;
     }
-
     notifyListeners();
   }
 
@@ -75,14 +76,11 @@ class ViewModelFunction with ChangeNotifier {
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       merchandizingM = MerchandizingM.fromJson(result);
-      this.listModel =
-          merchandizingM.list.map((el) => ListModel.fromJson(el)).toList();
-
+      this.listModel = merchandizingM.list.map((el) => ListModel.fromJson(el)).toList();
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
     }
-
     notifyListeners();
   }
 
@@ -123,7 +121,6 @@ class ViewModelFunction with ChangeNotifier {
         await httpRequest('main/reset/mit', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
       var result = json.decode(response.body);
-
       statusCode = response.statusCode;
       status = result['status'];
     } else {
@@ -219,27 +216,18 @@ class ViewModelFunction with ChangeNotifier {
 
   Future getMainList() async {
     this.allShopSaleList = await getMainScreenList(
-            spsysKey: getLoginDetail.syskey,
-            teamsysKey: getLoginDetail.teamSyskey,
-            userType: getLoginDetail.userType,
-            date: getDate,
-            orgId: getLoginDetail.orgId)
-        .timeout(Duration(seconds: 8), onTimeout: () {
+      spsysKey: getLoginDetail.syskey,
+      teamsysKey: getLoginDetail.teamSyskey,
+      userType: getLoginDetail.userType,
+      date: getDate,
+      orgId: getLoginDetail.orgId).timeout(Duration(seconds: 8), onTimeout: () {
       return null;
     });
-    this.shopsByTeam = allShopSaleList.shopsByTeam
-        .map((el) => ShopByListM.fromJson(el))
-        .toList();
-    this.shopsByUser = allShopSaleList.shopsByUser
-        .map((e) => ShopByListM.fromJson(e))
-        .toList();
+    this.shopsByTeam = allShopSaleList.shopsByTeam.map((el) => ShopByListM.fromJson(el)).toList();
+    this.shopsByUser = allShopSaleList.shopsByUser.map((e) => ShopByListM.fromJson(e)).toList();
   }
 
-  signUp(
-    String userName,
-    String phone,
-    String pass,
-  ) async {
+  signUp(String userName, String phone, String pass,) async {
     param = jsonEncode({
       "userId": phone,
       "userName": userName,
@@ -255,7 +243,6 @@ class ViewModelFunction with ChangeNotifier {
     } else {
       statusCode = response.statusCode;
     }
-
     notifyListeners();
   }
 
@@ -263,11 +250,9 @@ class ViewModelFunction with ChangeNotifier {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     var mainUrl = preferences.getString('mainUrl') ??
         "http://52.253.88.71:8084/madbrepository/";
-
     try {
       String url = mainUrl + urlname;
-      return http
-          .post(Uri.encodeFull(url), body: param, headers: {
+      return http.post(Uri.encodeFull(url), body: param, headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Content-Over": "$ordId",
@@ -280,11 +265,7 @@ class ViewModelFunction with ChangeNotifier {
   }
 
   Future<AllShopSaleList> getMainScreenList(
-      {String spsysKey,
-      String teamsysKey,
-      String userType,
-      String date,
-      String orgId}) async {
+      {String spsysKey, String teamsysKey, String userType, String date, String orgId}) async {
     param = jsonEncode({
       "spsyskey": "$spsysKey",
       "teamsyskey": "$teamsysKey",

@@ -9,21 +9,20 @@ class GetStock {
   final String packSizeSyskey;
   final String flavorSyskey;
 
-  GetStock(
-      {this.code,
-        this.desc,
-        this.vendorSyskey,
-        this.brandSyskey,
-        this.orgId,
-        this.categorySyskey,
-        this.packTypeSyskey,
-        this.packSizeSyskey,
-        this.flavorSyskey,
-      });
+  GetStock({
+    this.code,
+    this.desc,
+    this.vendorSyskey,
+    this.brandSyskey,
+    this.orgId,
+    this.categorySyskey,
+    this.packTypeSyskey,
+    this.packSizeSyskey,
+    this.flavorSyskey,
+  });
 
   factory GetStock.fromJson(Map<String, dynamic> json) {
     return GetStock(
-
       code: json['code'],
       desc: json['desc'],
       vendorSyskey: json['vendorSyskey'],

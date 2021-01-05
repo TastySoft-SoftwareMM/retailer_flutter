@@ -16,6 +16,7 @@ class _SyncDataState extends State<SyncData> {
   String _selectedType = 'Download';
   bool _isloading = false;
   double _value = 0.0;
+
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);
@@ -110,7 +111,8 @@ class _SyncDataState extends State<SyncData> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(5)),
                   child: RaisedButton(
-                    color: _isloading  ?Colors.red[300]: Style.Colors.mainColor,
+                    color:
+                        _isloading ? Colors.red[300] : Style.Colors.mainColor,
                     onPressed: () async {
                       if (_isloading == false) {
                         getConectivity().then((ConnectivityResult value) async {

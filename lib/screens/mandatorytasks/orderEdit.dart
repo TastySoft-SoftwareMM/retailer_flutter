@@ -16,6 +16,7 @@ class _OrderEditScreenState extends State<OrderEditScreen> {
   TextEditingController qtyController = TextEditingController();
   var width;
   ViewModelFunction modelFunction;
+
   @override
   Widget build(BuildContext context) {
     modelFunction = Provider.of<ViewModelFunction>(context);

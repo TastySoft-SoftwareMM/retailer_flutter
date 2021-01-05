@@ -10,6 +10,7 @@ class MainScreenSearch extends SearchDelegate {
   List<ShopByListM> shopList;
   List<ShopByListM> otherList;
   ViewModelFunction model;
+
   @override
   ThemeData appBarTheme(BuildContext context) {
     model = Provider.of<ViewModelFunction>(
@@ -26,6 +27,7 @@ class MainScreenSearch extends SearchDelegate {
   }
 
   final title;
+
   MainScreenSearch(
     this.title,
   ) : super(
@@ -35,6 +37,7 @@ class MainScreenSearch extends SearchDelegate {
                 color: Colors.white,
                 fontSize: 15,
                 letterSpacing: 1));
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [

@@ -29,6 +29,7 @@ class LoginViewModel {
     return _newLoginModel.userName;
   }
 
+
   String get userType {
     return _newLoginModel.userType;
   }

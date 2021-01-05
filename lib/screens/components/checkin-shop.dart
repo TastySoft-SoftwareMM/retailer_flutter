@@ -10,6 +10,7 @@ class CheckinShop extends StatefulWidget {
 
 class _CheckinShopState extends State<CheckinShop> {
   ViewModelFunction model;
+
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);

@@ -129,14 +129,14 @@ class _MainDrawerState extends State<MainDrawer> {
         ),
         titlePadding: EdgeInsets.only(top: 20, left: 8),
         content: Container(
-          height: MediaQuery.of(context).size.height*0.5,
+          height: MediaQuery.of(context).size.height * 0.5,
           width: MediaQuery.of(context).size.width,
           child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Column(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height*0.5-60,
+                  height: MediaQuery.of(context).size.height * 0.5 - 60,
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemBuilder: (context, index) => ListTile(

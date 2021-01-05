@@ -7,10 +7,15 @@ class Photo {
   Photo(this._photo, this._shopSysKey, this._activeTaskCode);
 
   Photo.withId(this._id, this._photo, this._shopSysKey, this._activeTaskCode);
+
   int get id => _id;
+
   String get photo => _photo;
+
   String get shopSysKey => _shopSysKey;
+
   String get testCode => _activeTaskCode;
+
   set getPhoto(String newPhoto) {
     this._photo = newPhoto;
   }

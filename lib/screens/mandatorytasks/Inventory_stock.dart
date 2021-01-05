@@ -40,15 +40,18 @@ class _InventoryStockAddPageState extends State<InventoryStockAddPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Stocks"),
-        actions: [IconButton(icon: Icon(Icons.search), onPressed: () {
-           showSearch(
+        actions: [
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
                     context: context,
                     delegate: InventorystockSearch(
                       'search',
                       mainList,
-                    
                     ));
-        })],
+              })
+        ],
       ),
       body: getMainExpansion(),
       bottomNavigationBar: Padding(
