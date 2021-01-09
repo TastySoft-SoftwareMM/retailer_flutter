@@ -30,13 +30,9 @@ class ListModel {
   final String t3;
   final String brandOwnerCode;
   final String brandOwnerName;
-
   final String createdDate;
   final String shopSysKey;
-
   final String campaignSysKey;
-
-  // final String userType;
   final String campaignsyskey;
   final String userSysKey;
   final List pictureList;

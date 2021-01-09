@@ -4,16 +4,13 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:retailer/database/merchar_imageHelper.dart';
 import 'package:retailer/models/checkIn_status_task.dart';
-import 'package:retailer/models/image_sqflite_M.dart';
 import 'package:retailer/models/shopByListModel.dart';
 import 'package:retailer/screens/main/owner_visit_card.dart';
 import 'package:retailer/screens/main/sale_person_visit_card.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'package:retailer/style/theme.dart' as Style;
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../custom/custom_expansion_title.dart' as custom;
 
@@ -93,16 +90,17 @@ class Dialogs {
               elevation: 0,
               backgroundColor: Colors.transparent,
               children: <Widget>[
-              Center(
-                child: CircularProgressIndicator(
+                Center(
+                    child: CircularProgressIndicator(
                   backgroundColor: Colors.white,
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-            ))
-          ]);
-      });
-    }
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                ))
+              ]);
+        });
   }
+}
 
 checkInDialog(
   BuildContext context,
@@ -220,10 +218,10 @@ checkInDialog(
                               );
                             }
                           }),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -249,7 +247,8 @@ checkInDialog(
                               child: DropdownButtonFormField(
                                 decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.white))),
+                                        borderSide:
+                                            BorderSide(color: Colors.white))),
                                 selectedItemBuilder: (value) {
                                   return [
                                     _selectedType == null
@@ -484,16 +483,16 @@ checkInDialog(
 
 Future<Position> getCurrentLocation(BuildContext context) async {
   Position position;
-  LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    await Geolocator.requestPermission()
-        .then((LocationPermission permission) async {
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        getToast(context, "Please allow location permission");
-        Navigator.pop(context, true);
-      } else if (permission == LocationPermission.always) {
-        try {
+  try {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      await Geolocator.requestPermission()
+          .then((LocationPermission permission) async {
+        if (permission == LocationPermission.denied ||
+            permission == LocationPermission.deniedForever) {
+          getToast(context, "Please allow location permission");
+          Navigator.pop(context, true);
+        } else if (permission == LocationPermission.always) {
           await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.best,
           ).then((value) {
@@ -502,15 +501,9 @@ Future<Position> getCurrentLocation(BuildContext context) async {
             getToast(context, "failed to get location.Please try again !");
             Navigator.pop(context, true);
           });
-        } catch (e) {
-          position = Position(longitude: 22.3453939, latitude: 96.34993439);
-
-          print("err = $e");
         }
-      }
-    });
-  } else {
-    try {
+      });
+    } else {
       await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
       ).then((value) {
@@ -519,9 +512,9 @@ Future<Position> getCurrentLocation(BuildContext context) async {
         getToast(context, "failed to get location.Please try again !");
         Navigator.pop(context, true);
       });
-    } catch (e) {
-      position = Position(longitude: 22.3453939, latitude: 96.34993439);
     }
+  } catch (e) {
+    position = Position(longitude: 22.3453939, latitude: 96.34993439);
   }
 
   return position;

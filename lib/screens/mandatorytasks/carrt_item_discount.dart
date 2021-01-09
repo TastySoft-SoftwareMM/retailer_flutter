@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/custom/custom_expansion_tile_slidable.dart';
 
-class cartItemDiscountScreen extends StatefulWidget {
+class CartItemDiscountScreen extends StatefulWidget {
   @override
-  _cartItemDiscountScreenState createState() => _cartItemDiscountScreenState();
+  _CartItemDiscountScreenState createState() => _CartItemDiscountScreenState();
 }
 
-class _cartItemDiscountScreenState extends State<cartItemDiscountScreen> {
+class _CartItemDiscountScreenState extends State<CartItemDiscountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

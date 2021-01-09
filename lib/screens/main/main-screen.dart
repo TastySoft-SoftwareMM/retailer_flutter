@@ -70,8 +70,8 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget getBody() {
     Widget widget;
-    if (model.allShopSaleList.shopsByTeam != null &&
-        model.allShopSaleList.shopsByUser != null) {
+    if (model.allShopSaleList.shopsByTeam.length > 0 ||
+        model.allShopSaleList.shopsByUser.length > 0) {
       widget = Container(
         height: height,
         child: Column(
@@ -192,6 +192,7 @@ class _MainScreenState extends State<MainScreen> {
           loading = false;
         });
       } else {
+        await model.login("09788571913", "123");
         if (model.getLoginDetail != null) {
           await model.getMainList().timeout(Duration(seconds: 10),
               onTimeout: () {

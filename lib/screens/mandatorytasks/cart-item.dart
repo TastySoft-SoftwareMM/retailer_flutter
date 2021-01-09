@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:retailer/custom/custom_expansion_title.dart';
 import 'package:retailer/screens/mandatorytasks/carrt_item_discount.dart';
 import '../../style/theme.dart' as Style;
-import 'package:http/http.dart' as http;
 
 // import '../../custom/custom_expansion_title.dart' as custom;
 
@@ -61,7 +60,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
                             ),
                             onPressed: () {
                               Navigator.push(context, new MaterialPageRoute(
-                      builder: (context) => cartItemDiscountScreen()));
+                      builder: (context) => CartItemDiscountScreen()));
                             },
                           ),
                   ),

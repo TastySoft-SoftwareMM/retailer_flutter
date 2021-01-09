@@ -3,16 +3,15 @@ import 'package:compressimage/compressimage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:retailer/database/merchar_imageHelper.dart';
 import 'package:retailer/models/image_sqflite_M.dart';
 import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/screens/public/widget.dart';
-import 'package:sqflite/sqflite.dart';
 import '../../style/theme.dart' as Style;
 import 'package:retailer/utility/utility.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:retailer/screens/mandatorytasks/merchandizing.dart';
 
 class MerchandizingEdit extends StatefulWidget {
   final TaskList _taskList;
@@ -79,23 +78,23 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                 mainAxisSpacing: 4,
                 children: List.generate(photoList.length + 1, (index) {
                   return Container(
-                    child: index + 1 > photoList.length ?
-                    InkWell(
-                      onTap: () {
-                        _settingModalBottomSheet(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.grey[300],
-                        ),
-                        child: Center(
-                          child: Text(
-                            '+',
-                            style: TextStyle(
-                                fontSize: 74,
-                                fontWeight: FontWeight.w200,
-                                color: Colors.white),
+                    child: index + 1 > photoList.length
+                        ? InkWell(
+                            onTap: () {
+                              _settingModalBottomSheet(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: Colors.grey[300],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '+',
+                                  style: TextStyle(
+                                      fontSize: 74,
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.white),
                                 ),
                               ),
                             ),
@@ -106,19 +105,15 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => ViewImage(
-                                    //               photoList[index],
-                                    //             )));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ViewImage(
+                                                  photoList[index].photo,
+                                                )));
                                   },
-                                  child: Container(
-                                    child: ClipRRect(
-                                      child: Utility.imageFromBase64String(
-                                          photoList[index].photo),
-                                    ),
-                                  ),
+                                  child: Utility.imageFromBase64String(
+                                      photoList[index].photo),
                                 ),
                                 Positioned(
                                     right: 2,
@@ -126,21 +121,16 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                     child: InkWell(
                                       onTap: () async {
                                         if (photoList[index].id != null) {
-                                          await imageDbHelper.deletePhoto(photoList[index].id);
+                                          await imageDbHelper
+                                              .deletePhoto(photoList[index].id);
+                                          setState(() {
+                                            photoList.remove(photoList[index]);
+                                          });
+                                        } else {
                                           setState(() {
                                             photoList.remove(photoList[index]);
                                           });
                                         }
-                                        // if (getDate != null) {
-                                        //   imageDbHelper.deleteAllPhoto();
-                                        //   setState(() {
-                                        //     photoList.remove(photoList[index]);
-                                        //   });
-                                        // } else {
-                                        //   setState(() {
-                                        //     photoList.remove(photoList[index]);
-                                        //   });
-                                        // }
                                       },
                                       child: CircleAvatar(
                                         radius: 12,
@@ -152,9 +142,9 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                         ),
                                       ),
                                     )),
-                        ],
-                      ),
-                    ),
+                              ],
+                            ),
+                          ),
                   );
                 }),
               ),
@@ -200,8 +190,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
       }
     });
     getToast(context, "Save Successful");
-    Navigator.pop(context, true);
-    Navigator.pop(context, true);
+    back();
   }
 
   void _settingModalBottomSheet(context) {
@@ -233,26 +222,24 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
   }
 
   getPhotoList() async {
-    final Future<Database> db = imageDbHelper.initializedDatabase();
-    await db.then((value) {
-      var photoListFuture = imageDbHelper.getPhotoList(
-          model.activeShop.shopsyskey, widget._taskList.taskCode);
-      photoListFuture.then((plist) {
-        setState(() {
-          this.photoList = plist;
-          print(plist);
-        });
+    var photoListFuture = imageDbHelper.getPhotoByTaskCode(
+        model.activeShop.shopsyskey, widget._taskList.taskCode);
+    photoListFuture.then((plist) {
+      setState(() {
+        this.photoList = plist;
+        print(plist);
       });
     });
   }
 
   Future getMultipleImage() async {
-    var result = await FilePicker.getMultiFile(
+    List<File> result = await FilePicker.getMultiFile(
       type: FileType.image,
-      allowCompression: true,
     );
     if (result != null) {
       result.forEach((element) async {
+        File picked = File(element.path);
+        await CompressImage.compress(imageSrc: picked.path, desiredQuality: 20);
         setState(() {
           photoList.add(Photo(Utility.base64String(element.readAsBytesSync()),
               model.activeShop.shopsyskey, widget._taskList.taskCode));
@@ -273,17 +260,24 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
       });
     }
   }
+
+  back() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MerchandizingScreen()),
+    );
+  }
 }
 
 class ViewImage extends StatelessWidget {
-  final File _file;
+  final String _image;
 
-  ViewImage(this._file);
+  ViewImage(this._image);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Image.file(_file),
+      child: Utility.imageFromBase64String(_image),
     );
   }
 }

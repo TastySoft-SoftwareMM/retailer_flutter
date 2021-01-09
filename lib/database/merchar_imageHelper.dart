@@ -47,7 +47,7 @@ class ImageDbHelper {
         'CREATE TABLE $table($_id INTEGER PRIMARY KEY AUTOINCREMENT,$photo TEXT,$shopSysKey TEXT,$activeTaskCode TEXT)');
   }
 
-  Future<List<Map<String, dynamic>>> getPhotMapList(
+  Future<List<Map<String, dynamic>>> getTaskCodeMapList(
       String activeSysKey, String getActiveTaskCode) async {
     Database db = await this.database;
 //  var result = await db.rawQuery('SELECTE * FROM $noteTable order by $colPriority ASC');
@@ -55,6 +55,17 @@ class ImageDbHelper {
         orderBy: '$_id DESC',
         where: '$shopSysKey = ? AND $activeTaskCode = ?',
         whereArgs: [activeSysKey, getActiveTaskCode]);
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getSysKeyMapList(
+      String activeSysKey) async {
+    Database db = await this.database;
+//  var result = await db.rawQuery('SELECTE * FROM $noteTable order by $colPriority ASC');
+    var result = await db.query(table,
+        orderBy: '$_id DESC',
+        where: '$shopSysKey = ?',
+        whereArgs: [activeSysKey]);
     return result;
   }
 
@@ -87,14 +98,25 @@ class ImageDbHelper {
 
   Future<int> getCount() async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $table');
+    List<Map<String, dynamic>> x =
+        await db.rawQuery('SELECT COUNT (*) from $table');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
 
-  Future<List<Photo>> getPhotoList(
+  Future<List<Photo>> getPhotoByTaskCode(
       String activeSysKey, String activeTaskCode) async {
-    var noteMapList = await getPhotMapList(activeSysKey, activeTaskCode);
+    var noteMapList = await getTaskCodeMapList(activeSysKey, activeTaskCode);
+    int count = noteMapList.length;
+    List<Photo> noteList = List<Photo>();
+    for (int i = 0; i < count; i++) {
+      noteList.add(Photo.formMapObject(noteMapList[i]));
+    }
+    return noteList;
+  }
+
+  Future<List<Photo>> getPhotoBySysKey(String activeSysKey) async {
+    var noteMapList = await getSysKeyMapList(activeSysKey);
     int count = noteMapList.length;
     List<Photo> noteList = List<Photo>();
     for (int i = 0; i < count; i++) {
