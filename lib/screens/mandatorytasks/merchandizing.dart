@@ -8,9 +8,8 @@ import 'package:retailer/screens/main/main_Screen_Search.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizingEdit.dart';
 import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/services/functional_provider.dart';
-import 'package:sqflite/sqflite.dart';
 import '../../style/theme.dart' as Style;
-
+import 'package:sqflite/sqflite.dart';
 import '../../custom/custom_expansion_title.dart' as custom;
 
 class MerchandizingScreen extends StatefulWidget {
@@ -21,14 +20,12 @@ class MerchandizingScreen extends StatefulWidget {
 class _MerchandizingScreenState extends State<MerchandizingScreen> {
   ViewModelFunction model;
   bool loading = true;
+  List<String> taskList = [];
   ImageDbHelper imageDbHelper = ImageDbHelper();
-  List<String> taskList;
   @override
   void initState() {
     super.initState();
     getSysKey();
-    taskList = List<String>();
-    getPhotoList();
   }
 
   @override
@@ -102,8 +99,16 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
             model.listModel[index].brandOwnerName,
             style: TextStyle(color: Style.Colors.textColor),
           ),
+          onExpansionChanged: (open) async {
+            if (open) {
+              this.taskList.clear();
+              await getPhotoList();
+            }
+          },
           children: [
-            getChildrenList(model.listModel[index].taskList),
+            getChildrenList(
+              model.listModel[index].taskList,
+            ),
           ],
         ),
       ),
@@ -137,7 +142,6 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
   }
 
   getPhotoList() async {
-    print("working sdkf dfsk sflkj sdl fsdkldj ");
     final Future<Database> db = imageDbHelper.initializedDatabase();
     await db.then((value) {
       var photoListFuture =
@@ -154,9 +158,12 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
         });
       });
     });
+    print(taskList);
   }
 
-  Widget getChildrenList(List list) {
+  Widget getChildrenList(
+    List list,
+  ) {
     List<TaskList> _taskList = list.map((e) => TaskList.fromJson(e)).toList();
     return ListView.builder(
       shrinkWrap: true,
@@ -178,9 +185,7 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
               },
               title: Text(_taskList[index].taskCode),
               trailing: IconButton(
-                onPressed: () {
-                  print('List was tap');
-                },
+                onPressed: () {},
                 icon: Icon(Icons.list),
               ),
             ),

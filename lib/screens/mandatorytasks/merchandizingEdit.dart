@@ -1,18 +1,18 @@
 import 'dart:io';
-import 'package:compressimage/compressimage.dart';
+// import 'package:compressimage/compressimage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:retailer/database/merchar_imageHelper.dart';
-import 'package:retailer/models/image_sqflite_M.dart';
 import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/screens/public/widget.dart';
-import 'package:sqflite/sqflite.dart';
 import '../../style/theme.dart' as Style;
 import 'package:retailer/utility/utility.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizing.dart';
+import 'package:retailer/models/image_sqflite_M.dart';
 
 class MerchandizingEdit extends StatefulWidget {
   final TaskList _taskList;
@@ -24,8 +24,9 @@ class MerchandizingEdit extends StatefulWidget {
 
 class _MerchandizingEditState extends State<MerchandizingEdit> {
   ImageDbHelper imageDbHelper = ImageDbHelper();
+
   List<Photo> photoList;
-  var pickedByCamera;
+  List<Map<String, dynamic>> showList = [];
   ViewModelFunction model;
   TextEditingController textEditingController = new TextEditingController();
 
@@ -55,14 +56,16 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
           children: [
             Container(
               margin: EdgeInsets.only(left: 10, right: 10),
-              height: 50,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey[400], width: 1.2),
               ),
               child: Center(
-                child: Text(
-                  widget._taskList.taskName,
-                  style: TextStyle(color: Colors.black, fontSize: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    widget._taskList.taskName,
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
                 ),
               ),
             ),
@@ -78,9 +81,9 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,
-                children: List.generate(photoList.length + 1, (index) {
+                children: List.generate(showList.length + 1, (index) {
                   return Container(
-                    child: index + 1 > photoList.length
+                    child: index + 1 > showList.length
                         ? InkWell(
                             onTap: () {
                               _settingModalBottomSheet(context);
@@ -111,26 +114,28 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ViewImage(
-                                                  photoList[index].photo,
+                                                  showList[index]["compress"],
                                                 )));
                                   },
-                                  child: Utility.imageFromBase64String(
-                                      photoList[index].photo),
+                                  child: Image.memory(
+                                    showList[index]['compress'],
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                                 Positioned(
                                     right: 2,
                                     top: 2,
                                     child: InkWell(
                                       onTap: () async {
-                                        if (photoList[index].id != null) {
-                                          await imageDbHelper
-                                              .deletePhoto(photoList[index].id);
+                                        if (showList[index]["id"] != null) {
+                                          await imageDbHelper.deletePhoto(
+                                              showList[index]["id"]);
                                           setState(() {
-                                            photoList.remove(photoList[index]);
+                                            showList.remove(showList[index]);
                                           });
                                         } else {
                                           setState(() {
-                                            photoList.remove(photoList[index]);
+                                            showList.remove(showList[index]);
                                           });
                                         }
                                       },
@@ -164,7 +169,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
           height: 45,
           child: FlatButton(
             onPressed: () {
-              if (photoList.length > 0) {
+              if (showList.length > 0) {
                 savePhoto();
               } else {
                 getToast(context, "Please Select Image");
@@ -180,31 +185,29 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     );
   }
 
-    savePhoto() {
-    if (photoList.length > 0) {
-                loading(context);
-                photoList.forEach((element) async {
-                  if (element.id == null) {
-                    await imageDbHelper.insertPhoto(Photo(
-                        element.photo,
-                        model.activeShop.shopsyskey,
-                        widget._taskList.taskCode,
-                        textEditingController.text));
-                  } else {
-                    await imageDbHelper.updatePhoto(Photo.withId(
-                        element.id,
-                        element.photo,
-                        model.activeShop.shopsyskey,
-                        widget._taskList.taskCode,
-                        textEditingController.text));
-                  }
-                });
-                getToast(context, "Save Successful");
-                Navigator.pop(context, true);
-                Navigator.pop(context, true);
-              } else {
-                getToast(context, "Please Select Image");
-              }
+  savePhoto() {
+    loading(context);
+    showList.forEach((element) async {
+        String base64 = Utility.base64String(element["compress"]);
+
+      if (element["id"] == null) {
+        await imageDbHelper.insertPhoto(Photo(
+            base64,
+            model.activeShop.shopsyskey,
+            widget._taskList.taskCode,
+            textEditingController.text));
+      } else {
+        return await imageDbHelper.updatePhoto(Photo.withId(
+          element["id"],
+
+            base64,
+            model.activeShop.shopsyskey,
+            widget._taskList.taskCode,
+            textEditingController.text));;
+      }
+    });
+    getToast(context, "Save Successful");
+    back();
   }
 
   void _settingModalBottomSheet(context) {
@@ -235,37 +238,42 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         });
   }
 
-    getPhotoList() async {
-    final Future<Database> db = imageDbHelper.initializedDatabase();
-    await db.then((value) {
-      var photoListFuture = imageDbHelper.getPhotoByTaskCode(
-          model.activeShop.shopsyskey, widget._taskList.taskCode,);
-      photoListFuture.then((plist) {
-        this.photoList = plist;
-        print(photoList.length);
-        setState(() {
-          if (photoList != null) {
-            photoList.forEach((element) {
-          print(element.remark);
-        });
-            this.textEditingController.text = plist[0].remark;
-          }
-        });
+  getPhotoList() async {
+    var photoListFuture = imageDbHelper.getPhotoByTaskCode(
+        model.activeShop.shopsyskey, widget._taskList.taskCode);
+    photoListFuture.then((plist) {
+      this.photoList = plist;
+
+      setState(() {
+        if (photoList.length >0) {
+          print("It is saved => $photoList");
+          textEditingController.text = photoList[0].remark??"";
+          photoList.forEach((element) {
+            showList.add({
+              "compress": Utility.dataFromBase64String(element.photo),
+              "id": element.id
+            });
+          });
+        }
       });
     });
   }
 
   Future getMultipleImage() async {
-    List<File> result = await FilePicker.getMultiFile(
+    List<File> files = await FilePicker.getMultiFile(
       type: FileType.image,
     );
-    if (result != null) {
-      result.forEach((element) async {
-        File picked = File(element.path);
-        await CompressImage.compress(imageSrc: picked.path, desiredQuality: 20);
+    if (files != null) {
+      files.forEach((element) async {
+        var result = await FlutterImageCompress.compressWithFile(
+          element.path,
+          quality: 20,
+          rotate: 0,
+        );
         setState(() {
-          photoList.add(Photo(Utility.base64String(element.readAsBytesSync()),
-              model.activeShop.shopsyskey, widget._taskList.taskCode,this.textEditingController.text));
+          setState(() {
+            showList.add({"filename": "${element.path}", "compress": result});
+          });
         });
       });
     }
@@ -275,13 +283,32 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      File picked = File(pickedFile.path);
-      await CompressImage.compress(imageSrc: picked.path, desiredQuality: 20);
+      var result = await FlutterImageCompress.compressWithFile(
+        pickedFile.path,
+        quality: 20,
+        rotate: 0,
+      );
       setState(() {
-        photoList.add(Photo(Utility.base64String(picked.readAsBytesSync()),
-            model.activeShop.shopsyskey, widget._taskList.taskCode,textEditingController.text));
+        showList.add({
+          "filename": "${pickedFile.path}",
+          "compress": result,
+        });
       });
     }
+  }
+
+  Future<File> testCompressAndGetFile(File file, String targetPath) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 88,
+      rotate: 180,
+    );
+
+    print(file.lengthSync());
+    print(result.lengthSync());
+
+    return result;
   }
 
   back() {
@@ -293,14 +320,17 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
 }
 
 class ViewImage extends StatelessWidget {
-  final String _image;
+  final dynamic _image;
 
   ViewImage(this._image);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Utility.imageFromBase64String(_image),
+      child: Image.memory(
+        _image,
+        fit: BoxFit.cover,
+      ),
     );
   }
 }
