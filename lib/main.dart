@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:retailer/screens/main/main-screen.dart';
 // import 'package:retailer/screens/user/login.dart';
 import 'package:retailer/services/functional_provider.dart';
+import 'screens/user/login.dart';
 import 'style/theme.dart' as Style;
 
 void main() {
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.grey,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MainScreen(),
+        home: Login(),
     );
   }
 }

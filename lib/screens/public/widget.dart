@@ -677,7 +677,7 @@ String getCurrentTypeSting(String currentType) {
   return value;
 }
 
-Widget getRemark() {
+Widget getRemark(controller) {
   return Padding(
     padding: const EdgeInsets.only(left: 8, right: 4, top: 8),
     child: Container(
@@ -686,6 +686,7 @@ Widget getRemark() {
           border: Border.all(color: Colors.grey[300])),
       height: 80,
       child: TextField(
+        controller: controller,
         maxLines: 8,
         decoration: InputDecoration(
             alignLabelWithHint: true,

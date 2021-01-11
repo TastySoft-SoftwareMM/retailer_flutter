@@ -13,6 +13,7 @@ class ImageDbHelper {
   static const String photo = 'photo';
   static const String shopSysKey = 'shopSysKey';
   static const String activeTaskCode = 'activeTaskCode';
+   static const String remark= 'remark';
 
   ImageDbHelper._createInstane();
 
@@ -44,7 +45,7 @@ class ImageDbHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE $table($_id INTEGER PRIMARY KEY AUTOINCREMENT,$photo TEXT,$shopSysKey TEXT,$activeTaskCode TEXT)');
+        'CREATE TABLE $table($_id INTEGER PRIMARY KEY AUTOINCREMENT,$photo TEXT,$shopSysKey TEXT,$activeTaskCode TEXT,$remark TEXT)');
   }
 
   Future<List<Map<String, dynamic>>> getTaskCodeMapList(

@@ -13,6 +13,7 @@ class OrderListDetailScreen extends StatefulWidget {
 
 class _OrderListDetailScreenState extends State<OrderListDetailScreen> {
   TextEditingController qtyController = TextEditingController();
+   TextEditingController textEditingController = TextEditingController();
   var width;
   String currentTime = DateFormat("dd/MM/yyyy").format(DateTime.now());
   ViewModelFunction modelFunction;
@@ -120,7 +121,7 @@ class _OrderListDetailScreenState extends State<OrderListDetailScreen> {
                     ),
                     itemCount: 1,
                   ),
-                  getRemark(),
+                  getRemark(textEditingController),
                   SizedBox(
                     height: 10,
                   ),

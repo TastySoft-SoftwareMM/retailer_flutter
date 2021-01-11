@@ -7,6 +7,7 @@ import 'package:retailer/database/merchar_imageHelper.dart';
 import 'package:retailer/models/image_sqflite_M.dart';
 import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/screens/public/widget.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../style/theme.dart' as Style;
 import 'package:retailer/utility/utility.dart';
 import 'package:retailer/services/functional_provider.dart';
@@ -26,6 +27,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
   List<Photo> photoList;
   var pickedByCamera;
   ViewModelFunction model;
+  TextEditingController textEditingController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
             ),
             Padding(
               padding: const EdgeInsets.all(2.0),
-              child: getRemark(),
+              child: getRemark(textEditingController),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
@@ -178,19 +180,31 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     );
   }
 
-  savePhoto() {
-    loading(context);
-    photoList.forEach((element) async {
-      if (element.id == null) {
-        await imageDbHelper.insertPhoto(Photo(element.photo,
-            model.activeShop.shopsyskey, widget._taskList.taskCode));
-      } else {
-        await imageDbHelper.updatePhoto(Photo.withId(element.id, element.photo,
-            model.activeShop.shopsyskey, widget._taskList.taskCode));
-      }
-    });
-    getToast(context, "Save Successful");
-    back();
+    savePhoto() {
+    if (photoList.length > 0) {
+                loading(context);
+                photoList.forEach((element) async {
+                  if (element.id == null) {
+                    await imageDbHelper.insertPhoto(Photo(
+                        element.photo,
+                        model.activeShop.shopsyskey,
+                        widget._taskList.taskCode,
+                        textEditingController.text));
+                  } else {
+                    await imageDbHelper.updatePhoto(Photo.withId(
+                        element.id,
+                        element.photo,
+                        model.activeShop.shopsyskey,
+                        widget._taskList.taskCode,
+                        textEditingController.text));
+                  }
+                });
+                getToast(context, "Save Successful");
+                Navigator.pop(context, true);
+                Navigator.pop(context, true);
+              } else {
+                getToast(context, "Please Select Image");
+              }
   }
 
   void _settingModalBottomSheet(context) {
@@ -221,13 +235,22 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         });
   }
 
-  getPhotoList() async {
-    var photoListFuture = imageDbHelper.getPhotoByTaskCode(
-        model.activeShop.shopsyskey, widget._taskList.taskCode);
-    photoListFuture.then((plist) {
-      setState(() {
+    getPhotoList() async {
+    final Future<Database> db = imageDbHelper.initializedDatabase();
+    await db.then((value) {
+      var photoListFuture = imageDbHelper.getPhotoByTaskCode(
+          model.activeShop.shopsyskey, widget._taskList.taskCode,);
+      photoListFuture.then((plist) {
         this.photoList = plist;
-        print(plist);
+        print(photoList.length);
+        setState(() {
+          if (photoList != null) {
+            photoList.forEach((element) {
+          print(element.remark);
+        });
+            this.textEditingController.text = plist[0].remark;
+          }
+        });
       });
     });
   }
@@ -242,7 +265,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         await CompressImage.compress(imageSrc: picked.path, desiredQuality: 20);
         setState(() {
           photoList.add(Photo(Utility.base64String(element.readAsBytesSync()),
-              model.activeShop.shopsyskey, widget._taskList.taskCode));
+              model.activeShop.shopsyskey, widget._taskList.taskCode,this.textEditingController.text));
         });
       });
     }
@@ -256,7 +279,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
       await CompressImage.compress(imageSrc: picked.path, desiredQuality: 20);
       setState(() {
         photoList.add(Photo(Utility.base64String(picked.readAsBytesSync()),
-            model.activeShop.shopsyskey, widget._taskList.taskCode));
+            model.activeShop.shopsyskey, widget._taskList.taskCode,textEditingController.text));
       });
     }
   }
