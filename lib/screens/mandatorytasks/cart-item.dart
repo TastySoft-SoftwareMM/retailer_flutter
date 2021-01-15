@@ -18,7 +18,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
   @override
   Widget build(BuildContext context) {
     if (qtyController.text.isEmpty) {
-      qtyController.text = '2';
+      qtyController.text = '';
     }
     width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -236,7 +236,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
           backgroundColor: Colors.red[50],
           initiallyExpanded: false,
           headerBackgroundColor: Colors.red[100],
-          iconColor: Style.Colors.textColor,
+          iconColor: Colors.black,
           title: Text(
             'SP Bakery',
             style:TextStyle(

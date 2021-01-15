@@ -203,11 +203,13 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
             base64,
             model.activeShop.shopsyskey,
             widget._taskList.taskCode,
-            textEditingController.text));;
+            textEditingController.text));
       }
     });
     getToast(context, "Save Successful");
-    back();
+    // back();
+    Navigator.pop(context,true);
+    Navigator.pop(context,true);
   }
 
   void _settingModalBottomSheet(context) {

@@ -17,7 +17,36 @@ class _TeamWidgetState extends State<TeamWidget> {
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);
-    return model.shopsByTeam == null ? Container() : getTeamList();
+    return model.shopsByTeam.length == null ? getnotfound() : getTeamList();
+  }
+
+  Widget getnotfound() {
+    var height =MediaQuery.of(context).size.height;
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.only(top: height* .3),
+        child: Center(
+          child: Column(
+            children: [
+              ImageIcon(
+                AssetImage('assets/icon/team.png'),
+                color: Colors.grey,
+                size: 65,
+              ),
+              Container(height: 5),
+              Text(
+                'Team not found !',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget getTeamList() {

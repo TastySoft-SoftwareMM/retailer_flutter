@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import '../../style/theme.dart' as Style;
@@ -211,7 +212,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
           children: [
             Container(
               width: width * 0.25,
-              child: Card(
+              child: Container(
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: Image.asset(
@@ -220,6 +221,8 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                     fit: BoxFit.fitHeight,
                   ),
                 ),
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.black),),
               ),
             ),
             Expanded(
@@ -255,9 +258,11 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                           ),
                           Spacer(),
                           IconButton(
-                            icon: ImageIcon(
-                              AssetImage('assets/icon/add-to-cart.png'),
-                              color: Colors.black,
+                            icon: Container(
+                              child: SvgPicture.asset(
+                                'assets/atc.svg',
+                                color: Colors.black,
+                              ),
                             ),
                             onPressed: () {
                               print('Shop  was tap');

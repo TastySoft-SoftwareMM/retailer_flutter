@@ -174,7 +174,7 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
         child: Padding(
           padding: EdgeInsets.only(left: 3),
           child: Container(
-            color: Colors.white,
+            color: Colors.white,  
             child: ListTile(
               onTap: () {
                 Navigator.push(
@@ -202,6 +202,6 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
     } else {
       color = Colors.white;
     }
-    return color;
+    return color; 
   }
 }
