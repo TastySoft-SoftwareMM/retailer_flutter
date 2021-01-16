@@ -14,10 +14,11 @@ class TeamWidget extends StatefulWidget {
 class _TeamWidgetState extends State<TeamWidget> {
   ViewModelFunction model;
 
+
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);
-    return model.shopsByTeam.length == null ? getnotfound() : getTeamList();
+    return model.shopsByTeam.isEmpty ? getnotfound() : getTeamList();
   }
 
   Widget getnotfound() {

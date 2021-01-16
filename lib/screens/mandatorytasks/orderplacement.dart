@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
+import 'package:retailer/screens/public/widget.dart';
 import '../../style/theme.dart' as Style;
 import '../../custom/custom_expansion_title.dart' as custom;
 
@@ -210,26 +211,17 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
         height: 110,
         child: Row(
           children: [
-            Container(
-              width: width * 0.25,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Image.asset(
-                    'assets/icon/sp_bread3.jpg',
-                    height: 100,
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black),),
-              ),
-            ),
+            getPhotoContainer(width),
+            Container(width: 5,),
             Expanded(
               child: Container(
-                height: 110,
+                height: 100,
                 width: width * 0.72 - 1.5,
-                child: Card(
+                child: Container(
+                  decoration:
+                    BoxDecoration(border: Border.all(color: Colors.grey[300]),
+                    borderRadius: BorderRadius.circular(6),
+                    ),
                   child: Column(
                     children: [
                       Spacer(),
@@ -261,6 +253,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                             icon: Container(
                               child: SvgPicture.asset(
                                 'assets/atc.svg',
+                                height: 25,
                                 color: Colors.black,
                               ),
                             ),

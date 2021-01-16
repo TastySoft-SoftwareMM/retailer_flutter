@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/custom/custom_expansion_title.dart';
+import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/screens/mandatorytasks/carrt_item_discount.dart';
 import '../../style/theme.dart' as Style;
 
@@ -384,24 +385,17 @@ class _CartItemScreenState extends State<CartItemScreen> {
         height: 110,
         child: Row(
           children: [
-            Container(
-              width: width * 0.25,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Image.asset(
-                    'assets/icon/sp_bread3.jpg',
-                    height: 100,
-                    fit: BoxFit.fitHeight,
-                  ),
-                ),
-              ),
-            ),
+            getPhotoContainer(width),
+            Container(width: 5,),
             Expanded(
               child: Container(
-                height: 110,
+                height: 100,
                 width: width * 0.72 - 1.5,
-                child: Card(
+                child: Container(
+                  decoration:
+                    BoxDecoration(border: Border.all(color: Colors.grey[300]),
+                    borderRadius: BorderRadius.circular(6),
+                    ),
                   child: Column(
                     children: [
                       Spacer(),

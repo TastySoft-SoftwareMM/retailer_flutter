@@ -18,6 +18,27 @@ var date = DateTime.now();
 DateFormat dateFormat = DateFormat("yyyyMMdd");
 String getDate = dateFormat.format(date);
 
+getPhotoContainer(width){
+  
+  return Container(
+              height: 100,
+              width: width * 0.23,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Image.asset(
+                    'assets/icon/sp_bread3.jpg',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.grey[300]),
+                    borderRadius: BorderRadius.circular(6),
+                    ),
+              ),
+            );
+}
+
 getToast(BuildContext context, String message) {
   return showToast(message,
       context: context,

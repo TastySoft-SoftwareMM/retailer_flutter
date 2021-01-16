@@ -15,7 +15,7 @@ class _UserShopState extends State<UserShop> {
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);
-    return model.shopsByUser == null ? getnotfound() : getUserShopList();
+    return model.shopsByUser.isEmpty ? getnotfound() : getUserShopList();
   }
 
   Widget getnotfound() {

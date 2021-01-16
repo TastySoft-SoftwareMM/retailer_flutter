@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/mandatorytasks/Inventory_stock.dart';
+import 'package:retailer/screens/public/widget.dart';
 import '../../style/theme.dart' as Style;
 
 class InventoryCheckScreen extends StatefulWidget {
@@ -91,23 +92,16 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
           height: 110,
           child: Row(
             children: [
+              getPhotoContainer(width),
+              Container(width: 5,),
               Container(
-                width: width * 0.25,
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Image.asset(
-                      'assets/icon/sp_bread1.jpg',
-                      height: 100,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                height: 110,
+                height: 100,
                 width: width * 0.73,
-                child: Card(
+                child: Container(
+                  decoration:
+                    BoxDecoration(border: Border.all(color: Colors.grey[300]),
+                    borderRadius: BorderRadius.circular(6),
+                    ),
                   child: Column(
                     children: [
                       Spacer(),
