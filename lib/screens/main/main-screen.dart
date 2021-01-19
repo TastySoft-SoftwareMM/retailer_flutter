@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:retailer/models/get_allstock.dart';
 import 'package:retailer/screens/main/main_Screen_Search.dart';
 import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
@@ -193,6 +194,12 @@ class _MainScreenState extends State<MainScreen> {
         });
       } else {
         await model.login("09788571913", "123");
+        list.forEach((element) {
+          print(element.brandOwnerName);
+        });
+
+        print(model.getAllStock);
+
         if (model.getLoginDetail != null) {
           await model.getMainList().timeout(Duration(seconds: 10),
               onTimeout: () {
