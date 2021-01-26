@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:retailer/models/all_shop_saleList.dart';
 import 'package:retailer/models/checkIn_status_task.dart';
+import 'package:retailer/models/get_allstock.dart';
 import 'package:retailer/models/loginModel.dart';
 import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/models/shopByListModel.dart';
@@ -18,6 +19,7 @@ class ViewModelFunction with ChangeNotifier {
   AllShopSaleList allShopSaleList;
   List<ShopByListM> shopsByTeam;
   List<ShopByListM> shopsByUser;
+  List<GetAllStock> allStock;
   int statusCode;
   String signUpDetail;
   String status;
@@ -50,9 +52,11 @@ class ViewModelFunction with ChangeNotifier {
   }
 
   Future login(String userId, String pass) async {
-    print("work");
-    param = jsonEncode(
-        {"userId": '$userId', "password": '$pass',});
+    // print("work");
+    param = jsonEncode({
+      "userId": '$userId',
+      "password": '$pass',
+    });
     final http.Response response =
         await httpRequest('main/logindebug/mit', param, '');
     if (response != null) {
@@ -76,7 +80,8 @@ class ViewModelFunction with ChangeNotifier {
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       merchandizingM = MerchandizingM.fromJson(result);
-      this.listModel = merchandizingM.list.map((el) => ListModel.fromJson(el)).toList();
+      this.listModel =
+          merchandizingM.list.map((el) => ListModel.fromJson(el)).toList();
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
@@ -86,8 +91,8 @@ class ViewModelFunction with ChangeNotifier {
 
   setTaskOfShop(String inventoryCheck, String merchandizing,
       String orderplacement) async {
-    print("$inventoryCheck , $merchandizing, $orderplacement");
-    print(sessionId);
+    // print("$inventoryCheck , $merchandizing, $orderplacement");
+    // print(sessionId);
     param = jsonEncode({
       "sessionId": sessionId,
       "task": {
@@ -207,6 +212,9 @@ class ViewModelFunction with ChangeNotifier {
         await httpRequest('stock/getstockall', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
+      final Iterable list = result['list'];
+      this.allStock = list.map((el) => GetAllStock.fromJson(el)).toList();
+     
       status = result['status'];
       statusCode = response.statusCode;
     } else {
@@ -216,18 +224,27 @@ class ViewModelFunction with ChangeNotifier {
 
   Future getMainList() async {
     this.allShopSaleList = await getMainScreenList(
-      spsysKey: getLoginDetail.syskey,
-      teamsysKey: getLoginDetail.teamSyskey,
-      userType: getLoginDetail.userType,
-      date: getDate,
-      orgId: getLoginDetail.orgId).timeout(Duration(seconds: 8), onTimeout: () {
+            spsysKey: getLoginDetail.syskey,
+            teamsysKey: getLoginDetail.teamSyskey,
+            userType: getLoginDetail.userType,
+            date: getDate,
+            orgId: getLoginDetail.orgId)
+        .timeout(Duration(seconds: 8), onTimeout: () {
       return null;
     });
-    this.shopsByTeam = allShopSaleList.shopsByTeam.map((el) => ShopByListM.fromJson(el)).toList();
-    this.shopsByUser = allShopSaleList.shopsByUser.map((e) => ShopByListM.fromJson(e)).toList();
+    this.shopsByTeam = allShopSaleList.shopsByTeam
+        .map((el) => ShopByListM.fromJson(el))
+        .toList();
+    this.shopsByUser = allShopSaleList.shopsByUser
+        .map((e) => ShopByListM.fromJson(e))
+        .toList();
   }
 
-  signUp(String userName, String phone, String pass,) async {
+  signUp(
+    String userName,
+    String phone,
+    String pass,
+  ) async {
     param = jsonEncode({
       "userId": phone,
       "userName": userName,
@@ -252,7 +269,8 @@ class ViewModelFunction with ChangeNotifier {
         "http://52.253.88.71:8084/madbrepository/";
     try {
       String url = mainUrl + urlname;
-      return http.post(Uri.encodeFull(url), body: param, headers: {
+      return http
+          .post(Uri.encodeFull(url), body: param, headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Content-Over": "$ordId",
@@ -265,7 +283,11 @@ class ViewModelFunction with ChangeNotifier {
   }
 
   Future<AllShopSaleList> getMainScreenList(
-      {String spsysKey, String teamsysKey, String userType, String date, String orgId}) async {
+      {String spsysKey,
+      String teamsysKey,
+      String userType,
+      String date,
+      String orgId}) async {
     param = jsonEncode({
       "spsyskey": "$spsysKey",
       "teamsyskey": "$teamsysKey",
@@ -278,7 +300,7 @@ class ViewModelFunction with ChangeNotifier {
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
-      print(result);
+      // print(result);
       statusCode = response.statusCode;
 
       AllShopSaleList allShopSaleList = AllShopSaleList.fromJson(result);

@@ -18,7 +18,6 @@ class GetAllStock {
   final String whCode;
   final String whSyskey;
   final List details;
-
   GetAllStock(
       {this.syskey,
       this.code,

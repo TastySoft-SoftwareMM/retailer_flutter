@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/mandatorytasks/Inventory_stock.dart';
 import 'package:retailer/screens/public/widget.dart';
+import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 
 class InventoryCheckScreen extends StatefulWidget {
@@ -25,9 +27,12 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
   var width;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
+  ViewModelFunction model;
 
   @override
   Widget build(BuildContext context) {
+    model = Provider.of<ViewModelFunction>(context);
+
     width = MediaQuery.of(context).size.width;
     if (qtyController.text == '') {
       qtyController.text = '1';
@@ -93,15 +98,17 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
           child: Row(
             children: [
               getPhotoContainer(width),
-              Container(width: 5,),
+              Container(
+                width: 5,
+              ),
               Container(
                 height: 100,
                 width: width * 0.73,
                 child: Container(
-                  decoration:
-                    BoxDecoration(border: Border.all(color: Colors.grey[300]),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey[300]),
                     borderRadius: BorderRadius.circular(6),
-                    ),
+                  ),
                   child: Column(
                     children: [
                       Spacer(),

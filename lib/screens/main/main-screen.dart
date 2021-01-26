@@ -1,8 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:retailer/models/get_allstock.dart';
 import 'package:retailer/screens/main/main_Screen_Search.dart';
 import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/screens/user/syncData/syncData.dart';
@@ -21,8 +20,8 @@ class _MainScreenState extends State<MainScreen> {
   var width;
   var height;
   bool loading = true;
+ 
 
-  @override
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(
@@ -158,8 +157,8 @@ class _MainScreenState extends State<MainScreen> {
             child: RaisedButton(
               elevation: 0,
               onPressed: () async {
-                var isEnable = await Geolocator.checkPermission();
-                print(isEnable);
+                // var isEnable = await Geolocator.checkPermission();
+                // print(isEnable);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -193,13 +192,9 @@ class _MainScreenState extends State<MainScreen> {
           loading = false;
         });
       } else {
-        await model.login("09788571913", "123");
-        list.forEach((element) {
-          print(element.brandOwnerName);
-        });
-
-        print(model.getAllStock);
-
+        // await model.getMainList();
+        // await model.login("09788571913", "123");
+        // await model.getStockList();
         if (model.getLoginDetail != null) {
           await model.getMainList().timeout(Duration(seconds: 10),
               onTimeout: () {
