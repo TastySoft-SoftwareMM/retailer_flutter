@@ -15,16 +15,6 @@ class OrderPlacementScreen extends StatefulWidget {
 }
 
 class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
-  List<String> list = ["Baked Goods", "Lotte", "Soft drinks", "DD"];
-  List<String> typelist = ['Bread', 'Pastries', 'Cake'];
-  final List data = [
-    "Price Discount Cream Roll",
-    "Test",
-  ];
-  List<String> mainList = [
-    'Sp_Blueberry Cream Roll',
-    'Sp-Blackberry Cream Roll'
-  ];
   TextEditingController textEditingController = new TextEditingController();
   var val = '1';
   var secWidth;
@@ -244,8 +234,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                                               child: Container(
                                                   width: secWidth * 0.7,
                                                   child: Text(
-                                                    snapshot.data[index]
-                                                        .brandOwnerName,
+                                                    snapshot.data[index].desc,
                                                     maxLines: 3,
                                                     overflow: TextOverflow.clip,
                                                     style: TextStyle(

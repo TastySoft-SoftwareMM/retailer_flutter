@@ -214,7 +214,8 @@ class ViewModelFunction with ChangeNotifier {
       final result = json.decode(response.body);
       final Iterable list = result['list'];
       this.allStock = list.map((el) => GetAllStock.fromJson(el)).toList();
-     
+    
+
       status = result['status'];
       statusCode = response.statusCode;
     } else {
@@ -266,7 +267,7 @@ class ViewModelFunction with ChangeNotifier {
   Future<http.Response> httpRequest(urlname, param, String ordId) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     var mainUrl = preferences.getString('mainUrl') ??
-        "http://52.253.88.71:8084/madbrepository/";
+        "http://52.255.142.115:8084/madbrepository/";
     try {
       String url = mainUrl + urlname;
       return http
