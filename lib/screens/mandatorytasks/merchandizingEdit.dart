@@ -40,144 +40,159 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
       photoList = List<Photo>();
       getPhotoList();
     }
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text(
-          widget._taskList.taskCode,
-          style: TextStyle(color: Colors.black),
+    return WillPopScope(
+      onWillPop: () {
+        return back();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            widget._taskList.taskCode,
+            style: TextStyle(color: Colors.black),
+          ),
         ),
-      ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[400], width: 1.2),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    widget._taskList.taskName,
-                    style: TextStyle(color: Colors.black, fontSize: 16),
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          child: ListView(
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[400], width: 1.2),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      widget._taskList.taskName,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: getRemark(textEditingController),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
-              child: GridView.count(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
-                children: List.generate(showList.length + 1, (index) {
-                  return Container(
-                    child: index + 1 > showList.length
-                        ? InkWell(
-                            onTap: () {
-                              _settingModalBottomSheet(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.grey[300],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '+',
-                                  style: TextStyle(
-                                      fontSize: 74,
-                                      fontWeight: FontWeight.w200,
-                                      color: Colors.white),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: getRemark(textEditingController),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
+                  children: List.generate(showList.length + 1, (index) {
+                    return Container(
+                      child: index + 1 > showList.length
+                          ? InkWell(
+                              onTap: () {
+                                _settingModalBottomSheet(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.grey[300],
                                 ),
-                              ),
-                            ),
-                          )
-                        : Container(
-                            child: Stack(
-                              fit: StackFit.passthrough,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ViewImage(
-                                                  showList[index]["compress"],
-                                                )));
-                                  },
-                                  child: Image.memory(
-                                    showList[index]['compress'],
-                                    fit: BoxFit.cover,
+                                child: Center(
+                                  child: Text(
+                                    '+',
+                                    style: TextStyle(
+                                        fontSize: 74,
+                                        fontWeight: FontWeight.w200,
+                                        color: Colors.white),
                                   ),
                                 ),
-                                Positioned(
-                                    right: 2,
-                                    top: 2,
-                                    child: InkWell(
-                                      onTap: () async {
-                                        if (showList[index]["id"] != null) {
-                                          await imageDbHelper.deletePhoto(
-                                              showList[index]["id"]);
-                                          setState(() {
-                                            showList.remove(showList[index]);
-                                          });
-                                        } else {
-                                          setState(() {
-                                            showList.remove(showList[index]);
-                                          });
-                                        }
+                              ),
+                            )
+                          : Container(
+                              padding: EdgeInsets.all(0.5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.grey[400])),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Stack(
+                                  fit: StackFit.passthrough,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ViewImage(
+                                                      showList[index]
+                                                          ["compress"],
+                                                    )));
                                       },
-                                      child: CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: Colors.white,
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 18,
-                                          color: Style.Colors.mainColor,
-                                        ),
+                                      child: Image.memory(
+                                        showList[index]['compress'],
+                                        fit: BoxFit.cover,
                                       ),
-                                    )),
-                              ],
+                                    ),
+                                    Positioned(
+                                        right: 2,
+                                        top: 2,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            if (showList[index]["id"] != null) {
+                                              await imageDbHelper.deletePhoto(
+                                                  showList[index]["id"]);
+                                              setState(() {
+                                                showList
+                                                    .remove(showList[index]);
+                                              });
+                                            } else {
+                                              setState(() {
+                                                showList
+                                                    .remove(showList[index]);
+                                              });
+                                            }
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 12,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 18,
+                                              color: Style.Colors.mainColor,
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Style.Colors.mainColor,
+            ],
           ),
-          height: 45,
-          child: FlatButton(
-            onPressed: () {
-              if (showList.length > 0) {
-                savePhoto();
-              } else {
-                getToast(context, "Please Select Image");
-              }
-            },
-            child: Text(
-              'Save',
-              style: TextStyle(color: Colors.white),
+        ),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Style.Colors.mainColor,
+            ),
+            height: 45,
+            child: FlatButton(
+              onPressed: () {
+                if (showList.length > 0) {
+                  savePhoto();
+                } else {
+                  getToast(context, "Please Select Image");
+                }
+              },
+              child: Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -188,7 +203,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
   savePhoto() {
     loading(context);
     showList.forEach((element) async {
-        String base64 = Utility.base64String(element["compress"]);
+      String base64 = Utility.base64String(element["compress"]);
 
       if (element["id"] == null) {
         await imageDbHelper.insertPhoto(Photo(
@@ -197,9 +212,8 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
             widget._taskList.taskCode,
             textEditingController.text));
       } else {
-        return await imageDbHelper.updatePhoto(Photo.withId(
-          element["id"],
-
+        await imageDbHelper.updatePhoto(Photo.withId(
+            element["id"],
             base64,
             model.activeShop.shopsyskey,
             widget._taskList.taskCode,
@@ -208,8 +222,8 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     });
     getToast(context, "Save Successful");
     // back();
-    Navigator.pop(context,true);
-    Navigator.pop(context,true);
+    Navigator.pop(context, true);
+    back();
   }
 
   void _settingModalBottomSheet(context) {
@@ -247,9 +261,9 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
       this.photoList = plist;
 
       setState(() {
-        if (photoList.length >0) {
+        if (photoList.length > 0) {
           print("It is saved => $photoList");
-          textEditingController.text = photoList[0].remark??"";
+          textEditingController.text = photoList[0].remark ?? "";
           photoList.forEach((element) {
             showList.add({
               "compress": Utility.dataFromBase64String(element.photo),

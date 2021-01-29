@@ -20,7 +20,6 @@ class _MainScreenState extends State<MainScreen> {
   var width;
   var height;
   bool loading = true;
- 
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +191,6 @@ class _MainScreenState extends State<MainScreen> {
           loading = false;
         });
       } else {
-        // await model.getMainList();
         // await model.login("09788571913", "123");
         // await model.getStockList();
         if (model.getLoginDetail != null) {

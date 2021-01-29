@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -18,25 +19,40 @@ var date = DateTime.now();
 DateFormat dateFormat = DateFormat("yyyyMMdd");
 String getDate = dateFormat.format(date);
 
-getPhotoContainer(width){
-  
+getPhotoContainer(width, imgname) {
   return Container(
-              height: 100,
-              width: width * 0.23,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Image.asset(
-                    'assets/icon/sp_bread3.jpg',
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.grey[300]),
-                    borderRadius: BorderRadius.circular(6),
-                    ),
+    height: 100,
+    width: width * 0.23,
+    child: Container(
+      padding: EdgeInsets.all(2.5),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: CachedNetworkImage(
+          imageUrl: 'http://52.255.142.115:8084/' + imgname,
+          placeholder: (context, url) => Center(
+            child: SizedBox(
+              height: 30,
+              width: 30,
+              child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                strokeWidth: 2,
               ),
-            );
+            ),
+          ),
+          fit: BoxFit.fill,
+          errorWidget: (context, url, error) => Image.asset(
+            'assets/icon/attach.png',
+            color: Colors.grey[400],
+          ),
+        ),
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[300]),
+        borderRadius: BorderRadius.circular(6),
+      ),
+    ),
+  );
 }
 
 getToast(BuildContext context, String message) {

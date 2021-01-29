@@ -12,18 +12,6 @@ class InventoryCheckScreen extends StatefulWidget {
 }
 
 class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
-  List<String> mainList = [
-    'Sp_Blueberry Cream Roll',
-    'Blueberry Cream ',
-    'Long Bread',
-    'Short Bread',
-    'Example Bread',
-    'Super Cream Bread',
-    'small Cream Bread',
-    'No  Cream Bread',
-    'Stawbarry Cream',
-    'simple bread',
-  ];
   var width;
   TextEditingController qtyController = TextEditingController();
   TextEditingController expQtyController = TextEditingController();
@@ -97,17 +85,15 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
           height: 110,
           child: Row(
             children: [
-              getPhotoContainer(width),
-              Container(
-                width: 5,
-              ),
+              getPhotoContainer(width,model.allStock[index].img),
+              Spacer(),
               Container(
                 height: 100,
-                width: width * 0.73,
+                width: width * 0.74,
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey[300]),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   child: Column(
                     children: [
@@ -124,10 +110,11 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                               child: Container(
                                   width: secWidth * 0.8,
                                   child: Text(
-                                    mainList[index],
+                                    model.allStock[index].desc,
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                       height: 1,
                                     ),
@@ -164,13 +151,13 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                   child: Container(
                                     height: 40,
                                     width: secWidth * 0.08,
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        "Qty",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Qty",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                 ),
@@ -259,13 +246,12 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                                   child: Container(
                                     height: 40,
                                     width: secWidth * 0.16,
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        "Exp qty",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Exp qty",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                 ),
@@ -349,12 +335,13 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                     ],
                   ),
                 ),
-              )
+              ),
+              Spacer(),
             ],
           ),
         ),
       ),
-      itemCount: mainList.length,
+      itemCount: model.allStock.length,
     );
   }
 }

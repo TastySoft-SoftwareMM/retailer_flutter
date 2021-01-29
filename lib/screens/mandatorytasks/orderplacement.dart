@@ -202,7 +202,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
                         height: 110,
                         child: Row(
                           children: [
-                            getPhotoContainer(width),
+                            getPhotoContainer(width, snapshot.data[index].img),
                             Container(
                               width: 5,
                             ),

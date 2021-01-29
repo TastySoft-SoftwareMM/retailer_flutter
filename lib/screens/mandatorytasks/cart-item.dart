@@ -385,7 +385,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
         height: 110,
         child: Row(
           children: [
-            getPhotoContainer(width),
+            getPhotoContainer(width,null),
             Container(width: 5,),
             Expanded(
               child: Container(

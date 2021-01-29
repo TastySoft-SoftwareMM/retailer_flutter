@@ -67,6 +67,7 @@ class _ProfileState extends State<Profile> {
       child: Column(
         children: <Widget>[
           Container(
+            width: MediaQuery.of(context).size.width,
             height: 45,
             color: Colors.red[50],
             child: Padding(
