@@ -12,12 +12,21 @@ import 'package:retailer/screens/main/sale_person_visit_card.dart';
 import 'package:retailer/services/functional_provider.dart';
 import 'package:retailer/style/theme.dart' as Style;
 import 'package:http/http.dart' as http;
-
 import '../../custom/custom_expansion_title.dart' as custom;
 
 var date = DateTime.now();
 DateFormat dateFormat = DateFormat("yyyyMMdd");
 String getDate = dateFormat.format(date);
+
+
+void getUrl() {
+  const str = 'http://52.255.142.115:8084/madbrepository/';
+  const start = " ";
+  const end = "madbrepository/";
+  final startIndex = str.indexOf(start);
+  final endIndex = str.indexOf(end, startIndex + start.length);
+  print(str.substring(startIndex + start.length, endIndex));
+}
 
 getPhotoContainer(width, imgname) {
   return Container(
@@ -34,16 +43,15 @@ getPhotoContainer(width, imgname) {
               height: 30,
               width: 30,
               child: CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
                 strokeWidth: 2,
               ),
             ),
           ),
           fit: BoxFit.fill,
           errorWidget: (context, url, error) => Image.asset(
-            'assets/icon/attach.png',
-            color: Colors.grey[400],
+            "assets/notfound.png",
+            // color: Colors.grey[400],
           ),
         ),
       ),
@@ -55,18 +63,20 @@ getPhotoContainer(width, imgname) {
   );
 }
 
+
+
 getToast(BuildContext context, String message) {
   return showToast(message,
-      context: context,
-      animation: StyledToastAnimation.slideFromTop,
-      reverseAnimation: StyledToastAnimation.slideToTop,
-      position: StyledToastPosition.top,
-      startOffset: Offset(0.0, -3.0),
-      reverseEndOffset: Offset(0.0, -3.0),
-      duration: Duration(seconds: 4),
-      animDuration: Duration(seconds: 2),
-      curve: Curves.elasticOut,
-      reverseCurve: Curves.fastOutSlowIn);
+    context: context,
+    animation: StyledToastAnimation.slideFromTop,
+    reverseAnimation: StyledToastAnimation.slideToTop,
+    position: StyledToastPosition.top,
+    startOffset: Offset(0.0, -3.0),
+    reverseEndOffset: Offset(0.0, -3.0),
+    duration: Duration(seconds: 4),
+    animDuration: Duration(seconds: 2),
+    curve: Curves.elasticOut,
+    reverseCurve: Curves.fastOutSlowIn);
 }
 
 Widget statusColor(task) {
@@ -120,19 +130,18 @@ void loading(BuildContext context) {
 class Dialogs {
   static Future<void> showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              children: <Widget>[
-                Center(
-                    child: CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                  strokeWidth: 2,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          children: <Widget>[
+           Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
                 ))
               ]);
         });
@@ -271,25 +280,23 @@ checkInDialog(
                   ),
                   Flexible(
                     child: element.status.currentType != ''
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 28, left: 8),
-                            child: Container(
-                              child: Text('Check In'),
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8, left: 8, right: 15),
-                            child: Container(
-                              child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    enabledBorder: UnderlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.white))),
-                                selectedItemBuilder: (value) {
-                                  return [
-                                    _selectedType == null
-                                        ? Text('Select Type')
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 28, left: 8),
+                          child: Container(
+                            child: Text('Check In'),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 8, left: 8, right: 15),
+                          child: Container(
+                            child: DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white))),
+                              selectedItemBuilder: (value) {
+                                return [
+                                  _selectedType == null
+                                      ? Text('Select Type')
                                         : Text(_selectedType.toString()),
                                     Text(_selectedType.toString()),
                                   ];
@@ -304,28 +311,28 @@ checkInDialog(
                                   });
                                 },
                                 items: _checkInList.map((element) {
-                                  return DropdownMenuItem<String>(
-                                    child: Row(
-                                      children: [
-                                        Text(element),
-                                        Spacer(),
-                                        _selectedType == element
-                                            ? Icon(
-                                                Icons.radio_button_checked,
-                                                color: Style.Colors.mainColor,
-                                              )
-                                            : Icon(
-                                                Icons.radio_button_off,
-                                                color: Colors.grey[500],
-                                              ),
-                                      ],
-                                    ),
-                                    value: element,
-                                  );
-                                }).toList(),
+                              return DropdownMenuItem<String>(
+                                child: Row(
+                                  children: [
+                                    Text(element),
+                                    Spacer(),
+                                  _selectedType == element
+                                    ? Icon(
+                                        Icons.radio_button_checked,
+                                        color: Style.Colors.mainColor,
+                                      )
+                                    : Icon(
+                                    Icons.radio_button_off,
+                                    color: Colors.grey[500],
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
+                              value: element,
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -359,18 +366,17 @@ checkInDialog(
                     height: 40,
                     width: 110,
                     decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Style.Colors.mainColor, width: 1.5),
-                        borderRadius: BorderRadius.circular(5)),
+                      border: Border.all(color: Style.Colors.mainColor, width: 1.5),
+                      borderRadius: BorderRadius.circular(5)),
                     child: FlatButton(
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
                         child: Center(
                           child: Text('Cancel',
-                              style: TextStyle(
-                                  color: Style.Colors.mainColor,
-                                  fontWeight: FontWeight.w500)),
+                            style: TextStyle(
+                              color: Style.Colors.mainColor,
+                              fontWeight: FontWeight.w500)),
                         )),
                   ),
                   Spacer(),
@@ -378,117 +384,89 @@ checkInDialog(
                     height: 40,
                     width: 110,
                     decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Style.Colors.mainColor, width: 1.5),
-                        borderRadius: BorderRadius.circular(5)),
+                      border: Border.all(color: Style.Colors.mainColor, width: 1.5),
+                      borderRadius: BorderRadius.circular(5)),
                     child: FlatButton(
-                        onPressed: () async {
-                          if (element.status.currentType != "") {
-                            if (position != null) {
-                              loading(context);
-                              await model.routeCheckin(
-                                  position, element, _selectedType);
-                              if (model.statusCode == 200) {
-                                if (_selectedType == "Store Closed") {
-                                  getToast(context, "Store Close Successful");
-                                  Navigator.pop(context, true);
-                                  Navigator.pop(context, true);
-                                } else {
-                                  getToast(context, "Check In Successful");
-                                  await model.addcheckInStatus(CheckInStatus(
-                                      element.status.task.inventoryCheck,
-                                      element.status.task.merchandizing,
-                                      element.status.task.orderPlacement,
-                                      element.status.task.print));
-                                  await model.addActiveShop(element);
+                      onPressed: () async {
+                        if (element.status.currentType != "") {
+                          if (position != null) {
+                            loading(context);
+                            await model.routeCheckin(position, element, _selectedType);
+                            if (model.statusCode == 200) {
+                              if (_selectedType == "Store Closed") {
+                                getToast(context, "Store Close Successful");
+                                Navigator.pop(context, true);
+                                Navigator.pop(context, true);
+                              } else {
+                                getToast(context, "Check In Successful");
+                                await model.addcheckInStatus(CheckInStatus(
+                                    element.status.task.inventoryCheck,
+                                    element.status.task.merchandizing,
+                                    element.status.task.orderPlacement,
+                                    element.status.task.print));
+                                await model.addActiveShop(element);
 
-                                  if (model.getLoginDetail.userType ==
-                                      "storeowner") {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                StoreOwnerVisitCard()));
-                                  } else {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SalePersonVisitCard()));
+                                if (model.getLoginDetail.userType == "storeowner") {
+                                  Navigator.push(
+                                  context, MaterialPageRoute(builder: (context) => StoreOwnerVisitCard()));
+                                } else {
+                                  Navigator.push(
+                                  context, MaterialPageRoute(builder: (context) => SalePersonVisitCard()));
                                   }
                                 }
                               } else {
-                                getToast(
-                                    context, "Server error !. Try again later");
+                                getToast(context, "Server error !. Try again later");
                                 Navigator.pop(context, true);
                                 Navigator.pop(context, true);
                               }
                             } else if (position == null) {
-                              getToast(
-                                  context, 'Please check location permission');
+                              getToast(context, 'Please check location permission');
                             }
                           } else if (element.status.currentType == "") {
                             if (position == null) {
-                              getToast(
-                                  context, "Please check location permission");
+                              getToast(context, "Please check location permission");
                             }
                             if (_selectedType == null) {
                               getToast(context, "Please select type");
                             } else if (position != null &&
                                 _selectedType != null) {
                               loading(context);
-                              getConectivity()
-                                  .then((ConnectivityResult value) async {
+                              getConectivity().then((ConnectivityResult value) async {
                                 if (value == ConnectivityResult.none) {
-                                  getToast(
-                                      context, "Check your internet Conection");
+                                  getToast(context, "Check your internet Conection");
                                   Navigator.pop(context, true);
                                 } else {
-                                  await model
-                                      .routeCheckin(
-                                          position, element, _selectedType)
-                                      .timeout(Duration(seconds: 10),
-                                          onTimeout: () {
-                                    getToast(context,
-                                        "Internet connection error !.");
+                                  await model.routeCheckin(
+                                    position, element, _selectedType).timeout(Duration(seconds: 10),
+                                    onTimeout: () {
+                                    getToast(context, "Internet connection error !.");
                                     Navigator.pop(context, true);
                                   });
                                   if (model.statusCode == 200) {
                                     if (_selectedType == "Store Closed") {
-                                      getToast(
-                                          context, "Store Close Successful");
+                                      getToast(context, "Store Close Successful");
                                       Navigator.pop(context, true);
                                       Navigator.pop(context, true);
                                     } else {
                                       getToast(context, "Check In Successful");
                                       await model.addcheckInStatus(
-                                          CheckInStatus(
-                                              element
-                                                  .status.task.inventoryCheck,
-                                              element.status.task.merchandizing,
-                                              element
-                                                  .status.task.orderPlacement,
-                                              element.status.task.print));
+                                      CheckInStatus(
+                                        element.status.task.inventoryCheck,
+                                        element.status.task.merchandizing,
+                                        element.status.task.orderPlacement,
+                                        element.status.task.print));
                                       await model.addActiveShop(element);
 
-                                      if (model.getLoginDetail.userType ==
-                                          "storeowner") {
+                                      if (model.getLoginDetail.userType == "storeowner") {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    StoreOwnerVisitCard()));
+                                        context, MaterialPageRoute(builder: (context) => StoreOwnerVisitCard()));
                                       } else {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SalePersonVisitCard()));
+                                        context, MaterialPageRoute(builder: (context) => SalePersonVisitCard()));
                                       }
                                     }
                                   } else {
-                                    getToast(context,
-                                        "Server error !. Try again later");
+                                    getToast(context, "Server error !. Try again later");
                                     Navigator.pop(context, true);
                                     Navigator.pop(context, true);
                                   }
@@ -523,8 +501,7 @@ Future<Position> getCurrentLocation(BuildContext context) async {
   try {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
-      await Geolocator.requestPermission()
-          .then((LocationPermission permission) async {
+      await Geolocator.requestPermission().then((LocationPermission permission) async {
         if (permission == LocationPermission.denied ||
             permission == LocationPermission.deniedForever) {
           getToast(context, "Please allow location permission");
@@ -592,8 +569,8 @@ Widget getShopList(List<ShopByListM> dataList) {
               padding: const EdgeInsets.only(bottom: 4, left: 4, right: 4),
               child: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white),
                 child: InkWell(
                   onTap: () async {
                     await checkInDialog(
@@ -608,17 +585,16 @@ Widget getShopList(List<ShopByListM> dataList) {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: Text(dataList[index].shopname,
-                                style: Style.headingTextStyle),
+                            child: Text(dataList[index].shopname, style: Style.headingTextStyle),
                           ),
                           Padding(
                             padding: EdgeInsets.all(4.0),
                             child: Text(
-                                getCurrentTypeSting(
-                                    dataList[index].status.currentType),
-                                style: getCurrentTypeTS(
-                                  dataList[index].status.currentType,
-                                )),
+                              getCurrentTypeSting(dataList[index].status.currentType),
+                              style: getCurrentTypeTS(
+                                dataList[index].status.currentType,
+                              )
+                            ),
                           )
                         ],
                       ),
@@ -726,19 +702,19 @@ Widget getRemark(controller) {
         controller: controller,
         maxLines: 8,
         decoration: InputDecoration(
-            alignLabelWithHint: true,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            labelText: "Remark :",
-            hintText: "Tap on a clip to paste it in the text box",
-            hintStyle: TextStyle(fontWeight: FontWeight.w300),
-            labelStyle: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w300,
-                height: 1.2,
-                color: Colors.black),
-            fillColor: Colors.white,
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.all(15)),
+          alignLabelWithHint: true,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          labelText: "Remark :",
+          hintText: "Tap on a clip to paste it in the text box",
+          hintStyle: TextStyle(fontWeight: FontWeight.w300),
+          labelStyle: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w300,
+            height: 1.2,
+          color: Colors.black),
+          fillColor: Colors.white,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(15)),
       ),
     ),
   );
@@ -794,21 +770,18 @@ Widget getShopByTeam(List<ShopByListM> dataList, List<ShopByListM> mainList) {
         onExpansionChanged: (value) {},
         children: [
           new FutureBuilder(
-            builder:
-                (BuildContext context, AsyncSnapshot<http.Response> response) {
+            builder: (BuildContext context, AsyncSnapshot<http.Response> response) {
               getByTeam.clear();
               List<ShopByListM> list = mainList
-                  .where((p) => p.usercode.contains(dataList[index].usercode))
-                  .toList();
+              .where((p) => p.usercode.contains(dataList[index].usercode)).toList();
               list.forEach((element) {
                 getByTeam.add(
                   Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 4, left: 4, right: 4),
+                    padding: const EdgeInsets.only(bottom: 4, left: 4, right: 4),
                     child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.white),
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.white),
                       child: InkWell(
                         child: Padding(
                           padding: EdgeInsets.only(top: 10.0),
@@ -817,30 +790,25 @@ Widget getShopByTeam(List<ShopByListM> dataList, List<ShopByListM> mainList) {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Text(element.shopname,
-                                      style: Style.headingTextStyle),
+                                  child: Text(element.shopname, style: Style.headingTextStyle),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(4.0),
                                   child: Text(
-                                      getCurrentTypeSting(
-                                          element.status.currentType),
-                                      style: getCurrentTypeTS(
-                                        element.status.currentType,
-                                      )),
+                                    getCurrentTypeSting(element.status.currentType),
+                                    style: getCurrentTypeTS(element.status.currentType,)),
                                 )
                               ],
                             ),
                             subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    element.personph,
-                                    style: Style.secondTextStyle,
-                                  ),
-                                  Text(element.address,
-                                      style: Style.secondTextStyle)
-                                ]),
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  element.personph,
+                                  style: Style.secondTextStyle,
+                                ),
+                                Text(element.address, style: Style.secondTextStyle)
+                              ]),
                           ),
                         ),
                       ),
@@ -867,11 +835,7 @@ Widget getShopByTeam(List<ShopByListM> dataList, List<ShopByListM> mainList) {
 }
 
 Widget getListLength(String userCode, List<ShopByListM> mainList) {
-  String length = mainList
-      .where((p) => p.usercode.contains(userCode))
-      .toList()
-      .length
-      .toString();
+  String length = mainList.where((p) => p.usercode.contains(userCode)).toList().length.toString();
   return Text(
     '0 / $length',
     style: TextStyle(color: Style.Colors.textColor),

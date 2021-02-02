@@ -50,30 +50,30 @@ class InventorystockSearch extends SearchDelegate {
   final List<String> mainList;
 
   InventorystockSearch(this.title, this.mainList)
-      : super(
-            searchFieldLabel: title,
-            searchFieldStyle: TextStyle(
-                decorationColor: Colors.white,
-                color: Colors.white,
-                fontSize: 15,
-                letterSpacing: 1));
+  : super(
+    searchFieldLabel: title,
+    searchFieldStyle: TextStyle(
+      decorationColor: Colors.white,
+      color: Colors.white,
+      fontSize: 15,
+      letterSpacing: 1));
   List<String> suggestion;
   List<String> result;
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    return [
-      query.isEmpty
-          ? Container()
-          : IconButton(
-              icon: Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                query = '';
-              },
-            ),
+  return [
+    query.isEmpty
+      ? Container()
+      : IconButton(
+          icon: Icon(
+            Icons.close,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            query = '';
+          },
+        ),
     ];
   }
 
@@ -91,9 +91,7 @@ class InventorystockSearch extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     Widget widget;
 
-    result = mainList
-        .where((p) => p.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    result = mainList.where((p) => p.toLowerCase().contains(query.toLowerCase())).toList();
     print('this is result $result');
     if (result.isEmpty) {
       widget = Center(
@@ -106,7 +104,7 @@ class InventorystockSearch extends SearchDelegate {
       );
     } else if (result.isNotEmpty) {
       var stockList = Container(
-          child: Column(
+      child: Column(
         children: [
           dropDown(context),
           Expanded(child: getMainExpansion()),
@@ -130,8 +128,7 @@ class InventorystockSearch extends SearchDelegate {
       ));
     } else {
       suggestion = mainList
-          .where((p) => p.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+          .where((p) => p.toLowerCase().contains(query.toLowerCase())).toList();
       widget = Container(
           child: Column(
         children: [
@@ -273,7 +270,6 @@ class InventorystockSearch extends SearchDelegate {
                 } else if (getlist == litems) {
                   colorcheck = value3;
                 }
-
                 check = false;
                 Navigator.pop(context, true);
               },
@@ -360,17 +356,16 @@ class InventorystockSearch extends SearchDelegate {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 4, right: 4, top: 7),
+                              padding: const EdgeInsets.only(left: 4, right: 4, top: 7),
                               child: Container(
-                                  width: secWidth * 0.8,
-                                  child: Text(
-                                    titlelist[index],
-                                    maxLines: 3,
-                                    overflow: TextOverflow.clip,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      height: 1,
+                                width: secWidth * 0.8,
+                                child: Text(
+                                  titlelist[index],
+                                  maxLines: 3,
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    height: 1,
                                     ),
                                   )),
                             ),
@@ -432,13 +427,9 @@ class InventorystockSearch extends SearchDelegate {
                                             width: secWidth * 0.1,
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  right: 8,
-                                                  top: 8,
-                                                  bottom: 8,
-                                                  left: 4),
+                                                  right: 8, top: 8, bottom: 8, left: 4),
                                               child: ImageIcon(
-                                                AssetImage(
-                                                    'assets/icon/minus.png'),
+                                                AssetImage('assets/icon/minus.png'),
                                                 color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
@@ -447,7 +438,7 @@ class InventorystockSearch extends SearchDelegate {
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(bottom: 5),
+                                          const EdgeInsets.only(bottom: 5),
                                           child: Container(
                                             width: secWidth * 0.1,
                                             child: TextField(
@@ -457,8 +448,7 @@ class InventorystockSearch extends SearchDelegate {
                                               controller: qtyController,
                                               textAlign: TextAlign.center,
                                               decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.only(bottom: 14),
+                                                contentPadding: EdgeInsets.only(bottom: 14),
                                                 border: InputBorder.none,
                                               ),
                                             ),
@@ -475,8 +465,7 @@ class InventorystockSearch extends SearchDelegate {
                                               padding: const EdgeInsets.only(
                                                   left: 8, top: 10, bottom: 10),
                                               child: ImageIcon(
-                                                AssetImage(
-                                                    'assets/icon/add.png'),
+                                                AssetImage('assets/icon/add.png'),
                                                 color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
@@ -504,8 +493,7 @@ class InventorystockSearch extends SearchDelegate {
                                       fit: BoxFit.fitWidth,
                                       child: Text(
                                         "Exp qty",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500),
+                                        style: TextStyle(fontWeight: FontWeight.w500),
                                       ),
                                     ),
                                   ),

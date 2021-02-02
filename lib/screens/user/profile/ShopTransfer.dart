@@ -57,14 +57,9 @@ class _TransferWidgetState extends State<TransferWidget> {
                       getToast(context, 'select user');
                     } else if (_shopValue != null && _userValue != null) {
                       List<ShopByListM> shopSysKey = model.shopsByUser
-                          .where((element) =>
-                              element.shopname.contains(_shopValue))
-                          .toList();
+                          .where((element) => element.shopname.contains(_shopValue)).toList();
                       List<ShopByListM> userCode = model.shopsByTeam
-                          .where((element) =>
-                              element.username.contains(_userValue))
-                          .toList();
-
+                          .where((element) => element.username.contains(_userValue)).toList();
                       await model.shopTransfer(
                           shopSysKey[0].shopsyskey, userCode[0].usercode);
                       if (model.statusCode == 200) {
@@ -98,9 +93,8 @@ class _TransferWidgetState extends State<TransferWidget> {
   Widget getSelectShop() {
     List<ShopByListM> filteredList = [];
     if (model.shopsByUser != null) {
-      filteredList = model.shopsByUser
-          .where((element) => element.status.currentType.isEmpty)
-          .toList();
+      filteredList =
+          model.shopsByUser.where((element) => element.status.currentType.isEmpty).toList();
     }
 
     return Stack(
@@ -123,9 +117,9 @@ class _TransferWidgetState extends State<TransferWidget> {
             hint: Text('Select Shop'),
             items: filteredList.map((element) {
               return DropdownMenuItem<String>(
-                  value: element.shopname,
-                  child: Text(element.shopname,
-                      style: TextStyle(color: Colors.black)));
+                value: element.shopname,
+                child: Text(element.shopname,
+                    style: TextStyle(color: Colors.black)));
             }).toList(),
             onChanged: (shopValue) {
               setState(() {
@@ -145,7 +139,6 @@ class _TransferWidgetState extends State<TransferWidget> {
         ShopByListM isExist = current.firstWhere((element) {
           return element.usercode == next.usercode;
         }, orElse: () => null);
-
         if (isExist == null) {
           current.add(next);
         }

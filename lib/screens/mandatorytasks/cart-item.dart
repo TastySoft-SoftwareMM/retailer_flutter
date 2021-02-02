@@ -4,8 +4,6 @@ import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/screens/mandatorytasks/carrt_item_discount.dart';
 import '../../style/theme.dart' as Style;
 
-// import '../../custom/custom_expansion_title.dart' as custom;
-
 class CartItemScreen extends StatefulWidget {
   @override
   _CartItemScreenState createState() => _CartItemScreenState();
@@ -34,13 +32,13 @@ class _CartItemScreenState extends State<CartItemScreen> {
                 children: [
                   Container(
                     child: IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        }),
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      }),
                   ),
                   Container(
                     padding: EdgeInsets.only(top: 4),
@@ -54,16 +52,16 @@ class _CartItemScreenState extends State<CartItemScreen> {
                     ),
                   ),
                   Container(
-                     child:IconButton(
-                            icon: ImageIcon(
-                              AssetImage('assets/icon/percentage.png'),
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
-                              Navigator.push(context, new MaterialPageRoute(
+                   child:IconButton(
+                    icon: ImageIcon(
+                      AssetImage('assets/icon/percentage.png'),
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      Navigator.push(context, new MaterialPageRoute(
                       builder: (context) => CartItemDiscountScreen()));
-                            },
-                          ),
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -155,49 +153,51 @@ class _CartItemScreenState extends State<CartItemScreen> {
         child: Row(
           children: [
             Container(
-                width: width * 0.32,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Style.Colors.mainColor),
+              width: width * 0.32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Style.Colors.mainColor),
                 child: FlatButton(
-                    onPressed: () {},
-                    child: Center(  
-                      child: Text(
-                        'Complete Visit',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
+                  onPressed: () {},
+                  child: Center(
+                    child: Text(
+                      'Complete Visit',
+                      style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w500),
                       ),
                     ))),
             Spacer(),
             Container(
                 width: width * 0.32,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Style.Colors.mainColor),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Style.Colors.mainColor),
                 child: FlatButton(
-                    onPressed: () {},
-                    child: Center(
-                      child: Text(
-                        'Print',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
+                  onPressed: () {},
+                  child: Center(
+                    child: Text(
+                      'Print',
+                      style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w500),
                       ),
                     ))),
             Spacer(),
             Container(
-                width: width * 0.32,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Style.Colors.mainColor),
-                child: FlatButton(
-                    onPressed: () {},
-                    child: Center(
-                      child: Text(
-                        'Order Update',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
-                      ),
-                    )))
+            width: width * 0.32,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Style.Colors.mainColor),
+            child: FlatButton(
+                onPressed: () {},
+                child: Center(
+                  child: Text(
+                    'Order Update',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w500),
+                  ),
+                )
+               )
+            )
           ],
         ),
       ),

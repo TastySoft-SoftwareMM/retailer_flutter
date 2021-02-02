@@ -74,59 +74,59 @@ class _VisitCardState extends State<VisitCard> {
                 Padding(
                   padding: const EdgeInsets.only(top: 4.0),
                   child: model.getLoginDetail.merchandizer == 'Yes'
-                      ? Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                createCardWidget(checkout.id, checkout.img,
-                                    "1.Check Out", checkout.task),
-                                createCardWidget(
-                                    inventorycheck.id,
-                                    inventorycheck.img,
-                                    "2.Inventory Check",
-                                    _shopDetail.status.task.inventoryCheck),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                createCardWidget(
-                                    merchandizing.id,
-                                    merchandizing.img,
-                                    "3.Merchandizing",
-                                    _shopDetail.status.task.merchandizing),
-                                isSwitched
-                                    ? Container()
-                                    : createCardWidget(
-                                        orderplacement.id,
-                                        orderplacement.img,
-                                        "4.OrderPlacement",
-                                        _shopDetail.status.task.orderPlacement),
-                              ],
+                    ? Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              createCardWidget(checkout.id, checkout.img,
+                                  "1.Check Out", checkout.task),
+                              createCardWidget(
+                                  inventorycheck.id,
+                                  inventorycheck.img,
+                                  "2.Inventory Check",
+                                  _shopDetail.status.task.inventoryCheck),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              createCardWidget(
+                                merchandizing.id,
+                                merchandizing.img,
+                                "3.Merchandizing",
+                                _shopDetail.status.task.merchandizing),
+                              isSwitched
+                                ? Container()
+                                : createCardWidget(
+                                  orderplacement.id,
+                                  orderplacement.img,
+                                  "4.OrderPlacement",
+                                  _shopDetail.status.task.orderPlacement),
+                            ],
                             ),
                           ],
                         )
                       : Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                createCardWidget(checkout.id, checkout.img,
-                                    "1.Check Out", checkout.task),
-                                createCardWidget(
-                                    inventorycheck.id,
-                                    inventorycheck.img,
-                                    "2.Inventory Check",
-                                    _shopDetail.status.task.inventoryCheck),
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              createCardWidget(checkout.id, checkout.img,
+                                  "1.Check Out", checkout.task),
+                              createCardWidget(
+                                  inventorycheck.id,
+                                  inventorycheck.img,
+                                  "2.Inventory Check",
+                                  _shopDetail.status.task.inventoryCheck),
                               ],
                             ),
                             Row(
                               children: <Widget>[
                                 isSwitched
-                                    ? Container()
-                                    : createCardWidget(
-                                        orderplacement.id,
-                                        orderplacement.img,
-                                        "3.OrderPlacement Check",
-                                        _shopDetail.status.task.orderPlacement),
+                                  ? Container()
+                                  : createCardWidget(
+                                      orderplacement.id,
+                                      orderplacement.img,
+                                      "3.OrderPlacement Check",
+                                      _shopDetail.status.task.orderPlacement),
                               ],
                             ),
                           ],
@@ -166,11 +166,12 @@ class _VisitCardState extends State<VisitCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 40),
                 child: Container(
-                    height: 40,
-                    child: SvgPicture.asset(
-                      image,
-                      color: Style.Colors.mainColor,
-                    )),
+                  height: 40,
+                  child: SvgPicture.asset(
+                    image,
+                    color: Style.Colors.mainColor,
+                  )
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 40.0),

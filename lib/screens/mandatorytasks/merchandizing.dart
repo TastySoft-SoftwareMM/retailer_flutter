@@ -42,44 +42,44 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
           title: Text("Merchandizing"),
           actions: [
             IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  showSearch(
-                      context: context,
-                      delegate: MainScreenSearch(
-                        "Search...",
-                      ));
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    delegate: MainScreenSearch(
+                      "Search...",
+                    ));
                 })
           ],
         ),
         body: loading
-            ? Center(
-                child: CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-                  strokeWidth: 2,
-                ),
-              )
-            : Padding(
-                padding: EdgeInsets.all(5.0),
-                child: model.listModel == null
-                    ? Container(
-                        child: Center(
-                          child: Text(
-                            "No Data Found !",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey),
-                          ),
+          ? Center(
+              child: CircularProgressIndicator(
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                strokeWidth: 2,
+              ),
+            )
+          : Padding(
+              padding: EdgeInsets.all(5.0),
+              child: model.listModel == null
+                  ? Container(
+                      child: Center(
+                        child: Text(
+                          "No Data Found !",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey),
                         ),
-                      )
-                    : Column(
-                        children: [
-                          CheckinShop(),
-                          Flexible(child: getExpansionList())
-                        ],
                       ),
+                    )
+                  : Column(
+                      children: [
+                        CheckinShop(),
+                        Flexible(child: getExpansionList())
+                      ],
+                    ),
               ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:retailer/models/get_allstock.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
+import 'package:retailer/screens/mandatorytasks/ordersearch.dart';
 import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
@@ -20,11 +21,21 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
   var secWidth;
   var width;
   ViewModelFunction model;
-
+  List<String> titlelist = [
+    'Sp_Daily_Butter Bread',
+    'SP_Milk Cream Roll ',
+    'SP_Daily Cheese Spread',
+    'SP_Bean Bread',
+    'Example Bread',
+    'Super Cream Bread',
+    'Small Cream Bread',
+    'No Cream Bread',
+    'Stawbarry Cream',
+    'Simple bread',
+  ];
   @override
   Widget build(BuildContext context) {
     model = Provider.of<ViewModelFunction>(context);
-
     secWidth = MediaQuery.of(context).size.width * 0.68;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -48,17 +59,20 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
               Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => CartItemScreen()));
+              context, new MaterialPageRoute(builder: (context) => CartItemScreen()));
             },
           ),
+
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              print('tap on search');
-            },
-          ),
+              showSearch(
+                context: context,
+                delegate: OrderSearch(
+                  'search',
+                  titlelist,
+                ));
+            })
         ],
       ),
       body: SingleChildScrollView(
@@ -144,42 +158,41 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
     });
     var subFilteredList = subCategory.toSet().toList();
     return subFilteredList.length > 0
-        ? Container(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    custom.ExpansionTitle(
-                      headerBackgroundColor: Colors.red[50],
-                      backgroundColor: Colors.white,
-                      iconColor: Colors.black,
-                      title: Text(
-                        subFilteredList[index],
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      children: [
-                        listByItems(subFilteredList[index]),
-                      ],
+      ? Container(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                custom.ExpansionTitle(
+                  headerBackgroundColor: Colors.red[50],
+                  backgroundColor: Colors.white,
+                  iconColor: Colors.black,
+                  title: Text(
+                    subFilteredList[index],
+                      style: TextStyle(color: Colors.black),
                     ),
-                    Divider(
-                      height: 4,
-                      color: Colors.white,
-                    )
-                  ],
-                );
-              },
-              itemCount: subFilteredList.length,
-            ),
-          )
-        : noDataWidget();
-  }
+                    children: [
+                      listByItems(subFilteredList[index]),
+                    ],
+                  ),
+                  Divider(
+                    height: 4,
+                    color: Colors.white,
+                  )
+                ],
+              );
+            },
+            itemCount: subFilteredList.length,
+          ),
+        )
+      : noDataWidget();
+}
 
   Future<List<GetAllStock>> getListBySubCate(items) async {
     List<GetAllStock> itemList = model.allStock
-        .where((p) => p.subCategoryCodeDesc.contains(items))
-        .toList();
+        .where((p) => p.subCategoryCodeDesc.contains(items)).toList();
     return itemList;
   }
 
@@ -189,283 +202,248 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
 
     return FutureBuilder(
         future: getListBySubCate(subCate),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<GetAllStock>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<GetAllStock>> snapshot) {
           Widget children;
           if (snapshot.hasData) {
             children = snapshot.data.length > 0
-                ? ListView.builder(
-                    physics: ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        height: 110,
-                        child: Row(
-                          children: [
-                            getPhotoContainer(width, snapshot.data[index].img),
-                            Container(
-                              width: 5,
-                            ),
-                            Expanded(
+              ? ListView.builder(
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      height: 110,
+                      child: Row(
+                        children: [
+                          getPhotoContainer(width, snapshot.data[index].img),
+                          Container(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: 100,
+                              width: width * 0.72 - 1.5,
                               child: Container(
-                                height: 100,
-                                width: width * 0.72 - 1.5,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey[300]),
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Spacer(),
-                                      Spacer(),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 4, right: 4, top: 8),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 4.0),
-                                              child: Container(
-                                                  width: secWidth * 0.7,
-                                                  child: Text(
-                                                    snapshot.data[index].desc,
-                                                    maxLines: 3,
-                                                    overflow: TextOverflow.clip,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      height: 1,
-                                                    ),
-                                                  )),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          IconButton(
-                                            icon: Container(
-                                              child: SvgPicture.asset(
-                                                'assets/atc.svg',
-                                                height: 25,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              print('Shop  was tap');
-                                            },
-                                          ),
-                                        ],
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey[300]),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Spacer(),
+                                    Spacer(),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 4, right: 4, top: 8),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 4.0),
+                                          child: Container(
+                                              width: secWidth * 0.7,
+                                              child: Text(
+                                                snapshot.data[index].desc,
+                                                maxLines: 3,
+                                                overflow: TextOverflow.clip,
+                                                style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight.w500,
+                                                  height: 1,
+                                                ),
+                                              )),
+                                        ),
                                       ),
                                       Spacer(),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            height: 40,
-                                            width: secWidth * 0.45,
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  height: 40,
-                                                  width: secWidth * 0.35,
-                                                  child: Card(
-                                                    elevation: 1,
-                                                    color: Colors.grey[200],
-                                                    child: Row(
-                                                      children: [
-                                                        InkWell(
-                                                          onTap: () {
-                                                            print(
-                                                                'minus one was tap');
-                                                          },
-                                                          child: Container(
-                                                            height: 40,
-                                                            width:
-                                                                secWidth * 0.1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      right: 8,
-                                                                      top: 8,
-                                                                      bottom: 8,
-                                                                      left: 4),
-                                                              child: ImageIcon(
-                                                                AssetImage(
-                                                                    'assets/icon/minus.png'),
-                                                                color: Style
-                                                                    .Colors
-                                                                    .mainColor,
-                                                                size: 16,
-                                                              ),
-                                                            ),
+                                      IconButton(
+                                        icon: Container(
+                                          child: SvgPicture.asset(
+                                            'assets/atc.svg',
+                                            height: 25,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          print('Shop  was tap');
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 40,
+                                        width: secWidth * 0.45,
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              height: 40,
+                                              width: secWidth * 0.35,
+                                              child: Card(
+                                                elevation: 1,
+                                                color: Colors.grey[200],
+                                                child: Row(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        print('minus one was tap');
+                                                      },
+                                                      child: Container(
+                                                        height: 40,
+                                                        width: secWidth * 0.1,
+                                                        child: Padding(
+                                                          padding: EdgeInsets.only(right: 8, top: 8, bottom: 8, left: 4),
+                                                          child: ImageIcon(
+                                                            AssetImage('assets/icon/minus.png'),
+                                                            color: Style.Colors.mainColor,
+                                                            size: 16,
                                                           ),
                                                         ),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            _showDialog();
-                                                          },
-                                                          child: Container(
-                                                            height: 40,
-                                                            width:
-                                                                secWidth * 0.1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 8,
-                                                                      top: 10,
-                                                                      bottom:
-                                                                          10),
-                                                              child: Text(val),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            print('object');
-                                                          },
-                                                          child: Container(
-                                                            height: 40,
-                                                            width:
-                                                                secWidth * 0.1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 8,
-                                                                      top: 10,
-                                                                      bottom:
-                                                                          10),
-                                                              child: ImageIcon(
-                                                                AssetImage(
-                                                                    'assets/icon/add.png'),
-                                                                color: Style
-                                                                    .Colors
-                                                                    .mainColor,
-                                                                size: 16,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        _showDialog();
+                                                      },
+                                                      child: Container(
+                                                        height: 40,
+                                                        width: secWidth * 0.1,
+                                                        child: Padding(
+                                                          padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
+                                                          child: Text(val),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        print('object');
+                                                      },
+                                                      child: Container(
+                                                        height: 40,
+                                                        width: secWidth * 0.1,
+                                                        child: Padding(
+                                                          padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
+                                                          child: ImageIcon(
+                                                            AssetImage('assets/icon/add.png'),
+                                                            color: Style.Colors.mainColor,
+                                                            size: 16,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 50,
+                                        width: secWidth * 0.55,
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 4),
+                                              child: Container(
+                                                // height: 40,
+                                                width: secWidth * 0.35,
+                                                child: Text(
+                                                "100",
+                                              ),
                                             ),
                                           ),
                                           Container(
-                                            height: 50,
-                                            width: secWidth * 0.55,
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4),
-                                                  child: Container(
-                                                    // height: 40,
-                                                    width: secWidth * 0.35,
-                                                    child: Text(
-                                                      "100",
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: secWidth * 0.16,
-                                                  child: Text(
-                                                    "100",
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                                          width: secWidth * 0.16,
+                                          child: Text(
+                                            "100",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                        decoration: BoxDecoration(),
-                      );
-                    },
-                    itemCount: snapshot.data.length,
-                  )
-                : noDataWidget();
-          } else if (snapshot.hasError) {
-            children = Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Text('Error: something went worng !'),
-            );
-          } else {
-            children = SizedBox(
-              child: CircularProgressIndicator(),
-              width: 60,
-              height: 60,
-            );
-          }
-          return children;
-        });
-  }
+                      ),
+                    )
+                  ],
+                ),
+                decoration: BoxDecoration(),
+              );
+            },
+            itemCount: snapshot.data.length,
+          )
+        : noDataWidget();
+        } else if (snapshot.hasError) {
+          children = Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text('Error: something went worng !'),
+          );
+        } else {
+        children = SizedBox(
+          child: CircularProgressIndicator(),
+          width: 60,
+          height: 60,
+        );
+      }
+        return children;
+      });
+}
 
   void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "SP_Blueberry Cream Roll",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 15,
-            ),
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          "SP_Blueberry Cream Roll",
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 15,
           ),
-          content: TextField(
-            controller: textEditingController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(hintText: 'Enter the number'),
+        ),
+        content: TextField(
+          controller: textEditingController,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(hintText: 'Enter the number'),
+        ),
+        actions: <Widget>[
+          Row(
+            children: <Widget>[
+              new FlatButton(
+                child: new Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                onPressed: () {
+                  setState(() {
+                    val = textEditingController.text;
+                    Navigator.pop(context, true);
+                  });
+                },
+                child: new Text("OK"))
+            ],
           ),
-          actions: <Widget>[
-            Row(
-              children: <Widget>[
-                new FlatButton(
-                  child: new Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        val = textEditingController.text;
-                        Navigator.pop(context, true);
-                      });
-                    },
-                    child: new Text("OK"))
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
+        ],
+      );
+    },
+  );
+}
 
-  Widget noDataWidget() {
-    return Container(
-      height: 60,
-      color: Colors.white,
-      child: Center(
-          child: Text(
-        "No Stock",
-        style: TextStyle(fontWeight: FontWeight.w500),
-      )),
-    );
-  }
+Widget noDataWidget() {
+  return Container(
+    height: 60,
+    color: Colors.white,
+    child: Center(
+      child: Text(
+    "No Stock",
+    style: TextStyle(fontWeight: FontWeight.w500),
+  )),
+  );
+}
 }

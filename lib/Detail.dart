@@ -6,6 +6,8 @@ class HomePageDetail extends StatefulWidget {
 }
 
 class _HomePageDetailState extends State<HomePageDetail> {
+  var secWidth;
+  var width;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,10 +21,10 @@ class _HomePageDetailState extends State<HomePageDetail> {
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
                 title: Text("Detail",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                    )),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                  )),
                 background: Image.asset(
                   'assets/icon/sp_bread3.jpg',
                   fit: BoxFit.cover,
@@ -78,11 +80,12 @@ class _HomePageDetailState extends State<HomePageDetail> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text("Pro",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.white,
-                                ))
+                          Text("Pro",
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white,
+                            )
+                            )
                           ],
                         ),
                       ),
@@ -117,10 +120,11 @@ class _HomePageDetailState extends State<HomePageDetail> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text("Baked goods",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 13,
-                            )),
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13,
+                          )
+                        ),
                       )
                     ],
                   ),
@@ -176,10 +180,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
   Widget getListWidget() {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-            top: 30,
-          ),
+        Padding(padding: EdgeInsets.only(top: 30,),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -374,10 +375,10 @@ class _HomePageDetailState extends State<HomePageDetail> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Text("Buy",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13,
-                                            ))
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 13,
+                                          ))
                                       ],
                                     ),
                                   ),
@@ -388,8 +389,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
                               height: 57,
                               child: Column(children: [
                                 Container(
-                                  padding:
-                                      EdgeInsets.only(top: 14.0, right: 18),
+                                  padding: EdgeInsets.only(top: 14.0, right: 18),
                                   child: Container(
                                     width: 38,
                                     height: 30,
@@ -502,9 +502,9 @@ class _HomePageDetailState extends State<HomePageDetail> {
                                     child: Text(
                                       '10000 Ks over',
                                       style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
+                                        color: Colors.grey,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold),
                                     ),
                                   )
                                 ]),
@@ -516,14 +516,13 @@ class _HomePageDetailState extends State<HomePageDetail> {
                                 height: 57,
                                 child: Column(children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 90, top: 19),
+                                    padding: EdgeInsets.only(right: 90, top: 19),
                                     child: Text(
                                       '7 % off',
                                       style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold),
+                                        fontSize: 13,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold),
                                     ),
                                   )
                                 ]),
@@ -535,8 +534,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
                               height: 60,
                               child: Column(children: [
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 23, top: 15),
+                                  padding: EdgeInsets.only(left: 23, top: 15),
                                   child: Text(
                                     '20000 Ks between 30000 Ks',
                                     style: TextStyle(
@@ -549,8 +547,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
                             ),
                             Column(children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 83, top: 15),
+                                padding: EdgeInsets.only(right: 83, top: 15),
                                 child: Text(
                                   '10 % off',
                                   style: TextStyle(
@@ -568,8 +565,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
                                 height: 57,
                                 child: Column(children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 20, top: 15),
+                                    padding: EdgeInsets.only(right: 20, top: 15),
                                     child: Center(
                                       child: Text(
                                         '40000 Ks or over',
@@ -590,8 +586,7 @@ class _HomePageDetailState extends State<HomePageDetail> {
                                 height: 57,
                                 child: Column(children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 76, top: 15),
+                                    padding: const EdgeInsets.only(right: 76, top: 15),
                                     child: Text(
                                       '15 % off',
                                       style: TextStyle(
@@ -612,7 +607,8 @@ class _HomePageDetailState extends State<HomePageDetail> {
                 ),
               ],
             ),
-          )),
+          )
+      ),
     );
   }
 }
