@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:retailer/models/all_shop_saleList.dart';
 import 'package:retailer/models/checkIn_status_task.dart';
+import 'package:retailer/models/getSmartList.dart';
 import 'package:retailer/models/get_allstock.dart';
 import 'package:retailer/models/loginModel.dart';
 import 'package:retailer/models/merchandizing_M.dart';
@@ -20,6 +21,7 @@ class ViewModelFunction with ChangeNotifier {
   List<ShopByListM> shopsByTeam;
   List<ShopByListM> shopsByUser;
   List<GetAllStock> allStock;
+  List<GetSmartList> getsmart;
   int statusCode;
   String signUpDetail;
   String status;
@@ -35,22 +37,18 @@ class ViewModelFunction with ChangeNotifier {
     _checkInStatus = setposition;
     notifyListeners();
   }
-
   set activeShop(ShopByListM setActiveShop) {
     _activeShop = setActiveShop;
     notifyListeners();
   }
-
   addcheckInStatus(CheckInStatus addCheckInStatus) {
     _checkInStatus = addCheckInStatus;
     notifyListeners();
   }
-
   addActiveShop(ShopByListM addActiveShop) {
     _activeShop = addActiveShop;
     notifyListeners();
   }
-
   Future login(String userId, String pass) async {
     // print("work");
     param = jsonEncode({
@@ -72,23 +70,19 @@ class ViewModelFunction with ChangeNotifier {
     }
     notifyListeners();
   }
-
   Future getShopKey(String shopSysKey, String userType) async {
     param = jsonEncode({"shopSysKey": '$shopSysKey', "userType": '$userType'});
-    final http.Response response =
-        await httpRequest('campaign/getshopKey/', param, getLoginDetail.orgId);
+    final http.Response response = await httpRequest('campaign/getshopKey/', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       merchandizingM = MerchandizingM.fromJson(result);
-      this.listModel =
-          merchandizingM.list.map((el) => ListModel.fromJson(el)).toList();
+      this.listModel = merchandizingM.list.map((el) => ListModel.fromJson(el)).toList();
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
     }
     notifyListeners();
   }
-
   setTaskOfShop(String inventoryCheck, String merchandizing,
       String orderplacement) async {
     // print("$inventoryCheck , $merchandizing, $orderplacement");
@@ -102,8 +96,7 @@ class ViewModelFunction with ChangeNotifier {
         "print": "COMPLETED"
       }
     });
-    final http.Response response =
-        await httpRequest('/route/settask', param, getLoginDetail.orgId);
+  final http.Response response = await httpRequest('/route/settask', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
       var result = json.decode(response.body);
       if (result['status'] == 'SUCCESS') {
@@ -115,7 +108,6 @@ class ViewModelFunction with ChangeNotifier {
     }
     notifyListeners();
   }
-
   resetPassword(String currentPass, String newpass) async {
     param = jsonEncode({
       "id": getLoginDetail.userId,
@@ -133,7 +125,6 @@ class ViewModelFunction with ChangeNotifier {
     }
     notifyListeners();
   }
-
   Future routeCheckin(
       Position position, ShopByListM element, String checkInType) async {
     String state;
@@ -164,8 +155,8 @@ class ViewModelFunction with ChangeNotifier {
         "print": "COMPLETED"
       }
     });
-    final http.Response response =
-        await httpRequest('/route/checkin', param, getLoginDetail.orgId);
+  final http.Response response =
+     await httpRequest('/route/checkin', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       status = result['status'];
@@ -175,7 +166,6 @@ class ViewModelFunction with ChangeNotifier {
       statusCode = response.statusCode;
     }
   }
-
   shopTransfer(String shopSysKey, String teamSysKey) async {
     param = jsonEncode({
       "date": "$getDate",
@@ -186,8 +176,7 @@ class ViewModelFunction with ChangeNotifier {
       "n2": "",
       "n3": ""
     });
-    final http.Response response = await httpRequest(
-        'shopPerson/insertUJUN002/', param, getLoginDetail.orgId);
+    final http.Response response = await httpRequest('shopPerson/insertUJUN002/', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       status = result['status'];
@@ -208,37 +197,49 @@ class ViewModelFunction with ChangeNotifier {
       'packSizeSyskey': '0',
       'flavorSyskey': '0',
     });
-    final http.Response response =
-        await httpRequest('stock/getstockall', param, getLoginDetail.orgId);
+    final http.Response response = await httpRequest('stock/getstockall', param, getLoginDetail.orgId);
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       final Iterable list = result['list'];
       this.allStock = list.map((el) => GetAllStock.fromJson(el)).toList();
-    
-
       status = result['status'];
       statusCode = response.statusCode;
     } else {
       statusCode = response.statusCode;
+      return null;
+    }
+  }
+
+  getSmartList() async{
+    param = jsonEncode({
+      "shopsyskey": "",
+    });
+    final http.Response response =
+    await httpRequest('https://jsonformatter.org/0cd3c1', param, getLoginDetail.orgId);
+    if(response.statusCode == 200){
+      final result = json.decode(response.body);
+      final Iterable alist = result['alist'];
+      this.getsmart = alist.map((e) => GetSmartList.fromJson(e)).toList();
+      status = result['status'];
+      statusCode = response.statusCode;
+    }
+    else{
+      statusCode = response.statusCode;
+      return null;
     }
   }
 
   Future getMainList() async {
     this.allShopSaleList = await getMainScreenList(
-            spsysKey: getLoginDetail.syskey,
-            teamsysKey: getLoginDetail.teamSyskey,
-            userType: getLoginDetail.userType,
-            date: getDate,
-            orgId: getLoginDetail.orgId)
-        .timeout(Duration(seconds: 8), onTimeout: () {
+      spsysKey: getLoginDetail.syskey,
+      teamsysKey: getLoginDetail.teamSyskey,
+      userType: getLoginDetail.userType,
+      date: getDate,
+      orgId: getLoginDetail.orgId).timeout(Duration(seconds: 8), onTimeout: () {
       return null;
     });
-    this.shopsByTeam = allShopSaleList.shopsByTeam
-        .map((el) => ShopByListM.fromJson(el))
-        .toList();
-    this.shopsByUser = allShopSaleList.shopsByUser
-        .map((e) => ShopByListM.fromJson(e))
-        .toList();
+    this.shopsByTeam = allShopSaleList.shopsByTeam.map((el) => ShopByListM.fromJson(el)).toList();
+    this.shopsByUser = allShopSaleList.shopsByUser.map((e) => ShopByListM.fromJson(e)).toList();
   }
 
   signUp(
@@ -252,8 +253,7 @@ class ViewModelFunction with ChangeNotifier {
       "password": pass,
       "passcode": getLoginDetail.orgId
     });
-    final http.Response response =
-        await httpRequest('main/signup/mit', param, '');
+    final http.Response response = await httpRequest('main/signup/mit', param, '');
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
       signUpDetail = result['message'];
@@ -270,25 +270,19 @@ class ViewModelFunction with ChangeNotifier {
         "http://52.255.142.115:8084/madbrepository/";
     try {
       String url = mainUrl + urlname;
-      return http
-          .post(Uri.encodeFull(url), body: param, headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Content-Over": "$ordId",
-          })
-          .timeout(Duration(seconds: 5))
-          .catchError((error) {});
+      return http.post(Uri.encodeFull(url), body: param, headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Content-Over": "$ordId",
+      })
+      .timeout(Duration(seconds: 5)).catchError((error) {});
     } catch (e) {
-      return throw (e);
+      return null;
     }
   }
 
   Future<AllShopSaleList> getMainScreenList(
-      {String spsysKey,
-      String teamsysKey,
-      String userType,
-      String date,
-      String orgId}) async {
+    {String spsysKey, String teamsysKey, String userType, String date, String orgId}) async {
     param = jsonEncode({
       "spsyskey": "$spsysKey",
       "teamsyskey": "$teamsysKey",
@@ -296,12 +290,10 @@ class ViewModelFunction with ChangeNotifier {
       "date": "$date",
     });
 
-    final http.Response response =
-        await httpRequest('shop/getshopall', param, orgId);
+    final http.Response response = await httpRequest('shop/getshopall', param, orgId);
 
     if (response.statusCode == 200) {
       final result = json.decode(response.body);
-      // print(result);
       statusCode = response.statusCode;
 
       AllShopSaleList allShopSaleList = AllShopSaleList.fromJson(result);

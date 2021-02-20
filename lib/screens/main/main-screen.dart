@@ -33,38 +33,36 @@ class _MainScreenState extends State<MainScreen> {
     if (loading == true) {
       getData();
     }
-
     return WillPopScope(
-        onWillPop: () async => false,
-        child: loading
-            ? Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-                    strokeWidth: 2,
-                  ),
-                ),
-              )
-            : Scaffold(
-                backgroundColor: Color(0xFFF5F5F5),
-                appBar: AppBar(
-                  title: Text("Retailer"),
-                  actions: [
-                    IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          showSearch(
-                              context: context,
-                              delegate: MainScreenSearch(
-                                "Search...",
-                              ));
-                        }),
-                  ],
-                ),
-                drawer: MainDrawer(),
-                body: getBody(),
+    onWillPop: () async => false,
+    child: loading
+    ? Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+            strokeWidth: 2,
+        ),
+      ),
+    )
+    : Scaffold(
+      backgroundColor: Color(0xFFF5F5F5),
+      appBar: AppBar(
+        title: Text("Retailer"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: MainScreenSearch(
+                  "Search...",
               ));
+            }),
+          ],
+        ),
+        drawer: MainDrawer(),
+        body: getBody(),
+      ));
   }
 
   Widget getBody() {
@@ -106,9 +104,9 @@ class _MainScreenState extends State<MainScreen> {
               Text(
                 "No shop found !",
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey),
               ),
               SizedBox(
                 height: 10,
@@ -119,19 +117,17 @@ class _MainScreenState extends State<MainScreen> {
                 child: Card(
                   color: Colors.grey[300],
                   child: FlatButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SyncData()));
-                      },
-                      child: Text(
-                        "Retry",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey[600]),
-                      )),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                       context, MaterialPageRoute(builder: (context) => SyncData()));
+                    },
+                  child: Text(
+                    "Retry",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[600]),
+                  )),
                 ),
               ),
             ],
@@ -202,7 +198,6 @@ class _MainScreenState extends State<MainScreen> {
             });
           });
         }
-
         setState(() {
           loading = false;
         });

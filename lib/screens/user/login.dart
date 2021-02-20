@@ -44,9 +44,9 @@ class _LoginState extends State<Login> {
       }else{
         print('delete database');
         this.imageDbHelper.deleteAllPhoto();
-        setState(() {
-          photoList.remove(photoList);
-        });
+        // setState(() {
+        //   photoList.remove(photoList);
+        // });
       }
     }
 }
@@ -187,9 +187,7 @@ class _LoginState extends State<Login> {
                         labelText: 'User Id',
                         labelStyle: TextStyle(fontSize: 15),
                         prefixIcon: Padding(
-                          padding: const EdgeInsets.all(
-                            15,
-                          ),
+                          padding: const EdgeInsets.all(15,),
                           child: ImageIcon(
                             AssetImage('assets/icon/id.png'),
                           ),

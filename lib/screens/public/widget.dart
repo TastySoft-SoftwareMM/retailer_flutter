@@ -17,16 +17,17 @@ import '../../custom/custom_expansion_title.dart' as custom;
 var date = DateTime.now();
 DateFormat dateFormat = DateFormat("yyyyMMdd");
 String getDate = dateFormat.format(date);
-
-
-void getUrl() {
-  const str = 'http://52.255.142.115:8084/madbrepository/';
-  const start = " ";
-  const end = "madbrepository/";
-  final startIndex = str.indexOf(start);
-  final endIndex = str.indexOf(end, startIndex + start.length);
-  print(str.substring(startIndex + start.length, endIndex));
-}
+// var url = '';
+//
+// void getUrl() {
+//   const str = 'http://52.255.142.115:8084/madbrepository/';
+//   const start = " ";
+//   const end = "madbrepository/";
+//   final startIndex = str.indexOf(start);
+//   final endIndex = str.indexOf(end, startIndex + start.length);
+//   url = endIndex as String;
+//   print(str.substring(startIndex + start.length, endIndex));
+// }
 
 getPhotoContainer(width, imgname) {
   return Container(
@@ -62,7 +63,6 @@ getPhotoContainer(width, imgname) {
     ),
   );
 }
-
 
 
 getToast(BuildContext context, String message) {

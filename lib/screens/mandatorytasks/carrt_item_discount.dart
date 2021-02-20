@@ -531,11 +531,11 @@ Widget promotionDiscount() {
                           padding: const EdgeInsets.only(left: 12, top: 3),
                           child: Text(
                             "SP_Assorted Cake",
-                            style: TextStyle(fontSize: 12),
+                            style: TextStyle(fontSize: 10),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 3, left: 22,),
+                          padding: EdgeInsets.only(top: 3, left: 50,),
                           child: SizedBox(
                             width: 21,
                             height: 16,
@@ -551,7 +551,7 @@ Widget promotionDiscount() {
                                 child: Text(
                                   '1',
                                   style: TextStyle(
-                                    fontSize: 8,
+                                    fontSize: 7,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -607,11 +607,11 @@ Widget promotionDiscount() {
                   Column(children: [
                     Row(children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(top: 20, left: 13,),
-                        child: Text("bag", style: TextStyle(fontSize: 12),),
+                        padding: EdgeInsets.only(top: 20, left: 12,),
+                        child: Text("bag", style: TextStyle(fontSize: 10),),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 15, left: 98,),
+                        padding: EdgeInsets.only(top: 15, left: 116,),
                         child: SizedBox(
                           width: 21,
                           height: 16,
@@ -627,7 +627,7 @@ Widget promotionDiscount() {
                               child: Text(
                                 '2',
                               style: TextStyle(
-                                fontSize: 8,
+                                fontSize: 7,
                                 fontWeight: FontWeight.bold,
                                 ),
                               ),

@@ -168,32 +168,33 @@ class _CartItemScreenState extends State<CartItemScreen> {
                     ))),
             Spacer(),
             Container(
-                width: width * 0.32,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Style.Colors.mainColor),
-                child: FlatButton(
-                  onPressed: () {},
-                  child: Center(
-                    child: Text(
-                      'Print',
-                      style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w500),
-                      ),
-                    ))),
+            width: width * 0.32,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            color: Style.Colors.mainColor),
+              child: FlatButton(
+                onPressed: () {},
+                child: Center(
+                  child: Text(
+                    'Print',
+                    style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w500),
+                    ),
+                  )
+              )
+            ),
             Spacer(),
             Container(
             width: width * 0.32,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Style.Colors.mainColor),
+              borderRadius: BorderRadius.circular(5),
+              color: Style.Colors.mainColor),
             child: FlatButton(
-                onPressed: () {},
+              onPressed: () {},
                 child: Center(
                   child: Text(
                     'Order Update',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w500),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
                   ),
                 )
                )
@@ -211,17 +212,17 @@ class _CartItemScreenState extends State<CartItemScreen> {
         child: TextField(
           maxLines: 4,
           decoration: InputDecoration(
-              alignLabelWithHint: true,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              labelText: "Remark :",
-              labelStyle: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
-                  height: 1.2,
-                  color: Colors.black),
-              fillColor: Colors.white,
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.all(8)),
+            alignLabelWithHint: true,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelText: "Remark :",
+            labelStyle: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              height: 1.2,
+              color: Colors.black),
+            fillColor: Colors.white,
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.all(8)),
         ),
       ),
     );
@@ -304,9 +305,9 @@ class _CartItemScreenState extends State<CartItemScreen> {
                       child: Text(
                         ':',
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                       ),
                     ),
                     Container(
@@ -314,9 +315,9 @@ class _CartItemScreenState extends State<CartItemScreen> {
                       child: Text(
                         ':',
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                       ),
                     ),
                     Container(
@@ -324,9 +325,9 @@ class _CartItemScreenState extends State<CartItemScreen> {
                       child: Text(
                         ':',
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                       ),
                     ),
                   ],
@@ -405,21 +406,21 @@ class _CartItemScreenState extends State<CartItemScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                left: 4, right: 4, top: 8),
+                            padding: EdgeInsets.only(left: 4, right: 4, top: 8),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 4.0),
                               child: Container(
-                                  width: secWidth * 0.7,
-                                  child: Text(
-                                    _items[index],
+                                width: secWidth * 0.7,
+                                child: Text(
+                                  _items[index],
                                     maxLines: 3,
                                     overflow: TextOverflow.clip,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       height: 1,
                                     ),
-                                  )),
+                                  )
+                              ),
                             ),
                           ),
                           Spacer(),
@@ -458,14 +459,9 @@ class _CartItemScreenState extends State<CartItemScreen> {
                                             height: 40,
                                             width: secWidth * 0.1,
                                             child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 8,
-                                                  top: 8,
-                                                  bottom: 8,
-                                                  left: 4),
+                                              padding: const EdgeInsets.only(right: 8, top: 8, bottom: 8, left: 4),
                                               child: ImageIcon(
-                                                AssetImage(
-                                                    'assets/icon/minus.png'),
+                                                AssetImage('assets/icon/minus.png'),
                                                 color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
@@ -480,8 +476,7 @@ class _CartItemScreenState extends State<CartItemScreen> {
                                             height: 40,
                                             width: secWidth * 0.1,
                                             child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8, top: 10, bottom: 10),
+                                              padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
                                               child: Text(val),
                                             ),
                                           ),
@@ -494,11 +489,9 @@ class _CartItemScreenState extends State<CartItemScreen> {
                                             height: 40,
                                             width: secWidth * 0.1,
                                             child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8, top: 10, bottom: 10),
+                                              padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
                                               child: ImageIcon(
-                                                AssetImage(
-                                                    'assets/icon/add.png'),
+                                                AssetImage('assets/icon/add.png'),
                                                 color: Style.Colors.mainColor,
                                                 size: 16,
                                               ),
@@ -578,13 +571,13 @@ class _CartItemScreenState extends State<CartItemScreen> {
                   },
                 ),
                 new FlatButton(
-                    onPressed: () {
-                      setState(() {
-                        val = qtyController.text;
-                        Navigator.pop(context, true);
-                      });
-                    },
-                    child: new Text("OK"))
+                  onPressed: () {
+                    setState(() {
+                      val = qtyController.text;
+                      Navigator.pop(context, true);
+                    });
+                  },
+                child: new Text("OK"))
               ],
             ),
           ],

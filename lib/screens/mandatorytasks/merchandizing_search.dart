@@ -3,21 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retailer/database/merchar_imageHelper.dart';
 import 'package:retailer/models/merchandizing_M.dart';
-import 'package:retailer/screens/components/checkin-shop.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizingEdit.dart';
 import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 import 'package:sqflite/sqflite.dart';
-import 'package:retailer/screens/mandatorytasks/merchandizing_search.dart';
 import '../../custom/custom_expansion_title.dart' as custom;
 
-class MerchandizingScreen extends StatefulWidget {
+class MerchandizingSearch extends StatefulWidget {
   @override
-  _MerchandizingScreenState createState() => _MerchandizingScreenState();
+  _MerchandizingSearchState createState() => _MerchandizingSearchState();
 }
 
-class _MerchandizingScreenState extends State<MerchandizingScreen> {
+class _MerchandizingSearchState extends State<MerchandizingSearch> {
   ViewModelFunction model;
   bool loading = true;
   List<String> taskList = [];
@@ -28,62 +26,17 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
     getSysKey();
   }
 
-  @override
   Widget build(BuildContext context) {
-  model = Provider.of<ViewModelFunction>(context, listen: false);
-  return WillPopScope(
-    onWillPop: () async {
-      return true;
-    },
-    child: Scaffold(
-     appBar: AppBar(
-      iconTheme: IconThemeData(color: Colors.white),
-      title: Text("Merchandizing"),
-      actions: [
-       IconButton(
-        icon: Icon(Icons.search),
-        onPressed: () {
-          // MerchandizingSearch();
-          Navigator.push(
-         context,
-           MaterialPageRoute(
-           builder: (context) => MerchandizingSearch()));
-        })
-      ],
-     ),
-      body: loading
-      ? Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-          strokeWidth: 2,
-          ),
-        )
-        : Padding(
-          padding: EdgeInsets.all(5.0),
-          child: model.listModel == null
-            ? Container(
-              child: Center(
-                child: Text(
-                  "No Data Found !",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey),
-                    ),
-                  ),
-                )
-               : Column(
-                children: [
-                  CheckinShop(),
-                  Flexible(child: getExpansionList())
-                  ],
-                ),
-            ),
-          ),
-        );
-      }
-
-  Widget getExpansionList() {
+    model = Provider.of<ViewModelFunction>(context, listen: false);
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("search"),
+      ),
+      body: getShopList(),
+    );
+  }
+  Widget getShopList(){
     return ListView.builder(
       itemBuilder: (context, index) => Card(
         color: Colors.transparent,
@@ -99,8 +52,8 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
           ),
           onExpansionChanged: (open) async {
             if (open) {
-             this.taskList.clear();
-             await getPhotoList();
+              this.taskList.clear();
+              await getPhotoList();
             }
           },
           children: [
@@ -111,9 +64,8 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
         ),
       ),
       itemCount: model.merchandizingM.list.length,
-    );
-  }
-
+      );
+    }
   getSysKey() async {
     getConectivity().then((ConnectivityResult value) async {
       if (value == ConnectivityResult.none) {
@@ -123,8 +75,8 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
         });
       } else {
         await model
-          .getShopKey(model.activeShop.shopsyskey, model.getLoginDetail.userType)
-          .timeout(Duration(seconds: 10), onTimeout: () {
+            .getShopKey(model.activeShop.shopsyskey, model.getLoginDetail.userType)
+            .timeout(Duration(seconds: 10), onTimeout: () {
           getToast(context, "Internet connection error");
           setState(() {
             loading = false;
@@ -157,8 +109,8 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
   }
 
   Widget getChildrenList(
-    List list,
-  ) {
+      List list,
+      ) {
     List<TaskList> _taskList = list.map((e) => TaskList.fromJson(e)).toList();
     return ListView.builder(
       shrinkWrap: true,
@@ -173,9 +125,9 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
             child: ListTile(
               onTap: () {
                 Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                  builder: (context) => MerchandizingEdit(_taskList[index])));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MerchandizingEdit(_taskList[index])));
               },
               title: Text(_taskList[index].taskCode),
               trailing: IconButton(
@@ -198,4 +150,10 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
     }
     return color;
   }
-}
+  }
+
+
+
+
+
+

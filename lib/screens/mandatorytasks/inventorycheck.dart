@@ -75,8 +75,8 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
   }
 
   Widget getStockList() {
-    var secWidth = MediaQuery.of(context).size.width * 0.7;
-    var width = MediaQuery.of(context).size.width;
+   var secWidth = MediaQuery.of(context).size.width * 0.7;
+   var width = MediaQuery.of(context).size.width;
     return ListView.builder(
       itemBuilder: (context, index) =>
       Padding(
@@ -86,165 +86,216 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
           child: Row(
         children: [
           getPhotoContainer(width, model.allStock[index].img),
-          // Container(
-          //   height: 100,
-          //   width: width * 0.23,
-          //   child: Container(
-          //     padding: EdgeInsets.all(2.5),
-          //     child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(5),
-          //       child: CachedNetworkImage(
-          //        imageUrl: 'http://52.255.142.115:8084/' + model.allStock[index].img,
-          //         placeholder: (context, url) =>
-          //         Center(
-          //           child: SizedBox(
-          //             height: 30,
-          //             width: 30,
-          //             child: CircularProgressIndicator(
-          //               valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-          //               strokeWidth: 2,
-          //             ),
-          //           ),
-          //         ),
-          //         fit: BoxFit.fill,
-          //         errorWidget: (context, url, error) =>
-          //           Image.asset("assets/notfound.png",
-          //             // color: Colors.grey[400],
-          //           ),
-          //         ),
-          //       ),
-          //       decoration: BoxDecoration(
-          //         border: Border.all(color: Colors.grey[300]),
-          //         borderRadius: BorderRadius.circular(6),
-          //       ),
-          //     ),
-          //   ),
-            Spacer(),
-            Container(
-              height: 100,
-              width: width * 0.74,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[300]),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Column(
+          Spacer(),
+        Container(
+          height: 100,
+          width: width * 0.74,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey[300]),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Column(
+              children: [
+                Spacer(),
+                Spacer(),
+                Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 4, right: 4, top: 4),
+                      child: Container(
+                        width: secWidth * 0.8,
+                        child: Text(
+                        model.allStock[index].desc,
+                          maxLines: 3, overflow: TextOverflow.clip,
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, height: 1,),
+                        )
+                      ),
+                    ),
                     Spacer(),
-                    Spacer(),
-                    Container(
+                    Padding(
+                      padding: EdgeInsets.only(right: 10, top: 10),
+                      child: InkWell(
+                        onTap: () {
+                          print('delete was tap');
+                        },
+                        child: ImageIcon(
+                          AssetImage('assets/icon/delete.png'),
+                          size: 23,
+                          color: Style.Colors.mainColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(),
+              Row(
+                children: [
+                  Container(
+                    height: 40,
+                    width: secWidth * 0.45,
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 4, right: 4, top: 4),
+                          padding: EdgeInsets.only(left: 5),
                           child: Container(
-                            width: secWidth * 0.8,
-                            child: Text(
-                            model.allStock[index].desc,
-                              maxLines: 3, overflow: TextOverflow.clip,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, height: 1,),
-                            )
+                          height: 40,
+                          width: secWidth * 0.08,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Qty",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400
+                            ),
                           ),
                         ),
-                        Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10, top: 10),
-                          child: InkWell(
-                            onTap: () {
-                              print('delete was tap');
-                            },
-                            child: ImageIcon(
-                              AssetImage('assets/icon/delete.png'),
-                              size: 23,
-                              color: Style.Colors.mainColor,
+                      ),
+                      Container(
+                        height: 40,
+                        width: secWidth * 0.35,
+                        child: Card(
+                          color: Colors.grey[200],
+                          elevation: 1,
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  print('minus one was tap');
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: secWidth * 0.1,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 8, top: 8, bottom: 8, left: 4),
+                                    child: ImageIcon(
+                                      AssetImage('assets/icon/minus.png'),
+                                      color: Style.Colors.mainColor,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 5),
+                                child: Container(
+                                  width: secWidth * 0.1,
+                                  child: TextField(
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                      controller: qtyController,
+                                      textAlign: TextAlign.center,
+                                     decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.only(bottom: 14),
+                                      border: InputBorder.none,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    print('object');
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: secWidth * 0.1,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
+                                      child: ImageIcon(
+                                        AssetImage('assets/icon/add.png'),
+                                        color: Style.Colors.mainColor,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Spacer(),
-                  Row(
+                  Container(
+                    height: 50,
+                    width: secWidth * 0.59,
+                    child: Row(
                     children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 13),
+                        child: Container(
+                          height: 40,
+                          width: secWidth * 0.18,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Exp qty",
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                      ),
                       Container(
                         height: 40,
-                        width: secWidth * 0.45,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 4),
-                              child: Container(
-                                height: 40,
-                                width: secWidth * 0.08,
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Qty",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400
+                        width: secWidth * 0.35,
+                        child: Card(
+                          color: Colors.grey[200],
+                          elevation: 1,
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  print('minus two was tap');
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: secWidth * 0.1,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 8, top: 8, bottom: 8, left: 4),
+                                    child: ImageIcon(
+                                      AssetImage('assets/icon/minus.png'),
+                                      color: Style.Colors.mainColor,
+                                      size: 16,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              height: 40,
-                              width: secWidth * 0.35,
-                              child: Card(
-                                color: Colors.grey[200],
-                                elevation: 1,
-                                child: Row(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        print('minus one was tap');
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: secWidth * 0.1,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              right: 8, top: 8, bottom: 8, left: 4),
-                                          child: ImageIcon(
-                                            AssetImage('assets/icon/minus.png'),
-                                            color: Style.Colors.mainColor,
-                                            size: 16,
-                                          ),
-                                        ),
-                                      ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 5),
+                                child: Container(
+                                  width: secWidth * 0.1,
+                                  child: TextField(
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
+                                    controller: qtyController,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.only(bottom: 14),
+                                    border: InputBorder.none,
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(bottom: 5),
-                                      child: Container(
-                                        width: secWidth * 0.1,
-                                        child: TextField(
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500),
-                                          controller: qtyController,
-                                          textAlign: TextAlign.center,
-                                          decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.only(bottom: 14),
-                                          border: InputBorder.none,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        print('object');
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: secWidth * 0.1,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
-                                          child: ImageIcon(
-                                            AssetImage('assets/icon/add.png'),
-                                            color: Style.Colors.mainColor,
-                                            size: 16,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  print('plus two was tap ');
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: secWidth * 0.1,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
+                                    child: ImageIcon(
+                                      AssetImage('assets/icon/add.png'),
+                                      color: Style.Colors.mainColor,
+                                    size: 16,
                                           ),
                                         ),
                                       ),
@@ -255,104 +306,19 @@ class _InventoryCheckScreenState extends State<InventoryCheckScreen> {
                             ),
                           ],
                         ),
-                      ),
-                      Container(
-                        height: 50,
-                        width: secWidth * 0.55,
-                        child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 4),
-                            child: Container(
-                              height: 40,
-                              width: secWidth * 0.16,
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Exp qty",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 40,
-                            width: secWidth * 0.35,
-                            child: Card(
-                              color: Colors.grey[200],
-                              elevation: 1,
-                              child: Row(
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      print('minus two was tap');
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: secWidth * 0.1,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(right: 8, top: 8, bottom: 8, left: 4),
-                                        child: ImageIcon(
-                                          AssetImage('assets/icon/minus.png'),
-                                          color: Style.Colors.mainColor,
-                                          size: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 5),
-                                    child: Container(
-                                      width: secWidth * 0.1,
-                                      child: TextField(
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                        controller: qtyController,
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.only(bottom: 14),
-                                        border: InputBorder.none,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      print('plus two was tap ');
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: secWidth * 0.1,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 8, top: 10, bottom: 10),
-                                        child: ImageIcon(
-                                          AssetImage('assets/icon/add.png'),
-                                          color: Style.Colors.mainColor,
-                                        size: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              ],
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
+          Spacer(),
+          ],
         ),
-        Spacer(),
-      ],
+      ),
     ),
-  ),
-),
-itemCount: model.allStock.length,
-  );
-}
+   itemCount: model.allStock.length,
+    );
+  }
 }

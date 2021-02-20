@@ -134,7 +134,8 @@ class OrderSearch extends SearchDelegate {
           ],
         ));
     } else {
-      suggestion = mainList.where((p) => p.toLowerCase().contains(query.toLowerCase())).toList();
+      suggestion = mainList.where((p) =>
+          p.toLowerCase().contains(query.toLowerCase())).toList();
       widget = Container(
         child: Column(
           children: [
