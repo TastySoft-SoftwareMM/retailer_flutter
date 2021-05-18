@@ -31,27 +31,27 @@ class MainScreenSearch extends SearchDelegate {
   MainScreenSearch(
     this.title,
   ) : super(
-    searchFieldLabel: title,
-    searchFieldStyle: TextStyle(
-      decorationColor: Colors.white,
-      color: Colors.white,
-      fontSize: 15,
-      letterSpacing: 1));
+            searchFieldLabel: title,
+            searchFieldStyle: TextStyle(
+                decorationColor: Colors.white,
+                color: Colors.white,
+                fontSize: 15,
+                letterSpacing: 1));
 
   @override
   List<Widget> buildActions(BuildContext context) {
-   return [
-     query.isEmpty
-      ? Container()
-      : IconButton(
-        icon: Icon(
-          Icons.close,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          query = '';
-        },
-      ),
+    return [
+      query.isEmpty
+          ? Container()
+          : IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                query = '';
+              },
+            ),
     ];
   }
 
@@ -89,7 +89,8 @@ class MainScreenSearch extends SearchDelegate {
       sugWidget = Center(
         child: Text(
           "No shop found !",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
         ),
       );
     }
@@ -99,9 +100,13 @@ class MainScreenSearch extends SearchDelegate {
   Widget getResultWidget() {
     Widget resultWidget;
 
-    shopList = model.shopsByUser.where((p) => p.shopname.toLowerCase().contains(query.toLowerCase())).toList();
+    shopList = model.shopsByUser
+        .where((p) => p.shopname.toLowerCase().contains(query.toLowerCase()))
+        .toList();
     otherList = model.shopsByTeam
-      .where((element) => element.shopname.toLowerCase().contains(query.toLowerCase())).toList();
+        .where((element) =>
+            element.shopname.toLowerCase().contains(query.toLowerCase()))
+        .toList();
     if (shopList.length > 0 || otherList.length > 0) {
       resultWidget = ListView(
         children: [
@@ -111,9 +116,10 @@ class MainScreenSearch extends SearchDelegate {
       );
     } else {
       resultWidget = Center(
-       child: Text(
-        "No shop found !",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
+        child: Text(
+          "No shop found !",
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey),
         ),
       );
     }

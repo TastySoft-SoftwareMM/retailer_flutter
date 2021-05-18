@@ -81,10 +81,13 @@ class _TeamWidgetState extends State<TeamWidget> {
         ),
         children: [
           new FutureBuilder(
-            builder: (BuildContext context, AsyncSnapshot<http.Response> response) {
+            builder:
+                (BuildContext context, AsyncSnapshot<http.Response> response) {
               getByTeam.clear();
               List<ShopByListM> list = model.shopsByTeam
-                  .where((p) => p.usercode.contains(model.shopsByTeam[index].usercode)).toList();
+                  .where((p) =>
+                      p.usercode.contains(model.shopsByTeam[index].usercode))
+                  .toList();
               list.forEach((element) {
                 getByTeam.add(
                   Padding(
@@ -109,7 +112,10 @@ class _TeamWidgetState extends State<TeamWidget> {
                         ),
                         onTap: () {
                           Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => ShopDetailScreen(element)));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ShopDetailScreen(element)));
                         },
                       ),
                     ),

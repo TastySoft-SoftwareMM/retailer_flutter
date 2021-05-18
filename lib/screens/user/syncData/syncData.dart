@@ -41,15 +41,15 @@ class _SyncDataState extends State<SyncData> {
                 ),
               ),
               _isloading
-                ? Padding(
-                    padding:
-                        EdgeInsets.only(right: 8, top: 8, left: 8, bottom: 8),
-                    child: Center(
-                      child: new Stack(
-                          fit: StackFit.passthrough,
-                          children: <Widget>[
-                            Container(
-                              height: 20,
+                  ? Padding(
+                      padding:
+                          EdgeInsets.only(right: 8, top: 8, left: 8, bottom: 8),
+                      child: Center(
+                        child: new Stack(
+                            fit: StackFit.passthrough,
+                            children: <Widget>[
+                              Container(
+                                height: 20,
                                 child: LinearProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Style.Colors.mainColor),
@@ -120,7 +120,7 @@ class _SyncDataState extends State<SyncData> {
                             getToast(context, "Check your internet Conection");
                           } else {
                             await syncDataFunction()
-                                .timeout(Duration(seconds: 40), onTimeout: () {
+                                .timeout(Duration(seconds: 15), onTimeout: () {
                               getToast(context, "Internet connection error !.");
                               setState(() {
                                 _isloading = false;
@@ -157,7 +157,6 @@ class _SyncDataState extends State<SyncData> {
 
     await model.getMainList();
     await model.getStockList();
-    await model.getSmartList();
     await Future.doWhile(() async {
       await Future.delayed(Duration(milliseconds: 1));
       setState(() {
@@ -167,11 +166,12 @@ class _SyncDataState extends State<SyncData> {
         return false;
       }
       return true;
-    }).timeout(Duration(seconds: 40));
+    }).timeout(Duration(seconds: 5));
     setState(() {
       _isloading = false;
       _value = 0.0;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => MainScreen()));
     });
   }
 
@@ -183,7 +183,8 @@ class _SyncDataState extends State<SyncData> {
         return new Align(
           alignment: Alignment(0.9, -0.4),
           child: Material(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
             child: Container(
               width: 200,
               height: 100,
@@ -210,13 +211,13 @@ class _SyncDataState extends State<SyncData> {
                             ),
                             Spacer(),
                             _selectedType == 'Download'
-                              ? Icon(
-                                  Icons.radio_button_checked,
-                                  color: Style.Colors.mainColor,
-                                )
-                              : Icon(
-                                  Icons.radio_button_off,
-                                ),
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: Style.Colors.mainColor,
+                                  )
+                                : Icon(
+                                    Icons.radio_button_off,
+                                  ),
                           ],
                         ),
                       ),
@@ -246,13 +247,13 @@ class _SyncDataState extends State<SyncData> {
                             ),
                             Spacer(),
                             _selectedType == 'Upload'
-                              ? Icon(
-                                  Icons.radio_button_checked,
-                                  color: Style.Colors.mainColor,
-                                )
-                              : Icon(
-                                  Icons.radio_button_off,
-                                ),
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: Style.Colors.mainColor,
+                                  )
+                                : Icon(
+                                    Icons.radio_button_off,
+                                  ),
                           ],
                         ),
                       ),

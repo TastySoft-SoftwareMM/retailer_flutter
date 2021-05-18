@@ -22,34 +22,35 @@ class _LoginState extends State<Login> {
   ImageDbHelper imageDbHelper = ImageDbHelper();
   List<Photo> photoList;
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _checkDate();
   }
+
   _checkDate() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String _date = preferences.getString('Date');
-    if(_date == null){
+    if (_date == null) {
       print('date was null');
       print(getDate);
       preferences.setString("Date", getDate);
-    }else{
+    } else {
       print("here is date $_date");
       var date = DateTime.now();
       DateFormat dateFormat = DateFormat("yyyyMMdd");
       String sampleDate = dateFormat.format(date);
 
-      if(_date == sampleDate){
+      if (_date == sampleDate) {
         print("didn't delete database");
-      }else{
+      } else {
         print('delete database');
         this.imageDbHelper.deleteAllPhoto();
-        // setState(() {
-        //   photoList.remove(photoList);
-        // });
+        setState(() {
+          photoList.remove(photoList);
+        });
       }
     }
-}
+  }
 
   final _formKey = GlobalKey<FormState>();
   var width;
@@ -187,7 +188,9 @@ class _LoginState extends State<Login> {
                         labelText: 'User Id',
                         labelStyle: TextStyle(fontSize: 15),
                         prefixIcon: Padding(
-                          padding: const EdgeInsets.all(15,),
+                          padding: const EdgeInsets.all(
+                            15,
+                          ),
                           child: ImageIcon(
                             AssetImage('assets/icon/id.png'),
                           ),
@@ -258,13 +261,16 @@ class _LoginState extends State<Login> {
                       onPressed: () async {
                         _formKey.currentState.validate();
                         if (userIdErr == null && passErr == null) {
-                          getConectivity().then((ConnectivityResult value) async {
+                          getConectivity()
+                              .then((ConnectivityResult value) async {
                             if (value == ConnectivityResult.none) {
-                              getToast(context, "Check your internet Conection");
+                              getToast(
+                                  context, "Check your internet Conection");
                             } else {
                               await check().timeout(Duration(seconds: 10),
                                   onTimeout: () {
-                                getToast(context, "Internet connection error !.");
+                                getToast(
+                                    context, "Internet connection error !.");
                                 Navigator.pop(context, true);
                               });
                             }
@@ -286,8 +292,10 @@ class _LoginState extends State<Login> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => SignUpPage()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUpPage()));
                           },
                           child: Text(
                             ' Sign up',
@@ -319,9 +327,9 @@ class _LoginState extends State<Login> {
     if (model.statusCode == 200) {
       if (model.getLoginDetail != null) {
         if (model.getLoginDetail.orgId != "" &&
-            model.getLoginDetail.orgId != null &&
-            model.getLoginDetail.userId != '' &&
-            model.getLoginDetail.userType == "saleperson" ||
+                model.getLoginDetail.orgId != null &&
+                model.getLoginDetail.userId != '' &&
+                model.getLoginDetail.userType == "saleperson" ||
             model.getLoginDetail.userType == "storeowner") {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => SyncData()));
@@ -390,6 +398,7 @@ class _ChangeUrlPageState extends State<ChangeUrlPage> {
         return back();
       },
       child: Scaffold(
+        resizeToAvoidBottomPadding: true,
         appBar: AppBar(
           title: Text('URL'),
           centerTitle: true,
@@ -462,13 +471,13 @@ class _ChangeUrlPageState extends State<ChangeUrlPage> {
                         ),
                       ),
                     )),
-                  ],
-                ),
-              ),
+              ],
             ),
           ),
-        );
-      }
+        ),
+      ),
+    );
+  }
 
   Future<bool> back() async {
     bool ba;
@@ -489,7 +498,7 @@ class _ChangeUrlPageState extends State<ChangeUrlPage> {
 
   getUrl() async {
     preferences = await SharedPreferences.getInstance();
-    urlController.text =
-        preferences.getString('mainUrl') ?? 'http://52.255.142.115:8084/madbrepository/';
+    urlController.text = preferences.getString('mainUrl') ??
+        'http://52.255.142.115:8084/madbrepository/';
   }
 }

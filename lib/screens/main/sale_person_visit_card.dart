@@ -36,89 +36,94 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
     model = Provider.of<ViewModelFunction>(
       context,
     );
-  return WillPopScope(
-    onWillPop: () async => false,
-    child: Scaffold(
-      backgroundColor: Color(0xFFF5F5F5),
-      appBar: AppBar(
-        title: Text("Retailer"),
-        actions: [
-        IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => CartItemScreen()));
-          },
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Color(0xFFF5F5F5),
+        appBar: AppBar(
+          title: Text("Retailer"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CartItemScreen()));
+              },
+            ),
+          ],
         ),
-      ],
-    ),
-    drawer: MainDrawer(),
-    body: SingleChildScrollView(
-      child: Column(
-        children: [
-          CheckinShop(),
-          Container(),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: model.getLoginDetail.merchandizer == 'Yes'
-              ? Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: createCardWidget(checkout.id, checkout.img, "1.Check Out", ""),
-                        ),
-                        createCardWidget(
-                            inventorycheck.id,
-                            inventorycheck.img,
-                            "2.Inventory Check",
-                            model.checkInStatus.inventoryCheck),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: createCardWidget(
-                            merchandizing.id,
-                            merchandizing.img,
-                            "3.Merchandizing",
-                            model.checkInStatus.merchandizing),
-                        ),
-                        isSwitched
-                          ? Container()
-                          : createCardWidget(
-                            orderplacement.id,
-                            orderplacement.img,
-                            "4.OrderPlacement",
-                            model.checkInStatus.orderPlacement),
-                      ],
-                    ),
-                  ],
-                )
-              : Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        createCardWidget(checkout.id, checkout.img, "1.Check Out", ""),
-                        createCardWidget(
-                          inventorycheck.id,
-                          inventorycheck.img,
-                          "2.Inventory Check",
-                          model.checkInStatus.inventoryCheck),
-                      ],
-                    ),
-                    Row(
-                    children: <Widget>[
-                      isSwitched ? Container() : createCardWidget(
-                        orderplacement.id,
-                        orderplacement.img,
-                        "3.OrderPlacement Check",
-                        model.checkInStatus.orderPlacement),
-                      ],
-                    ),
-                  ],
-                ),
+        drawer: MainDrawer(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              CheckinShop(),
+              Container(),
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: model.getLoginDetail.merchandizer == 'Yes'
+                    ? Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: createCardWidget(checkout.id,
+                                    checkout.img, "1.Check Out", ""),
+                              ),
+                              createCardWidget(
+                                  inventorycheck.id,
+                                  inventorycheck.img,
+                                  "2.Inventory Check",
+                                  model.checkInStatus.inventoryCheck),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: createCardWidget(
+                                    merchandizing.id,
+                                    merchandizing.img,
+                                    "3.Merchandizing",
+                                    model.checkInStatus.merchandizing),
+                              ),
+                              isSwitched
+                                  ? Container()
+                                  : createCardWidget(
+                                      orderplacement.id,
+                                      orderplacement.img,
+                                      "4.OrderPlacement",
+                                      model.checkInStatus.orderPlacement),
+                            ],
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              createCardWidget(
+                                  checkout.id, checkout.img, "1.Check Out", ""),
+                              createCardWidget(
+                                  inventorycheck.id,
+                                  inventorycheck.img,
+                                  "2.Inventory Check",
+                                  model.checkInStatus.inventoryCheck),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              isSwitched
+                                  ? Container()
+                                  : createCardWidget(
+                                      orderplacement.id,
+                                      orderplacement.img,
+                                      "3.OrderPlacement Check",
+                                      model.checkInStatus.orderPlacement),
+                            ],
+                          ),
+                        ],
+                      ),
               ),
               createSkipOrderplacementWidget(),
             ],
@@ -159,18 +164,18 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 40),
                 child: Container(
-                  height: 40,
-                  child: SvgPicture.asset(
-                    image,
-                    color: Style.Colors.mainColor,
-                  )),
+                    height: 40,
+                    child: SvgPicture.asset(
+                      image,
+                      color: Style.Colors.mainColor,
+                    )),
               ),
               Spacer(),
               Container(
                 color: Style.Colors.mainColor,
                 height: 40,
                 child: Center(
-                 child: Text(
+                    child: Text(
                   text,
                   style: Style.whiteTextStyle,
                 )),
@@ -193,21 +198,25 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
         );
         if (model.checkInStatus.inventoryCheck != "COMPLETED") {
           await model.setTaskOfShop(
-            "PENDING",
-            model.checkInStatus.merchandizing,
-            model.checkInStatus.orderPlacement);
+              "PENDING",
+              model.checkInStatus.merchandizing,
+              model.checkInStatus.orderPlacement);
           await model.addcheckInStatus(CheckInStatus(
-            "PENDING",
-            model.checkInStatus.merchandizing,
-            model.checkInStatus.orderPlacement,
-            model.checkInStatus.printStatus));
+              "PENDING",
+              model.checkInStatus.merchandizing,
+              model.checkInStatus.orderPlacement,
+              model.checkInStatus.printStatus));
           Navigator.pop(context, true);
           Navigator.push(
-           context, new MaterialPageRoute(builder: (context) => InventoryCheckScreen()));
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => InventoryCheckScreen()));
         } else {
           Navigator.pop(context, true);
           Navigator.push(
-           context, new MaterialPageRoute(builder: (context) => InventoryCheckScreen()));
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => InventoryCheckScreen()));
         }
 
         break;
@@ -217,18 +226,22 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
           await model.setTaskOfShop(model.checkInStatus.inventoryCheck,
               "PENDING", model.checkInStatus.orderPlacement);
           await model.addcheckInStatus(CheckInStatus(
-            model.checkInStatus.inventoryCheck,
-            "PENDING",
-            model.checkInStatus.orderPlacement,
-            model.checkInStatus.printStatus));
+              model.checkInStatus.inventoryCheck,
+              "PENDING",
+              model.checkInStatus.orderPlacement,
+              model.checkInStatus.printStatus));
 
           Navigator.pop(context, true);
           Navigator.push(
-            context, new MaterialPageRoute(builder: (context) => MerchandizingScreen()));
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => MerchandizingScreen()));
         } else {
           Navigator.pop(context, true);
           Navigator.push(
-           context, new MaterialPageRoute(builder: (context) => MerchandizingScreen()));
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => MerchandizingScreen()));
         }
 
         break;
@@ -246,13 +259,18 @@ class _SalePersonVisitCardState extends State<SalePersonVisitCard> {
               model.checkInStatus.printStatus));
           Navigator.pop(context, true);
           Navigator.push(
-            context, new MaterialPageRoute(builder: (context) => OrderPlacementScreen()));
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => OrderPlacementScreen()));
         } else {
           Navigator.pop(context, true);
           Navigator.push(
-           context, new MaterialPageRoute(builder: (context) => OrderPlacementScreen()));
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => OrderPlacementScreen()));
         }
-      break;
+
+        break;
     }
   }
 

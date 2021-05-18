@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:retailer/database/merchar_imageHelper.dart';
 import 'package:retailer/models/merchandizing_M.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
+import 'package:retailer/screens/main/main_Screen_Search.dart';
 import 'package:retailer/screens/mandatorytasks/merchandizingEdit.dart';
 import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/services/functional_provider.dart';
 import '../../style/theme.dart' as Style;
 import 'package:sqflite/sqflite.dart';
-import 'package:retailer/screens/mandatorytasks/merchandizing_search.dart';
 import '../../custom/custom_expansion_title.dart' as custom;
 
 class MerchandizingScreen extends StatefulWidget {
@@ -30,58 +30,60 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
 
   @override
   Widget build(BuildContext context) {
-  model = Provider.of<ViewModelFunction>(context, listen: false);
-  return WillPopScope(
-    onWillPop: () async {
-      return true;
-    },
-    child: Scaffold(
-     appBar: AppBar(
-      iconTheme: IconThemeData(color: Colors.white),
-      title: Text("Merchandizing"),
-      actions: [
-       IconButton(
-        icon: Icon(Icons.search),
-        onPressed: () {
-          // MerchandizingSearch();
-          Navigator.push(
-         context,
-           MaterialPageRoute(
-           builder: (context) => MerchandizingSearch()));
-        })
-      ],
-     ),
-      body: loading
-      ? Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
-          strokeWidth: 2,
-          ),
-        )
-        : Padding(
-          padding: EdgeInsets.all(5.0),
-          child: model.listModel == null
-            ? Container(
-              child: Center(
-                child: Text(
-                  "No Data Found !",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey),
-                    ),
-                  ),
-                )
-               : Column(
-                children: [
-                  CheckinShop(),
-                  Flexible(child: getExpansionList())
-                  ],
+    model = Provider.of<ViewModelFunction>(context, listen: false);
+
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Text("Merchandizing"),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: MainScreenSearch(
+                        "Search...",
+                      ));
+                })
+          ],
+        ),
+        body: loading
+            ? Center(
+                child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(Style.Colors.mainColor),
+                  strokeWidth: 2,
                 ),
-            ),
-          ),
-        );
-      }
+              )
+            : Padding(
+                padding: EdgeInsets.all(5.0),
+                child: model.listModel == null
+                    ? Container(
+                        child: Center(
+                          child: Text(
+                            "No Data Found !",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey),
+                          ),
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          CheckinShop(),
+                          Flexible(child: getExpansionList())
+                        ],
+                      ),
+              ),
+      ),
+    );
+  }
 
   Widget getExpansionList() {
     return ListView.builder(
@@ -99,8 +101,8 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
           ),
           onExpansionChanged: (open) async {
             if (open) {
-             this.taskList.clear();
-             await getPhotoList();
+              this.taskList.clear();
+              await getPhotoList();
             }
           },
           children: [
@@ -123,13 +125,15 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
         });
       } else {
         await model
-          .getShopKey(model.activeShop.shopsyskey, model.getLoginDetail.userType)
-          .timeout(Duration(seconds: 10), onTimeout: () {
+            .getShopKey(
+                model.activeShop.shopsyskey, model.getLoginDetail.userType)
+            .timeout(Duration(seconds: 10), onTimeout: () {
           getToast(context, "Internet connection error");
           setState(() {
             loading = false;
           });
         });
+
         setState(() {
           loading = false;
         });
@@ -140,7 +144,8 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
   getPhotoList() async {
     final Future<Database> db = imageDbHelper.initializedDatabase();
     await db.then((value) {
-      var photoListFuture = imageDbHelper.getPhotoBySysKey(model.activeShop.shopsyskey);
+      var photoListFuture =
+          imageDbHelper.getPhotoBySysKey(model.activeShop.shopsyskey);
       photoListFuture.then((plist) {
         setState(() {
           if (plist != null) {
@@ -173,9 +178,10 @@ class _MerchandizingScreenState extends State<MerchandizingScreen> {
             child: ListTile(
               onTap: () {
                 Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                  builder: (context) => MerchandizingEdit(_taskList[index])));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MerchandizingEdit(_taskList[index])));
               },
               title: Text(_taskList[index].taskCode),
               trailing: IconButton(

@@ -1,4 +1,5 @@
 import 'dart:io';
+// import 'package:compressimage/compressimage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -43,119 +44,128 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
       onWillPop: () {
         return back();
       },
-    child: Scaffold(
-    appBar: AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      iconTheme: IconThemeData(color: Colors.black),
-      title: Text(
-        widget._taskList.taskCode,
-        style: TextStyle(color: Colors.black),
-      ),
-    ),
-    body: Container(
-      width: MediaQuery.of(context).size.width,
-      child: ListView(
-        children: [
-        Container(
-          margin: EdgeInsets.only(left: 10, right: 10),
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey[400], width: 1.2),),
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                widget._taskList.taskName,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-              ),
-            ),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            widget._taskList.taskCode,
+            style: TextStyle(color: Colors.black),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: getRemark(textEditingController),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
-          child: GridView.count(
-            shrinkWrap: true,
-            physics: ClampingScrollPhysics(),
-            crossAxisCount: 2,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-            children: List.generate(showList.length + 1, (index) {
-              return Container(
-                child: index + 1 > showList.length
-                  ? InkWell(
-                    onTap: () {
-                      _settingModalBottomSheet(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.grey[300],
-                        ),
-                        child: Center(
-                          child: Text(
-                            '+',
-                            style: TextStyle(
-                                fontSize: 74,
-                                fontWeight: FontWeight.w200,
-                                color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
-                        padding: EdgeInsets.all(0.5),
-                        decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey[400])),
-                        child: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Stack(
-                          fit: StackFit.passthrough,
-                          children: [
-                            InkWell(
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          child: ListView(
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[400], width: 1.2),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      widget._taskList.taskName,
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: getRemark(textEditingController),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
+                  children: List.generate(showList.length + 1, (index) {
+                    return Container(
+                      child: index + 1 > showList.length
+                          ? InkWell(
                               onTap: () {
-                                Navigator.push(
-                                context, MaterialPageRoute(
-                                  builder: (context) => ViewImage(showList[index]["compress"],)));
-                                },
-                                child: Image.memory(
-                                  showList[index]['compress'],
-                                  fit: BoxFit.cover,
+                                _settingModalBottomSheet(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.grey[300],
                                 ),
-                              ),
-                              Positioned(
-                                right: 2,
-                                top: 2,
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (showList[index]["id"] != null) {
-                                    await imageDbHelper.deletePhoto(showList[index]["id"]);
-                                    setState(() {
-                                      showList.remove(showList[index]);
-                                      });
-                                    } else {
-                                    setState(() {
-                                      showList.remove(showList[index]);
-                                      });
-                                    }
-                                  },
-                                child: CircleAvatar(
-                                  radius: 12,
-                                  backgroundColor: Colors.white,
-                                  child: Icon(
-                                    Icons.close,
-                                    size: 18,
-                                    color: Style.Colors.mainColor,
+                                child: Center(
+                                  child: Text(
+                                    '+',
+                                    style: TextStyle(
+                                        fontSize: 74,
+                                        fontWeight: FontWeight.w200,
+                                        color: Colors.white),
                                   ),
                                 ),
-                              )),
-                            ],
-                          ),
-                        ),
-                      ),
+                              ),
+                            )
+                          : Container(
+                              padding: EdgeInsets.all(0.5),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.grey[400])),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: Stack(
+                                  fit: StackFit.passthrough,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ViewImage(
+                                                      showList[index]
+                                                          ["compress"],
+                                                    )));
+                                      },
+                                      child: Image.memory(
+                                        showList[index]['compress'],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Positioned(
+                                        right: 2,
+                                        top: 2,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            if (showList[index]["id"] != null) {
+                                              await imageDbHelper.deletePhoto(
+                                                  showList[index]["id"]);
+                                              setState(() {
+                                                showList
+                                                    .remove(showList[index]);
+                                              });
+                                            } else {
+                                              setState(() {
+                                                showList
+                                                    .remove(showList[index]);
+                                              });
+                                            }
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 12,
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 18,
+                                              color: Style.Colors.mainColor,
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
                     );
                   }),
                 ),
@@ -194,19 +204,20 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
     loading(context);
     showList.forEach((element) async {
       String base64 = Utility.base64String(element["compress"]);
+
       if (element["id"] == null) {
         await imageDbHelper.insertPhoto(Photo(
-          base64,
-          model.activeShop.shopsyskey,
-          widget._taskList.taskCode,
-          textEditingController.text));
+            base64,
+            model.activeShop.shopsyskey,
+            widget._taskList.taskCode,
+            textEditingController.text));
       } else {
         await imageDbHelper.updatePhoto(Photo.withId(
-          element["id"],
-          base64,
-          model.activeShop.shopsyskey,
-          widget._taskList.taskCode,
-          textEditingController.text));
+            element["id"],
+            base64,
+            model.activeShop.shopsyskey,
+            widget._taskList.taskCode,
+            textEditingController.text));
       }
     });
     getToast(context, "Save Successful");
@@ -217,30 +228,30 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
 
   void _settingModalBottomSheet(context) {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext bc) {
-        return Container(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: ImageIcon(AssetImage('assets/icon/attach.png')),
-                title: Text('Gallery '),
-                onTap: () {
-                  Navigator.pop(context, true);
-                  getMultipleImage();
-                }),
-              ListTile(
-                leading: Icon(Icons.camera_alt_outlined),
-                title: Text('Take Photo'),
-                onTap: () {
-                  Navigator.pop(context, true);
-                  getImage();
-                },
-              ),
-            ],
-          ),
-        );
-      });
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: ImageIcon(AssetImage('assets/icon/attach.png')),
+                    title: Text('Gallery '),
+                    onTap: () {
+                      Navigator.pop(context, true);
+                      getMultipleImage();
+                    }),
+                ListTile(
+                  leading: Icon(Icons.camera_alt_outlined),
+                  title: Text('Take Photo'),
+                  onTap: () {
+                    Navigator.pop(context, true);
+                    getImage();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   getPhotoList() async {
@@ -248,6 +259,7 @@ class _MerchandizingEditState extends State<MerchandizingEdit> {
         model.activeShop.shopsyskey, widget._taskList.taskCode);
     photoListFuture.then((plist) {
       this.photoList = plist;
+
       setState(() {
         if (photoList.length > 0) {
           print("It is saved => $photoList");

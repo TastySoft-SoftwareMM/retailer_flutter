@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+// import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:retailer/models/get_allstock.dart';
+// import 'package:retailer/custom/custom_expansion_title.dart';
+// import 'package:retailer/models/get_allstock.dart';
 import 'package:retailer/screens/mandatorytasks/cart-item.dart';
 import 'package:retailer/screens/components/checkin-shop.dart';
-import 'package:retailer/screens/mandatorytasks/ordersearch.dart';
-import 'package:retailer/screens/public/widget.dart';
+import 'package:retailer/screens/mandatorytasks/inventory_stock_search.dart';
+// import 'package:retailer/screens/public/widget.dart';
 import 'package:retailer/services/functional_provider.dart';
-import '../../style/theme.dart' as Style;
-import '../../custom/custom_expansion_title.dart' as custom;
+// import '../../style/theme.dart' as Style;
+import 'package:retailer/custom/custom_expansion_tile_sticky.dart' as sticky;
+// import '../../custom/custom_expansion_title.dart' as custom;
 
 class OrderPlacementScreen extends StatefulWidget {
   @override
@@ -21,23 +23,13 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
   var secWidth;
   var width;
   ViewModelFunction model;
-  List<String> titlelist = [
-    'Sp_Daily_Butter Bread',
-    'SP_Milk Cream Roll ',
-    'SP_Daily Cheese Spread',
-    'SP_Bean Bread',
-    'Example Bread',
-    'Super Cream Bread',
-    'Small Cream Bread',
-    'No Cream Bread',
-    'Stawbarry Cream',
-    'Simple bread',
-  ];
+
   @override
   Widget build(BuildContext context) {
-   model = Provider.of<ViewModelFunction>(context);
-   secWidth = MediaQuery.of(context).size.width * 0.68;
-   width = MediaQuery.of(context).size.width;
+    model = Provider.of<ViewModelFunction>(context);
+
+    secWidth = MediaQuery.of(context).size.width * 0.68;
+    width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -50,48 +42,50 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
             Navigator.pop(context, true);
           },
         ),
-        title: Text("Order Placement", style: TextStyle(color: Colors.white),),
+        title: Text(
+          "Order Placement",
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
               Navigator.push(
-                context, new MaterialPageRoute(builder: (context) => CartItemScreen()));
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => CartItemScreen()));
             },
           ),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
               showSearch(
-                context: context,
-                delegate: OrderSearch(
-                  'search',
-                  titlelist,
-                ));
-            })
+                  context: context,
+                  delegate: InventorystockSearch(
+                    'search',
+                    ['mainList'],
+                  ));
+            },
+          ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(5.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CheckinShop(),
-              SizedBox(
-                height: MediaQuery.of(context).size.height - 255,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      itemListByTitle('Promotion Items'),
-                      itemListByTitle('Recommend Stocks'),
-                      itemListByTitle('Browse All Items'),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
+      body: Padding(
+        padding: EdgeInsets.all(5.0),
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            CheckinShop(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height - 255,
+              child: Column(
+                children: [
+                  itemListByTitle('Promotion Items'),
+                  itemListByTitle('Recommend Stocks'),
+                  itemListByTitle('Browse All Items'),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -99,7 +93,7 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
 
   Widget itemListByTitle(String title) {
     return Container(
-      child: custom.ExpansionTitle(
+      child: sticky.ExpansionTitle(
         headerBackgroundColor: Colors.red,
         iconColor: Colors.white,
         title: Container(
@@ -108,327 +102,425 @@ class _OrderPlacementScreenState extends State<OrderPlacementScreen> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        children: [
-          listByMainItem(),
-        ],
+        children: listByMainItem(),
       ),
     );
   }
 
-  Widget listByMainItem() {
-   var mainCate = [];
-   model.allStock.forEach((element) {
-    mainCate.add(element.categoryCodeDesc);
-  }
-);
-
-var filteredList = mainCate.toSet().toList();
- return Container(
-  child: ListView.builder(
-    shrinkWrap: true,
-    physics: NeverScrollableScrollPhysics(),
-    itemBuilder: (context, index) {
-      return custom.ExpansionTitle(
+  List<Widget> listByMainItem() {
+    List<Widget> listMainItemWidgets = [];
+    var mainCate = [];
+    if (model.allStock.length != null) {
+      model.allStock.forEach((element) {
+        mainCate.add(element.categoryCodeDesc);
+      });
+    }
+    var filteredList = mainCate.toSet().toList();
+    filteredList.forEach((item) {
+      listMainItemWidgets.add(sticky.ExpansionTitle(
         backgroundColor: Colors.red[50],
         headerBackgroundColor: Colors.red[100],
         iconColor: Colors.black,
         title: Text(
-          filteredList[index],
+          item,
           style: TextStyle(color: Colors.black),
         ),
-        children: [
-          listByMainCategory(filteredList[index]),
-          ],
-        );
-      },
-      itemCount: filteredList.length,
-    ),
-  );
-}
+        children: listByMainCategory(item),
+      ));
+    });
 
-Widget listByMainCategory(mainCate) {
-  List<String> subCategory = [];
-  model.allStock.forEach((element) {
-    if (element.categoryCodeDesc == mainCate) {
-      subCategory.add(element.subCategoryCodeDesc);
-    }
-  });
-var subFilteredList = subCategory.toSet().toList();
-  return subFilteredList.length > 0
-    ? Container(
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              custom.ExpansionTitle(
-                headerBackgroundColor: Colors.red[50],
-                backgroundColor: Colors.white,
-                iconColor: Colors.black,
-                title: Text(
-                  subFilteredList[index],
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  children: [
-                    listByItems(subFilteredList[index]),
-                  ],
-                ),
-                Divider(
-                  height: 4,
-                  color: Colors.white,
-                )
-            ],
-          );
-        },
-        itemCount: subFilteredList.length,
-      ),
-    )
-  : noDataWidget();
-}
-
-  Future<List<GetAllStock>> getListBySubCate(items) async {
-    List<GetAllStock> itemList = model.allStock
-        .where((p) => p.subCategoryCodeDesc.contains(items)).toList();
-    return itemList;
+    return listMainItemWidgets;
   }
 
-  Widget listByItems(subCate) {
-    var secWidth = MediaQuery.of(context).size.width * 0.7 - 10;
-    var width = MediaQuery.of(context).size.width - 10;
-    return FutureBuilder(
-      future: getListBySubCate(subCate),
-      builder: (BuildContext context, AsyncSnapshot<List<GetAllStock>> snapshot) {
-        Widget children;
-        if (snapshot.hasData) {
-          children = snapshot.data.length > 0
-            ? ListView.builder(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Container(
-                    height: 110,
-                    child: Row(
-                      children: [
-                        getPhotoContainer(width, snapshot.data[index].img),
-                        Container(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 100,
-                            width: width * 0.72 - 1.5,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey[300]),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Column(
-                                children: [
-                                  Spacer(),
-                                  Spacer(),
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 4, right: 4, top: 8),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 4.0),
-                                        child: Container(
-                                          width: secWidth * 0.7,
-                                          child: Text(
-                                            snapshot.data[index].desc,
-                                            maxLines: 3,
-                                            overflow: TextOverflow.clip,
-                                            style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                              height: 1,
-                                            ),
-                                          )
-                                        ),
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    IconButton(
-                                      icon: Container(
-                                        child: SvgPicture.asset(
-                                          'assets/atc.svg',
-                                          height: 25,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        print('Shop  was tap');
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 40,
-                                      width: secWidth * 0.50,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            height: 40,
-                                            width: secWidth * 0.44,
-                                            child: Card(
-                                              elevation: 1,
-                                              color: Colors.grey[200],
-                                              child: Row(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      print('minus one was tap');
-                                                    },
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: secWidth * 0.1,
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(right: 8, top: 8, bottom: 8, left: 4),
-                                                        child: ImageIcon(
-                                                          AssetImage('assets/icon/minus.png'),
-                                                          color: Style.Colors.mainColor,
-                                                          size: 16,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      _showDialog();
-                                                    },
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: secWidth * 0.2,
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(top: 8, bottom: 10),
-                                                        child: Center(child: Text(val)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      print('object');
-                                                    },
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: secWidth * 0.1,
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(left: 13.0),
-                                                        child: ImageIcon(
-                                                          AssetImage('assets/icon/add.png'),
-                                                          color: Style.Colors.mainColor,
-                                                          size: 18,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 50,
-                                      width: secWidth * 0.55,
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 4),
-                                            child: Container(
-                                              // height: 40,
-                                              width: secWidth * 0.35,
-                                              child: Text(
-                                              "100",
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                        width: secWidth * 0.16,
-                                        child: Text(
-                                          "100",
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              decoration: BoxDecoration(),
-            );
-          },
-          itemCount: snapshot.data.length,
-        )
-      : noDataWidget();
-      } else if (snapshot.hasError) {
-        children = Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Text('Error: something went worng !'),
-        );
-      } else {
-      children = SizedBox(
-        child: CircularProgressIndicator(),
-        width: 60,
-        height: 60,
-      );
+  List<Widget> listByMainCategory(mainCate) {
+    List<Widget> listMainCategoryWidgets = [];
+    List<String> subCategory = [];
+    if (model.allStock.length != null) {
+      model.allStock.forEach((element) {
+        if (element.categoryCodeDesc == mainCate) {
+          subCategory.add(element.subCategoryCodeDesc);
+        }
+      });
     }
-      return children;
+    var subFilteredList = subCategory.toSet().toList();
+    subFilteredList.forEach((item) {
+      listMainCategoryWidgets.add(Column(
+        children: [
+          sticky.ExpansionTitle(
+            headerBackgroundColor: Colors.red[50],
+            backgroundColor: Colors.white,
+            iconColor: Colors.black,
+            title: Text(
+              item,
+              style: TextStyle(color: Colors.black),
+            ),
+            children: listByItems(item),
+          ),
+          Divider(
+            height: 4,
+            color: Colors.white,
+          )
+        ],
+      ));
     });
-}
+    return listMainCategoryWidgets;
+    // return subFilteredList.length > 0
+    //     ? Container(
+    //         child: ListView.builder(
+    //           shrinkWrap: true,
+    //           physics: ClampingScrollPhysics(),
+    //           itemBuilder: (context, index) {
+    //             return Column(
+    //               children: [
+    //                 sticky.ExpansionTitle(
+    //                   headerBackgroundColor: Colors.red[50],
+    //                   backgroundColor: Colors.white,
+    //                   iconColor: Colors.black,
+    //                   title: Text(
+    //                     subFilteredList[index],
+    //                     style: TextStyle(color: Colors.black),
+    //                   ),
+    //                   children: listByItems(subFilteredList[index]),
+    //                 ),
+    //                 Divider(
+    //                   height: 4,
+    //                   color: Colors.white,
+    //                 )
+    //               ],
+    //             );
+    //           },
+    //           itemCount: subFilteredList.length,
+    //         ),
+    //       )
+    //     : noDataWidget();
+  }
 
-void _showDialog() {
-showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        "SP_Blueberry Cream Roll",
-        style: TextStyle(
-          color: Colors.grey,
-          fontSize: 15,
+  // Future<List<GetAllStock>> getListBySubCate(items) async {
+  //   List<GetAllStock> itemList = model.allStock
+  //       .where((p) => p.subCategoryCodeDesc.contains(items))
+  //       .toList();
+  //   return itemList;
+  // }
+
+  List<Widget> listByItems(subCate) {
+    // var secWidth = MediaQuery.of(context).size.width * 0.7 - 10;
+    // var width = MediaQuery.of(context).size.width - 10;
+    return [
+      Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: 50,
+          color: Colors.red,
         ),
       ),
-      content: TextField(
-        controller: textEditingController,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(hintText: 'Enter the number'),
+      Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: 50,
+          color: Colors.red,
+        ),
       ),
-      actions: <Widget>[
-        Row(
-          children: <Widget>[
-            new FlatButton(
-              child: new Text("Cancel"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              new FlatButton(
-                onPressed: () {
-                  setState(() {
-                    val = textEditingController.text;
-                    Navigator.pop(context, true);
-                  });
-                },
-                child: new Text("OK"))
-            ],
-          ),
-        ],
-      );
-    },
-  );
+      Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: 50,
+          color: Colors.red,
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: 50,
+          color: Colors.red,
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: 50,
+          color: Colors.red,
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.all(8),
+        child: Container(
+          height: 50,
+          color: Colors.red,
+        ),
+      ),
+    ];
+
+    //   return FutureBuilder(
+    //       future: getListBySubCate(subCate),
+    //       builder:
+    //           (BuildContext context, AsyncSnapshot<List<GetAllStock>> snapshot) {
+    //         Widget children;
+    //         if (snapshot.hasData) {
+    //           children = snapshot.data.length > 0
+    //               ?
+
+    //                ListView.builder(
+    //                   // physics: ClampingScrollPhysics(),
+    //                   // scrollDirection: Axis.vertical,
+    //                   shrinkWrap: true,
+    //                   itemBuilder: (context, index) {
+    //                     return Container(
+    //                       height: 110,
+    //                       child: Row(
+    //                         children: [
+    //                           getPhotoContainer(width, snapshot.data[index].img),
+    //                           Container(
+    //                             width: 5,
+    //                           ),
+    //                           Expanded(
+    //                             child: Container(
+    //                               height: 100,
+    //                               width: width * 0.72 - 1.5,
+    //                               child: Container(
+    //                                 decoration: BoxDecoration(
+    //                                   border: Border.all(color: Colors.grey[300]),
+    //                                   borderRadius: BorderRadius.circular(6),
+    //                                 ),
+    //                                 child: Column(
+    //                                   children: [
+    //                                     Spacer(),
+    //                                     Spacer(),
+    //                                     Row(
+    //                                       crossAxisAlignment:
+    //                                           CrossAxisAlignment.start,
+    //                                       mainAxisAlignment:
+    //                                           MainAxisAlignment.start,
+    //                                       children: [
+    //                                         Padding(
+    //                                           padding: const EdgeInsets.only(
+    //                                               left: 4, right: 4, top: 8),
+    //                                           child: Padding(
+    //                                             padding: const EdgeInsets.only(
+    //                                                 left: 4.0),
+    //                                             child: Container(
+    //                                                 width: secWidth * 0.7,
+    //                                                 child: Text(
+    //                                                   snapshot.data[index].desc,
+    //                                                   maxLines: 3,
+    //                                                   overflow: TextOverflow.clip,
+    //                                                   style: TextStyle(
+    //                                                     fontWeight:
+    //                                                         FontWeight.w500,
+    //                                                     height: 1,
+    //                                                   ),
+    //                                                 )),
+    //                                           ),
+    //                                         ),
+    //                                         Spacer(),
+    //                                         IconButton(
+    //                                           icon: Container(
+    //                                             child: SvgPicture.asset(
+    //                                               'assets/atc.svg',
+    //                                               height: 25,
+    //                                               color: Colors.black,
+    //                                             ),
+    //                                           ),
+    //                                           onPressed: () {
+    //                                             print('Shop  was tap');
+    //                                           },
+    //                                         ),
+    //                                       ],
+    //                                     ),
+    //                                     Spacer(),
+    //                                     Row(
+    //                                       children: [
+    //                                         Container(
+    //                                           height: 40,
+    //                                           width: secWidth * 0.45,
+    //                                           child: Row(
+    //                                             children: [
+    //                                               Container(
+    //                                                 height: 40,
+    //                                                 width: secWidth * 0.35,
+    //                                                 child: Card(
+    //                                                   elevation: 1,
+    //                                                   color: Colors.grey[200],
+    //                                                   child: Row(
+    //                                                     children: [
+    //                                                       InkWell(
+    //                                                         onTap: () {
+    //                                                           print(
+    //                                                               'minus one was tap');
+    //                                                         },
+    //                                                         child: Container(
+    //                                                           height: 40,
+    //                                                           width:
+    //                                                               secWidth * 0.1,
+    //                                                           child: Padding(
+    //                                                             padding:
+    //                                                                 const EdgeInsets
+    //                                                                         .only(
+    //                                                                     right: 8,
+    //                                                                     top: 8,
+    //                                                                     bottom: 8,
+    //                                                                     left: 4),
+    //                                                             child: ImageIcon(
+    //                                                               AssetImage(
+    //                                                                   'assets/icon/minus.png'),
+    //                                                               color: Style
+    //                                                                   .Colors
+    //                                                                   .mainColor,
+    //                                                               size: 16,
+    //                                                             ),
+    //                                                           ),
+    //                                                         ),
+    //                                                       ),
+    //                                                       InkWell(
+    //                                                         onTap: () {
+    //                                                           _showDialog();
+    //                                                         },
+    //                                                         child: Container(
+    //                                                           height: 40,
+    //                                                           width:
+    //                                                               secWidth * 0.1,
+    //                                                           child: Padding(
+    //                                                             padding:
+    //                                                                 const EdgeInsets
+    //                                                                         .only(
+    //                                                                     left: 8,
+    //                                                                     top: 10,
+    //                                                                     bottom:
+    //                                                                         10),
+    //                                                             child: Text(val),
+    //                                                           ),
+    //                                                         ),
+    //                                                       ),
+    //                                                       InkWell(
+    //                                                         onTap: () {
+    //                                                           print('object');
+    //                                                         },
+    //                                                         child: Container(
+    //                                                           height: 40,
+    //                                                           width:
+    //                                                               secWidth * 0.1,
+    //                                                           child: Padding(
+    //                                                             padding:
+    //                                                                 const EdgeInsets
+    //                                                                         .only(
+    //                                                                     left: 8,
+    //                                                                     top: 10,
+    //                                                                     bottom:
+    //                                                                         10),
+    //                                                             child: ImageIcon(
+    //                                                               AssetImage(
+    //                                                                   'assets/icon/add.png'),
+    //                                                               color: Style
+    //                                                                   .Colors
+    //                                                                   .mainColor,
+    //                                                               size: 16,
+    //                                                             ),
+    //                                                           ),
+    //                                                         ),
+    //                                                       ),
+    //                                                     ],
+    //                                                   ),
+    //                                                 ),
+    //                                               ),
+    //                                             ],
+    //                                           ),
+    //                                         ),
+    //                                         Container(
+    //                                           height: 50,
+    //                                           width: secWidth * 0.55,
+    //                                           child: Row(
+    //                                             children: [
+    //                                               Padding(
+    //                                                 padding:
+    //                                                     const EdgeInsets.only(
+    //                                                         left: 4),
+    //                                                 child: Container(
+    //                                                   // height: 40,
+    //                                                   width: secWidth * 0.35,
+    //                                                   child: Text(
+    //                                                     "100",
+    //                                                   ),
+    //                                                 ),
+    //                                               ),
+    //                                               Container(
+    //                                                 width: secWidth * 0.16,
+    //                                                 child: Text(
+    //                                                   "100",
+    //                                                 ),
+    //                                               ),
+    //                                             ],
+    //                                           ),
+    //                                         )
+    //                                       ],
+    //                                     )
+    //                                   ],
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                           )
+    //                         ],
+    //                       ),
+    //                       decoration: BoxDecoration(),
+    //                     );
+    //                   },
+    //                   itemCount: snapshot.data.length,
+    //                 )
+    //               : noDataWidget();
+    //         } else if (snapshot.hasError) {
+    //           children = Padding(
+    //             padding: const EdgeInsets.only(top: 10),
+    //             child: Text('Error: something went worng !'),
+    //           );
+    //         } else {
+    //           children = SizedBox(
+    //             child: CircularProgressIndicator(),
+    //             width: 60,
+    //             height: 60,
+    //           );
+    //         }
+    //         return children;
+    //       });
+    // }
+
+    // void _showDialog() {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: Text(
+    //           "SP_Blueberry Cream Roll",
+    //           style: TextStyle(
+    //             color: Colors.grey,
+    //             fontSize: 15,
+    //           ),
+    //         ),
+    //         content: TextField(
+    //           controller: textEditingController,
+    //           keyboardType: TextInputType.number,
+    //           decoration: InputDecoration(hintText: 'Enter the number'),
+    //         ),
+    //         actions: <Widget>[
+    //           Row(
+    //             children: <Widget>[
+    //               new FlatButton(
+    //                 child: new Text("Cancel"),
+    //                 onPressed: () {
+    //                   Navigator.of(context).pop();
+    //                 },
+    //               ),
+    //               new FlatButton(
+    //                   onPressed: () {
+    //                     setState(() {
+    //                       val = textEditingController.text;
+    //                       Navigator.pop(context, true);
+    //                     });
+    //                   },
+    //                   child: new Text("OK"))
+    //             ],
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
   }
 
   Widget noDataWidget() {
@@ -436,10 +528,10 @@ showDialog(
       height: 60,
       color: Colors.white,
       child: Center(
-        child: Text(
-      "No Stock",
-      style: TextStyle(fontWeight: FontWeight.w500),
-    )),
+          child: Text(
+        "No Stock",
+        style: TextStyle(fontWeight: FontWeight.w500),
+      )),
     );
   }
 }
